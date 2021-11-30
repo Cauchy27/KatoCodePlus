@@ -1,12 +1,12 @@
 {
   "expo": {
-    "name": "KatoCodePlus",
-    "slug": "KatoCodePlus",
+    "name": "カトコードバトラー",
+    "slug": "KatoCode",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/img/icon_1130_2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/img/splash_test.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +17,20 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-9830305702055127~1910783861"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/img/icon1.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-9830305702055127~1910783861"
+      },
+      "package": "com.cauchy27.KatoCodePlus"
     },
     "web": {
       "favicon": "./assets/favicon.png"

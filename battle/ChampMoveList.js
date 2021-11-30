@@ -1,0 +1,43 @@
+import Sounds from "../assets/Sounds";
+
+export default KatomonMoveList = {
+  rightStraight:{
+    name:"右ストレート",
+    sound:Sounds.rightStraight,//音声ファイルのディレクトリ指定
+    power:50,
+    consumption_Guts:100,
+    add_Guts:0,
+    range:150,
+    additional1:{
+      param:"position2x",//変化するパラメータ(position/HP/ATK,,,)
+      change:100,//変化量
+    },
+    personality:1,//移動に影響する性格の設定
+  },
+  gaia:{
+    name:"ガイアの咆哮",
+    sound:Sounds.gaia,//音声ファイルのディレクトリ指定
+    power:10,
+    consumption_Guts:50,
+    add_Guts:0,
+    range:200,
+    additional1:{
+      param:"position2x",//変化するパラメータ(position/HP/ATK,,,)
+      change:50,//変化量
+    },
+    personality:1.5,//移動に影響する性格の設定
+  },
+  escape:{
+    name:"よけろ！",
+    sound:Sounds.yokero,//音声ファイルのディレクトリ指定
+    power:0,
+    consumption_Guts:100,
+    add_Guts:0,
+    range:1000,
+    additional1:{
+      param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
+      change:-100,//変化量
+    },
+    personality:0.8,//移動に影響する性格の設定
+  }
+}
