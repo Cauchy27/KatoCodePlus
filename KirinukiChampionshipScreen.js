@@ -58,8 +58,8 @@ export default class ChampionshipScreen extends Component {
       groupC:false,
       groupD:false,
 
-      // endA:false,
-      endA:true,
+      endA:false,
+      // endA:true,
       endB:false,
       endC:false,
       endD:false,
