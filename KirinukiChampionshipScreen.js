@@ -64,8 +64,6 @@ export default class ChampionshipScreen extends Component {
       endC:false,
       endD:false,
 
-      skipButtun:false,
-
       final:false,
 
       firstFlag:true,
@@ -1470,32 +1468,32 @@ export default class ChampionshipScreen extends Component {
       }));
       if(!this.state.Kirinuki5_lose){
         this.setState(state =>  ({
-          tableR2_final:this.state.tableR5,
-          tableR2_name_final:this.state.tableR5_name,
+          tableR2_final:this.state.tableR1,
+          tableR2_name_final:this.state.tableR1_name,
           tableR2_st_final:this.state.KirinukiDes5,
           katoPoint2_final:this.state.katoPoint5,
         }));
       }
       if(!this.state.Kirinuki6_lose){
         this.setState(state =>  ({
-          tableR2_final:this.state.tableR6,
-          tableR2_name_final:this.state.tableR6_name,
+          tableR2_final:this.state.tableR2,
+          tableR2_name_final:this.state.tableR2_name,
           tableR2_st_final:this.state.KirinukiDes6,
           katoPoint2_final:this.state.katoPoint6,
         }));
       }
       if(!this.state.Kirinuki7_lose){
         this.setState(state =>  ({
-          tableR2_final:this.state.tableR7,
-          tableR2_name_final:this.state.tableR7_name,
+          tableR2_final:this.state.tableR3,
+          tableR2_name_final:this.state.tableR3_name,
           tableR2_st_final:this.state.KirinukiDes7,
           katoPoint2_final:this.state.katoPoint7,
         }));
       }
       if(!this.state.Kirinuki8_lose){
         this.setState(state =>  ({
-          tableR2_final:this.state.tableR8,
-          tableR2_name_final:this.state.tableR8_name,
+          tableR2_final:this.state.tableR4,
+          tableR2_name_final:this.state.tableR4_name,
           tableR2_st_final:this.state.KirinukiDes8,
           katoPoint2_final:this.state.katoPoint8,
         }));
@@ -1513,32 +1511,32 @@ export default class ChampionshipScreen extends Component {
       }));
       if(!this.state.Kirinuki9_lose){
         this.setState(state =>  ({
-          tableR3_final:this.state.tableR9,
-          tableR3_name_final:this.state.tableR9_name,
+          tableR3_final:this.state.tableR1,
+          tableR3_name_final:this.state.tableR1_name,
           tableR3_st_final:this.state.KirinukiDes9,
           katoPoint3_final:this.state.katoPoint9,
         }));
       }
       if(!this.state.Kirinuki10_lose){
         this.setState(state =>  ({
-          tableR3_final:this.state.tableR10,
-          tableR3_name_final:this.state.tableR10_name,
+          tableR3_final:this.state.tableR2,
+          tableR3_name_final:this.state.tableR2_name,
           tableR3_st_final:this.state.KirinukiDes10,
           katoPoint3_final:this.state.katoPoint10,
         }));
       }
       if(!this.state.Kirinuki11_lose){
         this.setState(state =>  ({
-          tableR3_final:this.state.tableR11,
-          tableR3_name_final:this.state.tableR11_name,
+          tableR3_final:this.state.tableR3,
+          tableR3_name_final:this.state.tableR3_name,
           tableR3_st_final:this.state.KirinukiDes11,
           katoPoint3_final:this.state.katoPoint11,
         }));
       }
       if(!this.state.Kirinuki12_lose){
         this.setState(state =>  ({
-          tableR3_final:this.state.tableR12,
-          tableR3_name_final:this.state.tableR12_name,
+          tableR3_final:this.state.tableR4,
+          tableR3_name_final:this.state.tableR4_name,
           tableR3_st_final:this.state.KirinukiDes12,
           katoPoint3_final:this.state.katoPoint12,
         }));
@@ -1556,32 +1554,32 @@ export default class ChampionshipScreen extends Component {
       }));
       if(!this.state.Kirinuki13_lose){
         this.setState(state =>  ({
-          tableR4_final:this.state.tableR13,
-          tableR4_name_final:this.state.tableR13_name,
+          tableR4_final:this.state.tableR1,
+          tableR4_name_final:this.state.tableR1_name,
           tableR4_st_final:this.state.KirinukiDes13,
           katoPoint4_final:this.state.katoPoint13,
         }));
       }
       if(!this.state.Kirinuki14_lose){
         this.setState(state =>  ({
-          tableR4_final:this.state.tableR14,
-          tableR4_name_final:this.state.tableR14_name,
+          tableR4_final:this.state.tableR2,
+          tableR4_name_final:this.state.tableR2_name,
           tableR4_st_final:this.state.KirinukiDes14,
           katoPoint4_final:this.state.katoPoint14,
         }));
       }
       if(!this.state.Kirinuki15_lose){
         this.setState(state =>  ({
-          tableR4_final:this.state.tableR15,
-          tableR4_name_final:this.state.tableR15_name,
+          tableR4_final:this.state.tableR3,
+          tableR4_name_final:this.state.tableR3_name,
           tableR4_st_final:this.state.KirinukiDes15,
           katoPoint4_final:this.state.katoPoint15,
         }));
       }
       if(!this.state.Kirinuki16_lose){
         this.setState(state =>  ({
-          tableR4_final:this.state.tableR16,
-          tableR4_name_final:this.state.tableR16_name,
+          tableR4_final:this.state.tableR4,
+          tableR4_name_final:this.state.tableR4_name,
           tableR4_st_final:this.state.KirinukiDes16,
           katoPoint4_final:this.state.katoPoint16,
         }));
@@ -2043,7 +2041,7 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
-                  {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {/* {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2053,7 +2051,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
                   {!this.state.endB && (
                     <TouchableOpacity 
                       style={styles.button}
@@ -2065,7 +2063,7 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
-                  {this.state.endB && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {/* {this.state.endB && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2075,7 +2073,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
                 </View>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
                   {!this.state.endC && (
@@ -2089,7 +2087,7 @@ export default class ChampionshipScreen extends Component {
                     </Text>
                     </TouchableOpacity>
                   )}
-                  {this.state.endC && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {/* {this.state.endC && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2099,7 +2097,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
                   {!this.state.endD && (
                     <TouchableOpacity 
                     style={styles.button}
@@ -2111,7 +2109,7 @@ export default class ChampionshipScreen extends Component {
                     </Text>
                     </TouchableOpacity>
                   )}
-                  {this.state.endD && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {/* {this.state.endD && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2121,7 +2119,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )}
+                  )} */}
                 </View>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
                   {this.state.endA && this.state.endB && this.state.endC && this.state.endD && (
@@ -2132,17 +2130,6 @@ export default class ChampionshipScreen extends Component {
                     >
                       <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
                         決勝戦へ
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                  {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
-                    <TouchableOpacity 
-                      style={styles.button}
-                      onPress={() => 
-                        this.skipGroup()}
-                    >
-                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                        残りのグループを1つスキップ
                       </Text>
                     </TouchableOpacity>
                   )}
