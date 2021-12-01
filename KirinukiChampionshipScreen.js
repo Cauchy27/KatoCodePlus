@@ -1671,8 +1671,8 @@ export default class ChampionshipScreen extends Component {
       now: Date.now(),
       startTime: Date.now(),
 
-      position1X: Constants.MAX_WIDTH * 250/400/10,
-      position2X: Constants.MAX_WIDTH -Constants.MAX_WIDTH * 250/400/10 ,
+      position1X: 0,
+      position2X: Constants.MAX_WIDTH - 90-20,
 
       timer:30,
 
