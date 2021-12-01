@@ -36,7 +36,7 @@ export default KatomonMoveList = {
     range:1000,
     additional1:{
       param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-      change:-100,//変化量
+      change:-50,//変化量
     },
     personality:0.8,//移動に影響する性格の設定
   }

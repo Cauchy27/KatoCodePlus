@@ -1051,7 +1051,7 @@ export default class ChampionshipScreen extends Component {
       this.state.p2Guts = this.state.p2Guts + 10;
 
       // player1の移動ロジック
-      if(p1Rand > 0.5){
+      if(p1Rand > 0.4){
         // 前進
         if(this.state.position1X + 50 < this.state.position2X){
           // 追い越さないように、近づくと前進しない
@@ -1066,7 +1066,7 @@ export default class ChampionshipScreen extends Component {
       }
 
       // player2の移動ロジック
-      if(p2Rand > 0.5){
+      if(p2Rand > 0.4){
         // 前進
         if(this.state.position1X + 50 < this.state.position2X){
           // 追い越さないように、近づくと前進しない

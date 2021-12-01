@@ -23,7 +23,7 @@ export default KatoFesP2MoveList = {
       range:400,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-70,//変化量
+        change:-50,//変化量
       },
       personality:1.3,//移動に影響する性格の設定
     },
@@ -36,7 +36,7 @@ export default KatoFesP2MoveList = {
       range:300,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-70,//変化量
+        change:-30,//変化量
       },
       personality:1.3,//移動に影響する性格の設定
     },

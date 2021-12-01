@@ -72,6 +72,7 @@ export default class FesScreen extends Component {
       p1MOVE_3:this.props.route.params.katomonMove.move3,
 
       katomonImage:this.props.route.params.katomonImage,
+      p2Katomon:Images.hiroyuki,
 
       // 初戦の相手は固定?
       p2MOVE_1:KatoFesP2MoveList.ai,
@@ -498,6 +499,7 @@ export default class FesScreen extends Component {
   reStart = async(count) =>{
     this.stopBgm();
     this.soundStart(Sounds.battle1,0.03);
+    this.state.roundCount = count;
     // ラウンド判定
     switch(this.state.roundCount){
       case 1:
@@ -506,7 +508,7 @@ export default class FesScreen extends Component {
           p2MOVE_1:KatoFesP2Data.hiroyuki.move.move1,
           p2MOVE_2:KatoFesP2Data.hiroyuki.move.move2,
           p2MOVE_3:KatoFesP2Data.hiroyuki.move.move3,
-
+          p2Katomon:KatoFesP2Data.hiroyuki.image,
 
           p2Personality:KatoFesP2Data.hiroyuki.personality,
           p2Name:KatoFesP2Data.hiroyuki.name,
@@ -525,7 +527,7 @@ export default class FesScreen extends Component {
             p2MOVE_1:KatoFesP2Data.gear.move.move1,
             p2MOVE_2:KatoFesP2Data.gear.move.move2,
             p2MOVE_3:KatoFesP2Data.gear.move.move3,
-  
+            p2Katomon:KatoFesP2Data.gear.image,
   
             p2Personality:KatoFesP2Data.gear.personality,
             p2Name:KatoFesP2Data.gear.name,
@@ -544,7 +546,7 @@ export default class FesScreen extends Component {
               p2MOVE_1:KatoFesP2Data.nise.move.move1,
               p2MOVE_2:KatoFesP2Data.nise.move.move2,
               p2MOVE_3:KatoFesP2Data.nise.move.move3,
-    
+              p2Katomon:KatoFesP2Data.nise.image,
     
               p2Personality:KatoFesP2Data.nise.personality,
               p2Name:KatoFesP2Data.nise.name,
@@ -563,7 +565,7 @@ export default class FesScreen extends Component {
                 p2MOVE_1:KatoFesP2Data.naranton.move.move1,
                 p2MOVE_2:KatoFesP2Data.naranton.move.move2,
                 p2MOVE_3:KatoFesP2Data.naranton.move.move3,
-      
+                p2Katomon:KatoFesP2Data.naranton.image,
       
                 p2Personality:KatoFesP2Data.naranton.personality,
                 p2Name:KatoFesP2Data.naranton.name,
@@ -582,7 +584,7 @@ export default class FesScreen extends Component {
                 p2MOVE_1:KatoFesP2Data.golden_naoko.move.move1,
                 p2MOVE_2:KatoFesP2Data.golden_naoko.move.move2,
                 p2MOVE_3:KatoFesP2Data.golden_naoko.move.move3,
-
+                p2Katomon:KatoFesP2Data.golden_naoko.image,
 
                 p2Personality:KatoFesP2Data.golden_naoko.personality,
                 p2Name:KatoFesP2Data.golden_naoko.name,
@@ -619,8 +621,6 @@ export default class FesScreen extends Component {
       p1ATK:this.props.route.params.katomonikioi,
       p1DEF:this.props.route.params.katomonMamori,
     });
-
-    this.state.roundCount = count;
     
     this.intervalId = this.system();
 
@@ -745,7 +745,7 @@ export default class FesScreen extends Component {
             textAlign:'center',
             fontSize: 24,
             fontWeight: 'bold',
-            fontFamily: 'DotGothic16_400Regular',
+            // fontFamily: 'DotGothic16_400Regular',
             backgroundColor:"#fff",
             marginLeft:"30%",
             marginRight:"30%",
@@ -760,7 +760,7 @@ export default class FesScreen extends Component {
             textAlign:'center',
             fontSize: 24,
             fontWeight: 'bold',
-            fontFamily: 'DotGothic16_400Regular',
+            // fontFamily: 'DotGothic16_400Regular',
             backgroundColor:"#fff",
             flex:0.3,
             }}>
@@ -799,7 +799,7 @@ export default class FesScreen extends Component {
             <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%</Text>  
           {/* Player2 */}
           <Image
-              source={Images.hiroyuki}
+              source={this.state.p2Katomon}
               style={{ width: 100, height: 100 ,top:this.state.position2Y, left: this.state.position2X, position:'absolute',
               backgroundColor:"#ffd700",
               borderRadius:10,}}
@@ -865,7 +865,7 @@ export default class FesScreen extends Component {
                 <Text style={{
                   fontSize: 20,
                   fontWeight: 'bold',
-                  fontFamily: 'DotGothic16_400Regular',
+                  // fontFamily: 'DotGothic16_400Regular',
                   textAlign:'center',
                 }}>
                   応援:ガッツ増加
@@ -914,7 +914,7 @@ const styles = StyleSheet.create({
   hello: {
     fontSize: 24,
     fontWeight: 'bold',
-    fontFamily: 'DotGothic16_400Regular',
+    // fontFamily: 'DotGothic16_400Regular',
   },
   gameOverText: {
     color: 'white',
@@ -1003,14 +1003,14 @@ const styles = StyleSheet.create({
   name_r:{
     fontSize: 20,
     fontWeight: 'bold',
-    fontFamily: 'DotGothic16_400Regular',
+    // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
     flex:1,
   },
   name_l:{
     fontSize: 20,
     fontWeight: 'bold',
-    fontFamily: 'DotGothic16_400Regular',
+    // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
     flex:1,
   },
@@ -1019,7 +1019,7 @@ const styles = StyleSheet.create({
     backgroundColor:"#eee",
     fontSize: 14,
     fontWeight: 'bold',
-    fontFamily: 'DotGothic16_400Regular',
+    // fontFamily: 'DotGothic16_400Regular',
     textAlign:'left',
     padding:"5%",
     flex:1,
