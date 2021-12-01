@@ -579,37 +579,36 @@ export default class KatomonGenerateScreen extends Component {
         )}
         {this.state.translateFlag && (
           <View style={{
-            // marginTop:"-60%",
+            // height:Constants.MAX_HEIGHT * 2/10
           }}>
             <Text style={{
               fontSize:18,
               marginTop:"5%",
+              height:30,
             }}>
               今ここに、新たなカトモンが誕生しました。
             </Text>
-            <ScrollView>
+            <ScrollView style={{
+              height:Constants.MAX_HEIGHT - 30 -30
+            }}>
               <Animated.View style={{ opacity: this.state.opacity}}>
-                <View style={{flexDirection: 'row',}}>
-                  <Image
-                    source={this.state.katomon.image}
-                    style={{ width: 128, height: 128 ,position:'relative',
+                <View style={{flexDirection: 'row',position:'relative',
                     marginTop:"5%",
                     marginBottom:"5%",
                     marginLeft:"5%",
-                    marginRight:"5%",
-                    backgroundColor:"#fff"}}
-                  /> 
-                  <View style={{marginTop:"10%"}}>
-                    <Text></Text>
-                  </View>
-                </View>
+                    marginRight:"5%",}}>
+                  <View style={{width:Constants.MAX_WIDTH/2,alignItems:"center"}}>
+                    <Image
+                      source={this.state.katomon.image}
+                      style={{ width: 128, height: 128 ,position:'relative',
+                      marginTop:"5%",
+                      marginBottom:"5%",
+                      // marginLeft:"5%",
+                      marginRight:"5%",
+                      backgroundColor:"#fff"}}
+                    /> 
                     <Text style={{marginTop:"5%",fontSize:24,marginLeft:"5%",marginRight:"5%"}}>
                       名前: {this.state.katomon.name}
-                    </Text>
-                    <Text style={{marginTop:"5%",
-                    marginBottom:"5%",
-                    fontSize:14,marginLeft:"5%",marginRight:"5%"}}>
-                      {this.state.katomon.destination}
                     </Text>
                     <View style={{flexDirection:"row"}}>
                       <View>
@@ -626,7 +625,9 @@ export default class KatomonGenerateScreen extends Component {
                           <Text  style={{fontSize:18}}>{this.state.katoMamori}</Text>
                         </View>
                       </View>
-                      <View>
+                    </View>
+                  </View>
+                  <View style={{marginTop:"5%",width:Constants.MAX_WIDTH/2}}>
                         <View>
                           < Text style={styles.move}>1.{this.state.katomon.move.move1.name}</Text>
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move1.consumption_Guts}</Text>
@@ -642,11 +643,19 @@ export default class KatomonGenerateScreen extends Component {
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move3.consumption_Guts}</Text>
                           <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move3.range} 威力：{this.state.katomon.move.move3.power}</Text>
                         </View>
-                      </View>
-                    </View>
+                  </View>
+                </View>       
+                    <Text style={{marginTop:"5%",
+                    marginBottom:"5%",
+                    fontSize:14,marginLeft:"5%",marginRight:"5%"}}>
+                      {this.state.katomon.destination}
+                    </Text>  
                 <TouchableOpacity 
                 style={{
-                  marginTop:"10%",backgroundColor:"#f5deb3",marginLeft:"20%",marginRight:"20%",
+                  marginTop:"10%",
+                  backgroundColor:"#f5deb3",
+                  marginLeft:"20%",
+                  marginRight:"20%",
                   borderRadius:20,
                 }}
                 onPress={() =>
@@ -657,7 +666,6 @@ export default class KatomonGenerateScreen extends Component {
                   </Text>
                 </TouchableOpacity>
               </Animated.View>
-
             </ScrollView>
           </View>
         )}
