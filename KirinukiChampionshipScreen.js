@@ -58,7 +58,8 @@ export default class ChampionshipScreen extends Component {
       groupC:false,
       groupD:false,
 
-      endA:false,
+      // endA:false,
+      endA:true,
       endB:false,
       endC:false,
       endD:false,
@@ -2042,6 +2043,17 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
+                  {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.skipGroup()}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        1つスキップする
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                   {!this.state.endB && (
                     <TouchableOpacity 
                       style={styles.button}
@@ -2050,6 +2062,17 @@ export default class ChampionshipScreen extends Component {
                     >
                       <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
                         Bの対戦を見守る
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {this.state.endB && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.skipGroup()}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        1つスキップする
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -2066,6 +2089,17 @@ export default class ChampionshipScreen extends Component {
                     </Text>
                     </TouchableOpacity>
                   )}
+                  {this.state.endC && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.skipGroup()}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        1つスキップする
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                   {!this.state.endD && (
                     <TouchableOpacity 
                     style={styles.button}
@@ -2075,6 +2109,17 @@ export default class ChampionshipScreen extends Component {
                     <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
                       Dの対戦を見守る
                     </Text>
+                    </TouchableOpacity>
+                  )}
+                  {this.state.endD && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.skipGroup()}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        1つスキップする
+                      </Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -2090,7 +2135,7 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
-                  {this.state.endA || this.state.endB || this.state.endC || this.state.endD && (
+                  {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
