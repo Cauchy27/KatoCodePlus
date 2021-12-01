@@ -27,14 +27,13 @@ export default class TitleScreen extends Component {
     super(props);
     this.state = { 
       bgm:{
-        title:null,
-        change:null,
+        title:new Audio.Sound,
+        change:new Audio.Sound,
       }
     };
   }
 
   componentDidMount = async() => {
-
     this.state.bgm.title = new Audio.Sound;
     this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03);
   };
@@ -43,11 +42,11 @@ export default class TitleScreen extends Component {
     await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
   };
 
+  // ページ内のサウンドを一括ロード
+
   soundStart =async(state,select,inputVol) =>{
-    // bgm
-      await state.loadAsync(select);//ファイルロード
-      // console.log(state );
-      await state.setStatusAsync({ volume: inputVol });//音量
+      await state.loadAsync(select);
+      await state.setStatusAsync({ volume:inputVol});//音量
       await state.playAsync();//スタート
   };
 
@@ -55,11 +54,10 @@ export default class TitleScreen extends Component {
     this.stopBgm(this.state.bgm.title);
   }
 
-  restartSound = async(state) =>{
-    return await state.playAsync();
-  };
+  // restartSound = async(state) =>{
+  //   return await state.playAsync();
+  // };
 
-  testData =777;
 
   Interstitial =async()=>{
     if(__DEV__){
@@ -82,8 +80,10 @@ export default class TitleScreen extends Component {
 
   goto = async(destination) => {
     try {
+      console.log("1");
     // destinationごとに音声を変えておく
-      this.state.bgm.change = new Audio.Sound();
+      this.stopBgm(this.state.bgm.title);
+      this.state.bgm.change = new Audio.Sound;
       switch(destination){
         // case "フリー対戦":
         //   selector = Sounds.yaruo;
@@ -93,12 +93,11 @@ export default class TitleScreen extends Component {
         //   break;
         case "切り抜きチャンピオンシップ":
           this.soundStart(this.state.bgm.change,Sounds.katou7,0.5);
-          
-          await this.stopBgm(this.state.bgm.title);
+          this.stopBgm(this.state.bgm.title);
           return this.props.navigation.navigate(destination);
         case "カトモン生成":
           this.soundStart(this.state.bgm.change,Sounds.katou8,1);
-          await this.stopBgm(this.state.bgm.title);
+          this.stopBgm(this.state.bgm.title);
           return this.props.navigation.navigate(destination);
       }
     } 
@@ -111,7 +110,6 @@ export default class TitleScreen extends Component {
     
     return(
       <View style = {styles.container}>
-        {console.log(this.testData)}
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
         <View style = {styles.title}>
           <View style={{flex:1}}>
@@ -123,12 +121,14 @@ export default class TitleScreen extends Component {
           <View style = {styles.menu}>
             <TouchableOpacity 
               onPress={() =>
-                this.goto('切り抜きチャンピオンシップ',this.testData)
+                this.goto('切り抜きチャンピオンシップ')
                 // ↑第二引数で、遷移先に渡す変数を
               }
               style = {styles.bottun}
             >
-              <Text style={{color : "#ffff00",textAlign:"center"}}>
+              <Text style={{color : "#ffff00",textAlign:"center",
+              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
+            }}>
                 切り抜きチャンピオンシップ
               </Text>
             </TouchableOpacity>
@@ -138,11 +138,13 @@ export default class TitleScreen extends Component {
               }
               style = {styles.bottun}
             >
-              <Text style={{color : "#00ffff",textAlign:"center"}}>
+              <Text style={{color : "#00ffff",textAlign:"center",
+              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
+            }}>
                 カトモン生成/カトフェス
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() =>
                 this.restartSound(this.state.bgm.title)
               }
@@ -151,7 +153,7 @@ export default class TitleScreen extends Component {
               <Text style={{color : "#00ffff",textAlign:"center"}}>
                 BGM再再生
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </View>
 
@@ -170,7 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   hello: {
-    fontSize: 30,
+    fontSize: Math.round(Constants.TITLE_WIDTH/1.3/12),
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     // backgroundColor:"#d2b48c",
@@ -189,14 +191,13 @@ const styles = StyleSheet.create({
   title:{
     backgroundColor:"#d2b48c",
     // color:"#d2b48c",
-    height: Constants.TITLE_HEIGHT/2.5,
-    // paddingLeft:"2%" ,
-    // paddingRight:"2%",
-    paddingTop:"5%",
-    bottom: "5%",
+    height: Constants.TITLE_HEIGHT/2.3,
+    width:Constants.TITLE_WIDTH/1.3,
+    paddingTop:"10%",
+    marginBottom: "5%",
     paddingLeft:"5%",
     paddingRight:"5%",
-    borderRadius:10,
+    borderRadius:20,
   },
   menu:{
     // backgroundColor: '#eee',
@@ -204,12 +205,17 @@ const styles = StyleSheet.create({
     marginBottom: "5%",
     borderRadius:10,
     flex:1.5,
+    flexDirection:"column",
+    justifyContent:"center",
   },
   bottun:{
-    margin:"5%",
-    padding:"5%",
+    marginTop:"5%",
+    marginBottom:"5%",
     backgroundColor:"#696969",
     borderRadius:20,
+    flex:1,
+    flexDirection:"column",
+    justifyContent:"center",
   },
   
 });

@@ -25,18 +25,18 @@ import ChampMoveList from "./battle/ChampMoveList";
 
 // 制限がかかった際に切り替える
 const YOUTUBE_API_KEY = {
- 1:"AIzaSyDWNDiS0XB1tcrkUHzOdhc4uAoGNQh6V5w",
- 2:"AIzaSyCeN9u9jcXSHJoLWUrek0m4igqKAvbZjGs",
+ 1:"AIzaSyAkVeqOZhJ8fwr8k_bNy2poO4UYNyikzWM",
+ 2:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
  3:"AIzaSyBM-Gz05cxeA0HU6VXC79ZOUeH5Y_51pG8",
  4:"AIzaSyCcmePnsCkF8-W5mfwRyKULUvqdQW4UeuA",
  5:"AIzaSyCSI-e5B5H8G93XR2DrJSypqbaFGexvim8",
  6:"AIzaSyBuWDI-BPp8lNaUjtLW-hOGjC2QscJcZdg",
- 7:"AIzaSyBfXndA5kNEV8V-Ka1VfQbjrYvZwr5tKac",
+ 7:"AIzaSyAlU9qILWC3EJUN0DhXdcrZo7uHtrZFbDo",
  8:"AIzaSyC50BVEl6KvNPdGCupaw7X5CW0Joylp1_A",
  9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
 };
 // 使用するキー
-var useApiNum = 7 ;
+var useApiNum = 9 ;
 
 // 最初に開くところ
 export default class ChampionshipScreen extends Component {
@@ -45,13 +45,15 @@ export default class ChampionshipScreen extends Component {
 
     this.state = {
       running: true,
-      apiSuccess:　true,
+      apiSuccess:　false,
       memberListFlag:true,
+      // memberListFlag:false,
       resultFlag:false,
 
       useAPI:useApiNum,
 
       groupA:false,
+      // groupA:true,
       groupB:false,
       groupC:false,
       groupD:false,
@@ -60,6 +62,8 @@ export default class ChampionshipScreen extends Component {
       endB:false,
       endC:false,
       endD:false,
+
+      skipButtun:false,
 
       final:false,
 
@@ -225,10 +229,10 @@ export default class ChampionshipScreen extends Component {
       timer:30,
       width: Constants.MAX_WIDTH, 
       height: Constants.MAX_WIDTH * 250/400,
-      position1X: 0,
-      position1Y: Constants.MAX_WIDTH * 250/400/2+45,
-      position2X: Constants.MAX_WIDTH - 90-20,
-      position2Y: Constants.MAX_WIDTH * 250/400/2+45,
+      position1X: Constants.MAX_WIDTH * 250/400/10,
+      position1Y: Constants.MAX_WIDTH * 250/400/2 - Constants.MAX_WIDTH * 250/400/6/2,
+      position2X: Constants.MAX_WIDTH -Constants.MAX_WIDTH * 250/400/10 ,
+      position2Y: Constants.MAX_WIDTH * 250/400/2 - Constants.MAX_WIDTH * 250/400/6/2,
 
       battleFlag:false,
 
@@ -269,24 +273,18 @@ export default class ChampionshipScreen extends Component {
       // 音声をロードしておくところ
       soundPreload:{
         r1:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
+          move1:null,
+          move2:null,
         },
         r2:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
-        },
-        r3:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
-        },
-        r4:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
+          move1:null,
+          move2:null,
         },
         bgm:{
-          battle1:new Audio.Sound,
-          title:new Audio.Sound,
+          battle1:null,
+          title:null,
+          final:null,
+          change:null,
         }
       },
 
@@ -303,16 +301,20 @@ export default class ChampionshipScreen extends Component {
 
   componentDidMount = async() => {
 
+    this.state.soundPreload.bgm.title = new Audio.Sound;
     this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
     // セリフをBGMが邪魔しないように音量調整
 
     // 切り抜き情報取得
-    this.getList();
+    await this.getList();
+    console.log(this.state.apiSuccess);
 
   };
 
   componentWillUnmount =async()=>{
     this.stopBgm(this.state.soundPreload.bgm.title);
+    this.stopBgm(this.state.soundPreload.bgm.battle1);
+    this.stopBgm(this.state.soundPreload.bgm.final);
     clearInterval(this.intervalId);
   };
 
@@ -459,16 +461,16 @@ export default class ChampionshipScreen extends Component {
                 KirinukiDes16:response2["data"]["items"][15]["statistics"],
                 KirinukiImage16: response2["data"]["items"][15]["snippet"]["thumbnails"]["default"]["url"],
               });
-              this.state.apiSuccess = true;
+              this.state.apiSuccess = false;
           })
           .catch(() => {
               console.log('通信に失敗しました_res');
-              this.state.apiSuccess = false;
+              this.state.apiSuccess = true;
           });
       })
       .catch(() => {
           console.log('通信に失敗しました');
-          this.state.apiSuccess = false;
+          this.state.apiSuccess = true;
       });
   }
   
@@ -483,7 +485,7 @@ export default class ChampionshipScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.setStatusAsync({ shouldPlay: false});
+    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
   };
 
   // BGM再生用（音量なども調整）
@@ -503,6 +505,8 @@ export default class ChampionshipScreen extends Component {
       console.log("first!");
       console.log(this.state.expFlag);
     }
+    this.state.soundPreload.bgm.change = new Audio.Sound;
+    await this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.03);
 
     this.setState(state =>  ({
       tableData:{
@@ -695,7 +699,202 @@ export default class ChampionshipScreen extends Component {
     }
   };
 
-  setBattle = (col1,col2) =>{
+  skipGroup =() =>{
+    if(!this.state.endA){
+      this.setState(state =>  ({
+
+        groupA:true,
+
+        tableR1:this.state.KirinukiImage1,
+        tableR2:this.state.KirinukiImage2,
+        tableR3:this.state.KirinukiImage3,
+        tableR4:this.state.KirinukiImage4,
+
+        tableR1_name:this.state.KirinukiData1,
+        tableR2_name:this.state.KirinukiData2,
+        tableR3_name:this.state.KirinukiData3,
+        tableR4_name:this.state.KirinukiData4,
+
+        tableR1_st:this.state.KirinukiDes1,
+        tableR2_st:this.state.KirinukiDes2,
+        tableR3_st:this.state.KirinukiDes3,
+        tableR4_st:this.state.KirinukiDes4,
+
+        katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"],
+        katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"],
+        katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"],
+        katoPoint4:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"],
+
+      }));
+      // 戦闘力で決定)
+      // 1の勝ち抜け
+      if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+        this.loseSynser(false,true,true,true);
+      }
+      // 2の勝ち抜け
+      if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+        this.loseSynser(true,false,true,true);
+      }
+      // 3の勝ち抜け
+      if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+        this.loseSynser(true,true,false,true);
+      }
+      // 4の勝ち抜け
+      if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+        this.loseSynser(true,true,true,false);
+      }
+      // 同着はスキップできないように。
+    }
+    else{
+      if(!this.state.endB){
+        this.setState(state =>  ({
+
+          groupB:true,
+  
+          tableR1:this.state.KirinukiImage5,
+          tableR2:this.state.KirinukiImage6,
+          tableR3:this.state.KirinukiImage7,
+          tableR4:this.state.KirinukiImage8,
+  
+          tableR1_name:this.state.KirinukiData5,
+          tableR2_name:this.state.KirinukiData6,
+          tableR3_name:this.state.KirinukiData7,
+          tableR4_name:this.state.KirinukiData8,
+  
+          tableR1_st:this.state.KirinukiDes5,
+          tableR2_st:this.state.KirinukiDes6,
+          tableR3_st:this.state.KirinukiDes7,
+          tableR4_st:this.state.KirinukiDes8,
+  
+          katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes5["videoCount"],
+          katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes6["videoCount"],
+          katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes7["videoCount"],
+          katoPoint4:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes8["videoCount"],
+  
+        }));
+        // 戦闘力で決定)
+        // 1の勝ち抜け
+        if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+          this.loseSynser(false,true,true,true);
+        }
+        // 2の勝ち抜け
+        if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+          this.loseSynser(true,false,true,true);
+        }
+        // 3の勝ち抜け
+        if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+          this.loseSynser(true,true,false,true);
+        }
+        // 4の勝ち抜け
+        if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+          this.loseSynser(true,true,true,false);
+        }
+        // 同着はスキップできないように。
+      }
+      else{
+        if(!this.state.endC){
+          this.setState(state =>  ({
+
+            groupC:true,
+    
+            tableR1:this.state.KirinukiImage9,
+            tableR2:this.state.KirinukiImage10,
+            tableR3:this.state.KirinukiImage11,
+            tableR4:this.state.KirinukiImage12,
+
+            tableR1_name:this.state.KirinukiData9,
+            tableR2_name:this.state.KirinukiData10,
+            tableR3_name:this.state.KirinukiData11,
+            tableR4_name:this.state.KirinukiData12,
+
+            tableR1_st:this.state.KirinukiDes9,
+            tableR2_st:this.state.KirinukiDes10,
+            tableR3_st:this.state.KirinukiDes11,
+            tableR4_st:this.state.KirinukiDes12,
+
+            katoPoint1:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"],
+            katoPoint2:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"],
+            katoPoint3:this.state.KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"],
+            katoPoint4:this.state.KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"],
+    
+          }));
+          // 戦闘力で決定)
+          // 1の勝ち抜け
+          if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+            this.loseSynser(false,true,true,true);
+          }
+          // 2の勝ち抜け
+          if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+            this.loseSynser(true,false,true,true);
+          }
+          // 3の勝ち抜け
+          if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+            this.loseSynser(true,true,false,true);
+          }
+          // 4の勝ち抜け
+          if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+            this.loseSynser(true,true,true,false);
+          }
+          // 同着はスキップできないように。
+        }
+        else{
+          if(!this.state.endD){
+            this.setState(state =>  ({
+
+              groupD:true,
+      
+              tableR1:this.state.KirinukiImage13,
+              tableR2:this.state.KirinukiImage14,
+              tableR3:this.state.KirinukiImage15,
+              tableR4:this.state.KirinukiImage16,
+
+              tableR1_name:this.state.KirinukiData13,
+              tableR2_name:this.state.KirinukiData14,
+              tableR3_name:this.state.KirinukiData15,
+              tableR4_name:this.state.KirinukiData16,
+
+              tableR1_st:this.state.KirinukiDes13,
+              tableR2_st:this.state.KirinukiDes14,
+              tableR3_st:this.state.KirinukiDes15,
+              tableR4_st:this.state.KirinukiDes16,
+
+              katoPoint1:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"],
+              katoPoint2:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"],
+              katoPoint3:this.state.KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"],
+              katoPoint4:this.state.KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"],
+      
+            }));
+            // 戦闘力で決定)
+            // 1の勝ち抜け
+            if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+              this.loseSynser(false,true,true,true);
+            }
+            // 2の勝ち抜け
+            if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+              this.loseSynser(true,false,true,true);
+            }
+            // 3の勝ち抜け
+            if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+              this.loseSynser(true,true,false,true);
+            }
+            // 4の勝ち抜け
+            if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+              this.loseSynser(true,true,true,false);
+            }
+            // 同着はスキップできないように。
+          }
+        }
+      }
+    }
+  };
+
+  setBattle = async(col1,col2) =>{
+    try{
+      console.log("stop");
+    }
+    catch(error){
+      console.log("no stop");
+    }
     if(this.state.battleFlag){
       return 0;
     }
@@ -705,10 +904,6 @@ export default class ChampionshipScreen extends Component {
     this.setState(state =>  ({
       p1:col1,
       p2:col2,
-      // p1MOVE_1 : this.selectMove("p1"),
-      // p1MOVE_2 : this.selectMove("p1"),
-      // p2MOVE_1 : this.selectMove("p2"),
-      // p2MOVE_2 : this.selectMove("p2"),
     }));
 
     switch(col1){
@@ -771,8 +966,8 @@ export default class ChampionshipScreen extends Component {
         }));
       break;
     }
-
-    return this.start();
+    
+    this.start();
   };
 
   // 自動で技のピックアップ
@@ -909,7 +1104,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/this.state.p2KatoPoint}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10)}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -933,7 +1128,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/this.state.p2KatoPoint}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10)}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -957,14 +1152,13 @@ export default class ChampionshipScreen extends Component {
 
   // p2技発動
   p2move = async(select) =>{
-    const soundObject = new Audio.Sound();
     switch(select){
       case "1":
         this.state.soundPreload.r2.move1 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/this.state.p1KatoPoint}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -988,7 +1182,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/this.state.p1KatoPoint}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -1432,7 +1626,7 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         resultFlag:true,
       }));
-      this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.next1,1);
+      this.soundStart(this.state.soundPreload.bgm.final,Sounds.next1,1);
     }
     this.setState(state =>  ({
       tableData:{
@@ -1463,8 +1657,10 @@ export default class ChampionshipScreen extends Component {
 
   // 再戦
   start = async() =>{
-    this.stopBgm();
-    this.soundStart(Sounds.battle1,0.03);
+    this.stopBgm(this.state.soundPreload.bgm.title);
+    // this.stopBgm(this.state.soundPreload.bgm.battle1);
+    this.state.soundPreload.bgm.battle1 = new Audio.Sound;
+    this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle1,0.03);
 
     // バトル中のボタン停止
     this.setState(state =>  ({battleFlag:true}));
@@ -1503,29 +1699,18 @@ export default class ChampionshipScreen extends Component {
   goto = async(destination) => {
     try {
     // destinationごとに音声を変えておく
-      const soundObject = new Audio.Sound();
+      this.state.soundPreload.bgm.change = new Audio.Sound();
       switch(destination){
         case "ホーム":
-          await soundObject.loadAsync(require('./assets/sound/yaruo.mp3'));
-          break;
+          this.soundStart(this.state.bgm.change,Sounds.katou7,0.5);
+          this.stopBgm(this.state.soundPreload.bgm.title);
+          this.stopBgm(this.state.soundPreload.bgm.final);
+          return this.props.navigation.navigate(destination);
       }
-
-      await soundObject.playAsync();
-      console.log('success!!!');
-      await this.stopBgm();
-
-      this.props.navigation.navigate(destination)
     } 
     catch (error) {
       console.log('error...');
     }
-  };
-  
-
-
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-    this.stopBgm();
   };
 
   render(){
@@ -1534,7 +1719,7 @@ export default class ChampionshipScreen extends Component {
       if(Math.round(
         this.state.timer) <= 0){
           clearInterval(this.intervalId);
-          this.stopBgm();
+          this.stopBgm(this.state.soundPreload.bgm.battle1);
           this.state.battleFlag=false;
           if(this.state.p1HP < this.state.p2HP){
             // p1負け
@@ -1558,7 +1743,7 @@ export default class ChampionshipScreen extends Component {
         if(this.state.p1HP <= 0){
             // p1負け
             clearInterval(this.intervalId);
-            this.stopBgm();
+            this.stopBgm(this.state.soundPreload.bgm.battle1);
             this.state.battleFlag=false;
             this.state.tableData[this.state.p2][this.state.p1]="←勝";
             this.state.tableData[this.state.p1][this.state.p2]="←負";
@@ -1568,14 +1753,13 @@ export default class ChampionshipScreen extends Component {
         if(this.state.p2HP <= 0){
           // p2負け
           clearInterval(this.intervalId);
-          this.stopBgm();
+          this.stopBgm(this.state.soundPreload.bgm.battle1);
           this.state.battleFlag=false;
           this.state.tableData[this.state.p2][this.state.p1]="←負";
           this.state.tableData[this.state.p1][this.state.p2]="←勝";
           this.checkTable();
           // this.state.timer = 55;
          }
-         console.log(this.state.soundPreload);
     }
 
     return(
@@ -1587,16 +1771,11 @@ export default class ChampionshipScreen extends Component {
             {!this.state.groupA && !this.state.groupB && !this.state.groupC && !this.state.groupD && (
               <View style={{flex: 0.2,marginTop:"5%",marginBottom:"5%" }}>
                 {this.state.running && (
-                  <View style={{flexDirection:"row"}}>
-                    <Text style = {styles.hello}>さて、今回エントリーの16チャンネルは...</Text>
-                      <TouchableOpacity 
-                        style={{backgroundColor:"#eee",marginLeft:"3%"}}
-                        onPress={() =>this.changeAPI()}
-                      >
-                        <Text>再読み込み ☜</Text>
-                    </TouchableOpacity>
-                  </View>
-                  
+                  <View>
+                    {this.state.apiSuccess &&(
+                      <Text style = {styles.hello}>さて、今回エントリーの16チャンネルは...</Text>
+                    )}
+                  </View>        
                 )}
               </View>
             )}
@@ -1853,97 +2032,140 @@ export default class ChampionshipScreen extends Component {
             {this.state.memberListFlag && (
               <View style={{flex:1,alignItems:"center",marginTop:"3%"}}>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
-                {!this.state.endA && (
-                  <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => 
-                      this.changeScene("A")}
-                  >
-                    <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',
-                  }}>
-                      Aの対戦を見守る
-                    </Text>
-                  </TouchableOpacity>
-                )}
-                {!this.state.endB && (
-                  <TouchableOpacity 
-                    style={styles.button}
-                    onPress={() => 
-                      this.changeScene("B")}
-                  >
-                    <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                      Bの対戦を見守る
-                    </Text>
-                  </TouchableOpacity>
-                )}
+                  {!this.state.endA && (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.changeScene("A")}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',
+                    }}>
+                        Aの対戦を見守る
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {!this.state.endB && (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.changeScene("B")}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        Bの対戦を見守る
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
-                {!this.state.endC && (
-                  <TouchableOpacity 
-                  style={styles.button}
-                  onPress={() => 
-                    this.changeScene("C")}
-                  >
-                  <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                    Cの対戦を見守る
-                  </Text>
-                  </TouchableOpacity>
-                )}
-                {!this.state.endD && (
-                  <TouchableOpacity 
-                  style={styles.button}
-                  onPress={() => 
-                    this.changeScene("D")}
-                  >
-                  <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                    Dの対戦を見守る
-                  </Text>
-                  </TouchableOpacity>
-                )}
-                {this.state.final && (
-                  <TouchableOpacity 
+                  {!this.state.endC && (
+                    <TouchableOpacity 
                     style={styles.button}
                     onPress={() => 
-                      null}
-                  >
+                      this.changeScene("C")}
+                    >
                     <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                      決勝戦へ
+                      Cの対戦を見守る
                     </Text>
-                  </TouchableOpacity>
-                )}
-
+                    </TouchableOpacity>
+                  )}
+                  {!this.state.endD && (
+                    <TouchableOpacity 
+                    style={styles.button}
+                    onPress={() => 
+                      this.changeScene("D")}
+                    >
+                    <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                      Dの対戦を見守る
+                    </Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <View style={{alignItems:"center",flexDirection:"row"}}>
+                  {this.state.endA && this.state.endB && this.state.endC && this.state.endD && (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        this.changeScene("final")}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        決勝戦へ
+                      </Text>
+                    </TouchableOpacity>
+                  )}
+                  {this.state.endA || this.state.endB || this.state.endC || this.state.endD && (
+                    <TouchableOpacity 
+                      style={styles.button}
+                      onPress={() => 
+                        null}
+                    >
+                      <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
+                        残りのグループを1つスキップ
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
-
             )}
           </View>
+        )}
+
+        {!this.state.apiSuccess && this.state.firstFlag &&(
+          <TouchableOpacity 
+            style={styles.fullScreenButton}
+            onPress={() =>this.changeAPI()}
+          >
+            <View style={styles.fullScreen}>
+              <Text style={styles.gameOverText}>
+                再読み込み ☜
+              </Text>
+              <Text style={styles.gameOverText}>
+                (10回以上押しても変わらない場合は、少しだけお待ちください。)
+              </Text>
+            </View>
+          </TouchableOpacity>
         )}
         
         {/* groupAの画面 */}
         {/* 対戦表→バトルフィールド */}
         {!this.state.memberListFlag && !this.state.resultFlag  && (
           <View 
-            style={{flex:1}}
+            style={{
+              flex:1,
+              width:Constants.MAX_WIDTH}}
           >
             {/* フィールド */}
-            <View 
-              // style={{backgroundColor:"#ffff00"}}
-            >
-              <View style = {styles.name}>
+            <View >
+              <Image
+                style={{ 
+                  backgroundColor:'#eee',
+                  width:this.state.width,
+                  height:this.state.height,
+                  // alignItems:"center",
+                  // position:"absolute",
+                  resizeMode:"cover",
+                }}
+                source={Images.pizaField}
+              />
+              <View style = {{
+                flexDirection: 'row',
+                position: 'absolute',
+                top:Constants.MAX_WIDTH * 250/400/10,
+                width:Constants.MAX_WIDTH,
+                height:60,
+                textAlign:'center',
+                justifyContent:"center",
+                // backgroundColor: "red",
+              }}>
                 <Text style = {styles.name_r}>
                   {this.state.p1Name}
                 </Text>
                 <Text style = {{
                 textAlign:'center',
-                marginRight:"2%",
-                marginLeft:"2%",
+                padding:"2%",
                 fontSize: 24,
                 fontWeight: 'bold',
-                // fontFamily: 'DotGothic16_400Regular',
                 backgroundColor:"#fff",
-                paddingTop:"5%",
-                paddingRight:"2%",
-                paddingLeft:"2%",
+
                 }}>
                   {Math.round(this.state.timer)}
                 </Text>
@@ -1951,179 +2173,192 @@ export default class ChampionshipScreen extends Component {
                   {this.state.p2Name}
                 </Text>
               </View>
-              <Image
-                width={this.state.width+50}
-                height={this.state.height}
-                style={{ 
-                  backgroundColor: '#eee' ,
-                  // alignItems:"center",
-                  // position:"absolute",
-                  // marginLeft:"2.5%",
-                  // marginRight:"2.5%",
-                  resizeMode:"stretch",
-                }}
-                source={Images.pizaField}
-              />
+              {/* HPバー */}
+              <View style = {{
+                flexDirection: 'row',
+                position: 'absolute',
+                top:Constants.MAX_WIDTH * 250/400/10+60,
+                width:Math.round(Constants.MAX_WIDTH/2*this.state.p1HP/1000),
+                height:10,
+                textAlign:'center',
+                justifyContent:"center",
+                backgroundColor: "red",
+                left:0,
+              }}>
+              </View>
+              <View style = {{
+                flexDirection: 'row',
+                position: 'absolute',
+                top:Constants.MAX_WIDTH * 250/400/10+60,
+                width:Math.round(Constants.MAX_WIDTH/2*this.state.p2HP/1000),
+                height:10,
+                textAlign:'center',
+                justifyContent:"center",
+                backgroundColor: "blue",
+                right:0,
+              }}>
+              </View>
               {/* Player1 */}
               <Image
                 source={{ uri: `${this.state.p1Image}` }}
-                style={{ width: 100, height: 100 ,top:this.state.position1Y, left: this.state.position1X, position:'absolute',
-                backgroundColor:"#cd853f",
+                style={{ width: this.state.height/3, height: this.state.height/3 ,top:this.state.position1Y, left: this.state.position1X, position:'absolute',
+                // backgroundColor:"#cd853f",
+                resizeMode:"contain",
                 borderRadius:10,}}
               /> 
-              <Text style={{ width:Math.round(this.state.p1HP/1000 *100),height: 15,top:this.state.position1Y-20, left: this.state.position1X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p1HP)}</Text>  
-              <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/1000 *100)}%</Text>  
+              {/* <Text style={{ width:Math.round(this.state.p1HP/1000 *100),height: 15,top:this.state.position1Y-20, left: this.state.position1X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p1HP)}</Text>  
+              <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/1000 *100)}%</Text>   */}
               
 
               {/* Player2 */}
               <Image
                 source={{ uri: `${this.state.p2Image}` }}
-                style={{ width: 100, height: 100 ,top:this.state.position2Y, left: this.state.position2X, position:'absolute',
-                backgroundColor:"#ffd700",
-                borderRadius:10,}}
+                style={{ width: this.state.height/3, height: this.state.height/3 ,top:this.state.position2Y, left: this.state.position2X, position:'absolute',
+                // backgroundColor:"#cd853f",
+                borderRadius:10}}
               />
-              <Text style={{ width:Math.round(this.state.p2HP/1000*100), height: 15 ,top:this.state.position2Y-20, left: this.state.position2X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p2HP)}</Text> 
+              {/* <Text style={{ width:Math.round(this.state.p2HP/1000*100), height: 15 ,top:this.state.position2Y-20, left: this.state.position2X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p2HP)}</Text> 
 
-              <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/1000*100)}%</Text>  
+              <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/1000*100)}%</Text>   */}
 
 
-              <Text style={{ width:200,height: 25,top:Constants.MAX_WIDTH * 250/400 + 25, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p1KatoPoint}</Text>  
-              <Text style={{ width:200,height: 25,top:Constants.MAX_WIDTH * 250/400 + 25, left: Constants.MAX_WIDTH - 200-10, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p2KatoPoint}</Text>  
+              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{this.state.p1KatoPoint}</Text>  
+              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, right:0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{this.state.p2KatoPoint}</Text>  
             </View>
             {/* 対戦表 */}
-            <View style={{flex:1,position:"absolute",bottom:10,}}>
+            <View style={{flex:1,position:"absolute",bottom:0}}>
               <View style={styles.tableRow}>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
-                  backgroundColor:"#000000",borderColor:"#000000",}}
+                  style={{ width: this.state.width/5, height: Constants.TITLE_WIDTH/5,
+                  backgroundColor:"#000000",borderColor:"#000000",justifyContent:"center"}}
                 >
-                  <Text style={{color:"#eee",textAlign:"center",fontSize:16,padding:"25%"}}>
+                  {/* <Text style={{color:"#eee",textAlign:"center",fontSize:24,}}>
                     {this.state.groupA && ("A予")}
                     {this.state.groupB && ("B予")}
                     {this.state.groupC && ("C予")}
                     {this.state.groupD && ("D予")}
                     {this.state.final && ("決勝")}
-                  </Text>
+                  </Text> */}
                 </View>
                 <Image 
                   style ={styles.image}
                   source={{ uri: `${this.state.tableR1}` }}
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: this.state.width/5, height: this.state.width/5 }}
                 />
                 <Image 
                   style ={styles.image}
                   source={{ uri: `${this.state.tableR2}` }}
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: this.state.width/5, height: this.state.width/5 }}
                 />
                 <Image 
                   style ={styles.image}
                   source={{ uri: `${this.state.tableR3}` }}
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: this.state.width/5, height: this.state.width/5 }}
                 />
                 <Image 
                   style ={styles.image}
                   source={{ uri: `${this.state.tableR4}` }}
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: this.state.width/5, height: this.state.width/5 }}
                 />
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  }}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  }}
                   source={{ uri: `${this.state.tableR1}` }}
                 />
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  ,
                   backgroundColor:"#000000",borderColor:"#000000", }}
                 >
                 </View>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40 )/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   }}
                   source={{ uri: `${this.state.tableR2}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   }}
                   source={{ uri: `${this.state.tableR3}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   }}
                   source={{ uri: `${this.state.tableR4}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
+                  style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5 ,
+                  style={{ width:this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5 ,
                     backgroundColor:"#000000"}}
                 />
               </View>
@@ -2177,6 +2412,7 @@ const styles = StyleSheet.create({
   hello: {
     fontSize: 16,
     fontWeight: 'bold',
+    textAlign:"center",
     // fontFamily: 'DotGothic16_400Regular',
     // position:"absolute",
   },
@@ -2272,35 +2508,42 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginLeft:"5%",
     marginRight:"5%",
-    paddingTop:"1%",
+    paddingTop:"3%",
+    paddingBottom:"3%",
     textAlign:'center',
+    flex:1,
     // backgroundColor: "red",
   },
   name:{
     flexDirection: 'row',
     position: 'relative',
-    marginLeft:"5%",
-    marginRight:"5%",
+    marginLeft:"1%",
+    marginRight:"1%",
     marginBottom:"1%",
     marginTop:"1%",
     textAlign:'center',
     height:60,
+    justifyContent:"center",
     // backgroundColor: "red",
   },
   name_r:{
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
     flex:1,
-    paddingTop:"5%",
+    // backgroundColor:"blue",
+    justifyContent: 'center',
+    // paddingTop:"5%",
   },
   name_l:{
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
     flex:1,
-    paddingTop:"5%",
+    // backgroundColor:"red",
+    justifyContent: 'center',
+    // paddingTop:"5%",
   },
 });

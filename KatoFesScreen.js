@@ -78,6 +78,26 @@ export default class FesScreen extends Component {
       p2MOVE_1:KatoFesP2MoveList.ai,
       p2MOVE_2:KatoFesP2MoveList.ronpa,
       p2MOVE_3:KatoFesP2MoveList.ronpa,
+
+      // 音声の管理用
+      soundPreload:{
+        r1:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+          move3:new Audio.Sound,
+        },
+        r2:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+          move3:new Audio.Sound,
+        },
+        bgm:{
+          battle1:new Audio.Sound,
+          title:new Audio.Sound,
+          breaking:new Audio.Sound,
+          change:new Audio.Sound,
+        }
+      },
     };
   }
 
@@ -103,28 +123,26 @@ export default class FesScreen extends Component {
     this.intervalId = this.system();
 
     if(this.state.running){
-      this.soundStart(Sounds.battle1,0.03);
+      this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle2,0.03);
     }
   };
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
-    this.stopBgm();
+    this.stopBgm(this.state.soundPreload.bgm.battle1);
+    this.stopBgm(this.state.soundPreload.bgm.change);
   };
 
-  stopBgm =async()=>{
-    await this.soundId.setStatusAsync({ shouldPlay: false, positionMillis: 0 });
+  stopBgm =async(state)=>{
+    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
   };
 
   // BGM再生用（音量なども調整）
-  soundStart =async(select,inputVol) =>{
-    // bgm
-      this.soundId = new Audio.Sound();//オブジェクト導入
-      await this.soundId.loadAsync(select);//ファイルロード
-      // console.log(this.soundId );
-      await this.soundId.setStatusAsync({ volume: inputVol });//音量
-      await this.soundId.playAsync();//スタート
-  };
+  soundStart =async(state,select,inputVol) =>{
+    await state.loadAsync(select);
+    await state.setStatusAsync({ volume:inputVol});//音量
+    await state.playAsync();//スタート
+};
 
   // BGMの切り替え
   bgmChange = (target,select) =>{
@@ -235,9 +253,9 @@ export default class FesScreen extends Component {
 
   // p1技発動
   p1move = async(select) =>{
-    const soundObject = new Audio.Sound();
     switch(select){
       case "1":
+        this.state.soundPreload.r1.move1 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
@@ -257,10 +275,11 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_1.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p1MOVE_1.sound);
+          return this.soundStart(this.state.soundPreload.r1.move1,this.state.p1MOVE_1.sound,1);
         }
         break;
       case "2":
+        this.state.soundPreload.r1.move2 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
@@ -280,10 +299,11 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_2.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p1MOVE_2.sound);
+          return this.soundStart(this.state.soundPreload.r1.move2,this.state.p1MOVE_2.sound,1);
         }
         break;
       case "3":
+        this.state.soundPreload.r1.move3 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_3.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_3.range){
           // 相手のHP減少
@@ -303,23 +323,17 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_3.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p1MOVE_3.sound);
+          return this.soundStart(this.state.soundPreload.r1.move3,this.state.p1MOVE_3.sound,1);
         }
         break;
-    }
-    try{
-      await soundObject.playAsync();
-    }
-    catch(error){
-      // console.log("sound error");
     }
   };
 
   // p2技発動
   p2move = async(select) =>{
-    const soundObject = new Audio.Sound();
     switch(select){
       case "1":
+        this.state.soundPreload.r2.move1 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
@@ -339,10 +353,11 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_1.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p2MOVE_1.sound);
+          return this.soundStart(this.state.soundPreload.r2.move1,this.state.p2MOVE_1.sound,1);
         }
         break;
       case "2":
+        this.state.soundPreload.r2.move2 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
@@ -362,10 +377,11 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_2.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p2MOVE_2.sound);
+          return this.soundStart(this.state.soundPreload.r2.move2,this.state.p2MOVE_2.sound,1);
         }
         break;
       case "3":
+        this.state.soundPreload.r2.move3 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_3.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_3.range){
           // 相手のHP減少
@@ -385,21 +401,15 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_3.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p2MOVE_3.sound);
+          return this.soundStart(this.state.soundPreload.r2.move3,this.state.p2MOVE_3.sound,1);
         }
         break;
-    }
-    try{
-      await soundObject.playAsync();
-    }
-    catch(error){
-      // console.log("sound error");
     }
   };
 
   // 応援ボタン
-  addGuts = () =>{
-    this.state.p1Guts = this.state.p1Guts + 5;
+  addGuts = async() =>{
+    await this.setState(state =>  ({p1Guts : this.state.p1Guts + 3}));
   }
 
   //cpuの技選択ロジック
@@ -453,7 +463,7 @@ export default class FesScreen extends Component {
       var p1Rand = Math.random();
       var p2Rand = Math.random();
 
-      this.state.p1Guts = this.state.p1Guts + 3;
+      this.state.p1Guts = this.state.p1Guts + 2;
       this.state.p2Guts = this.state.p2Guts + 5;
 
       // player1の移動ロジック
@@ -497,9 +507,10 @@ export default class FesScreen extends Component {
 
   // 再戦
   reStart = async(count) =>{
-    this.stopBgm();
-    this.soundStart(Sounds.battle1,0.03);
+    this.stopBgm(this.state.soundPreload.bgm.breaking);
     this.state.roundCount = count;
+    this.state.soundPreload.bgm.breaking = new Audio.Sound;
+    this.state.soundPreload.bgm.battle1 = new Audio.Sound;
     // ラウンド判定
     switch(this.state.roundCount){
       case 1:
@@ -518,7 +529,8 @@ export default class FesScreen extends Component {
           p2DEF:KatoFesP2Data.hiroyuki.status.DEF,
 
           p2HPmax:KatoFesP2Data.hiroyuki.status.HP,
-        }));     
+        })); 
+        this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle2,0.03);
         break;
 
         case 2:
@@ -538,6 +550,7 @@ export default class FesScreen extends Component {
   
             p2HPmax:KatoFesP2Data.gear.status.HP,
           }));     
+          this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle5,0.03);
           break;
 
           case 3:
@@ -557,6 +570,7 @@ export default class FesScreen extends Component {
     
               p2HPmax:KatoFesP2Data.nise.status.HP,
             }));     
+            this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle3,0.03);
             break;
 
             case 4:
@@ -576,6 +590,7 @@ export default class FesScreen extends Component {
       
                 p2HPmax:KatoFesP2Data.naranton.status.HP,
               }));     
+              this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle1,0.03);
               break;
 
             case 5:
@@ -595,6 +610,7 @@ export default class FesScreen extends Component {
 
                 p2HPmax:KatoFesP2Data.golden_naoko.status.HP,
               }));     
+              this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle4,0.03);
               break;
 
               case 6:
@@ -632,16 +648,12 @@ export default class FesScreen extends Component {
   goto = async(destination) => {
     try {
     // destinationごとに音声を変えておく
-      const soundObject = new Audio.Sound();
       switch(destination){
         case "ホーム":
-          await soundObject.loadAsync(require('./assets/sound/fujinami2.mp3'));
+          await this.stopBgm(this.state.soundPreload.bgm.breaking);
+          this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.5);
           break;
       }
-
-      await soundObject.playAsync();
-      console.log('success!!!');
-
       this.setState({
         roundCount:1,
         running:true,
@@ -658,16 +670,11 @@ export default class FesScreen extends Component {
   
   render(){
 
-    // console.log(this.props.route.params);
-    if(this.state.roundCount==5){
-      this.state.roundCount="最終";
-    }
-
     // 対戦の終了判定
     if(Math.round(
     this.state.timer) <= 0){
       clearInterval(this.intervalId);
-      this.stopBgm();
+      this.stopBgm(this.state.soundPreload.bgm.battle1);
       if(this.state.p1HP/this.state.p1HPmax <= this.state.p2HP/this.state.p2HPmax){
         this.state.running = false;
         // 負け広告
@@ -681,6 +688,7 @@ export default class FesScreen extends Component {
         this.soundStart(Sounds.next1,1);
         if(this.state.roundCount>=5){
           this.state.endFlag = true;
+          this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
         }
         else{
           this.state.winning = true;
@@ -690,7 +698,7 @@ export default class FesScreen extends Component {
     }
     if(this.state.p1HP <= 0){
         clearInterval(this.intervalId);
-        this.stopBgm();
+        this.stopBgm(this.state.soundPreload.bgm.battle1);
         if(this.state.p1HP <= this.state.p2HP){
           this.state.running = false;
           // 負け広告
@@ -698,40 +706,21 @@ export default class FesScreen extends Component {
         if(random < 0.3){
           this.Interstitial();
         }
-          this.soundStart(Sounds.gameOver,0.03);
-        }
-        else{
-          this.soundStart(Sounds.next1,1);
-          if(this.state.roundCount>=5){
-            this.state.endFlag = true;
-          }
-          else{
-            this.state.winning = true;
-          }
+          this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
         }
         // this.state.timer = 55;
       }
     if(this.state.p2HP <= 0){
       clearInterval(this.intervalId);
-      this.stopBgm();
-      if(this.state.p1HP <= this.state.p2HP){
-        this.state.running = false;
-        // 負け広告
-        var random = Math.random();
-        if(random < 0.3){
-          this.Interstitial();
-        }
-        this.soundStart(Sounds.gameOver,0.03);
-      }
-      else{
-        this.soundStart(Sounds.next1,1);
+      this.stopBgm(this.state.soundPreload.bgm.battle1);
+        this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,1);
         if(this.state.roundCount>=5){
           this.state.endFlag = true;
+          this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
         }
         else{
           this.state.winning = true;
         }
-      }
       // this.state.timer = 55;
      }
 
@@ -740,19 +729,35 @@ export default class FesScreen extends Component {
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.background} />
         <View style={{
           position:'absolute',
-          top:"1%"}}>
-          <Text style = {{
-            textAlign:'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            // fontFamily: 'DotGothic16_400Regular',
-            backgroundColor:"#fff",
-            marginLeft:"30%",
-            marginRight:"30%",
-            height:24,
-            }}>
-              現在{this.state.roundCount}戦目
-          </Text>
+          top:"1%",width:Constants.MAX_WIDTH}}>
+            {this.state.roundCount<=5 &&(
+              <Text style = {{
+                textAlign:'center',
+                fontSize: 18,
+                fontWeight: 'bold',
+                // fontFamily: 'DotGothic16_400Regular',
+                backgroundColor:"#fff",
+                marginLeft:"30%",
+                marginRight:"30%",
+                height:24,
+                }}>
+                  現在{this.state.roundCount}戦目
+              </Text>
+            )}
+            {this.state.roundCount>5 &&(
+              <Text style = {{
+                textAlign:'center',
+                fontSize: 18,
+                fontWeight: 'bold',
+                // fontFamily: 'DotGothic16_400Regular',
+                backgroundColor:"#fff",
+                marginLeft:"30%",
+                marginRight:"30%",
+                height:24,
+                }}>
+                  最終戦
+              </Text>
+            )}
           <View style = {styles.name}>
             <Text style = {styles.name_r}>
               {this.state.p1Name}
@@ -789,36 +794,66 @@ export default class FesScreen extends Component {
             </Text>
           </View>
           <Image
-            width={this.state.width}
-            height={this.state.height}
             style={{ 
+              width:this.state.width,
+              height:this.state.height,
+              marginTop:"1%",
               backgroundColor: '#eee' ,
-              alignItems:"center",
-              borderRadius:10,
+              resizeMode:"cover"
           }}
             source={Images.battleField}
           />
+
+          {/* HPバー */}
+          <View style = {{
+                flexDirection: 'row',
+                position: 'absolute',
+                top:Constants.MAX_WIDTH * 250/400/10 +90,
+                width:Math.round(Constants.MAX_WIDTH/2*this.state.p1HP/this.state.p1HPmax),
+                height:10,
+                textAlign:'center',
+                justifyContent:"center",
+                backgroundColor: "red",
+                left:0,
+              }}>
+          </View>
+          <View style = {{
+                flexDirection: 'row',
+                position: 'absolute',
+                top:Constants.MAX_WIDTH * 250/400/10 +90, 
+                width:Math.round(Constants.MAX_WIDTH/2*this.state.p2HP/this.state.p2HPmax),
+                height:10,
+                textAlign:'center',
+                justifyContent:"center",
+                backgroundColor: "blue",
+                right:0,
+              }}>
+          </View>
+          <Text style={{ height: 30 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, left: this.state.width/6, position:'absolute',fontSize:24,backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p1HP)} ({Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%)</Text>  
+          <Text style={{ height: 30 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, right: this.state.width/6, position:'absolute',fontSize:24,backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p2HP)} ({Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%)</Text>  
           {/* Player1 */}
            <Image
               source={this.state.katomonImage}
-              style={{ width: 100, height: 100 ,top:this.state.position1Y, left: this.state.position1X, position:'absolute',
+              style={{ width: this.state.height/2.5, height: this.state.height/2.5 ,top:this.state.position1Y, left: this.state.position1X, position:'absolute',
               backgroundColor:"#cd853f",
               borderRadius:10,}}
             /> 
-            <Text style={{ width:Math.round(this.state.p1HP/this.state.p1HPmax * 100),height: 15,top:this.state.position1Y-20, left: this.state.position1X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p1HP)}</Text>  
-            <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%</Text>  
+            {/* <Text style={{ width:Math.round(this.state.p1HP/this.state.p1HPmax * 100),height: 15,top:this.state.position1Y-20, left: this.state.position1X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p1HP)}</Text>  
+            <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%</Text>   */}
           {/* Player2 */}
           <Image
               source={this.state.p2Katomon}
-              style={{ width: 100, height: 100 ,top:this.state.position2Y, left: this.state.position2X, position:'absolute',
+              style={{width: this.state.height/2.5, height: this.state.height/2.5 ,top:this.state.position2Y, left: this.state.position2X, position:'absolute',
               backgroundColor:"#ffd700",
               borderRadius:10,}}
             />
-            <Text style={{ width:Math.round(this.state.p2HP/this.state.p2HPmax * 100), height: 15 ,top:this.state.position2Y-20, left: this.state.position2X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p2HP)}</Text>  
-            <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%</Text>  
+            {/* <Text style={{ width:Math.round(this.state.p2HP/this.state.p2HPmax * 100), height: 15 ,top:this.state.position2Y-20, left: this.state.position2X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p2HP)}</Text>  
+            <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%</Text>   */}
 
           {/* 画面下半分 */}
-          <ScrollView style={{height:Constants.MAX_HEIGHT - Constants.MAX_WIDTH * 200/400+24+24+18}}>
+          <ScrollView style={{height:Constants.MAX_HEIGHT - Constants.MAX_WIDTH * 250/400 - 24 -18 -130,
+          // backgroundColor:"red"
+        }}>
             {/* 技ボタン */}
             <View style={{marginBottom:"0%"}}>
               <View style={styles.names}>
@@ -831,7 +866,7 @@ export default class FesScreen extends Component {
                   <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_1.range} 威力：{this.state.p1MOVE_1.power}</Text>
                 </TouchableOpacity>
                 <View style={styles.moveButtons}>
-                  <Text style={styles.move}>1.{this.state.p2MOVE_1.name}</Text>
+                  <Text style={styles.move_ene}>1.{this.state.p2MOVE_1.name}</Text>
                   <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_1.consumption_Guts}</Text>
                   <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_1.range} 威力：{this.state.p2MOVE_1.power}</Text>
                 </View>
@@ -846,7 +881,7 @@ export default class FesScreen extends Component {
                   <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_2.range} 威力：{this.state.p1MOVE_2.power}</Text>
                 </TouchableOpacity>
                 <View style={styles.moveButtons}>
-                  <Text style={styles.move}>2.{this.state.p2MOVE_2.name}</Text>
+                  <Text style={styles.move_ene}>2.{this.state.p2MOVE_2.name}</Text>
                   <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_2.consumption_Guts}</Text>
                   <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_2.range} 威力：{this.state.p2MOVE_2.power}</Text>
                 </View>
@@ -861,18 +896,26 @@ export default class FesScreen extends Component {
                   <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_3.range} 威力：{this.state.p1MOVE_3.power}</Text>
                 </TouchableOpacity>
                 <View style={styles.moveButtons}>
-                  <Text style={styles.move}>3.{this.state.p2MOVE_3.name}</Text>
+                  <Text style={styles.move_ene}>3.{this.state.p2MOVE_3.name}</Text>
                   <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_3.consumption_Guts}</Text>
                   <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_3.range} 威力：{this.state.p2MOVE_3.power}</Text>
                 </View>
               </View>
             </View>
-
-            {/* 応援ボタン */}
-            <View style = {styles.buttons}>
+          </ScrollView>
+        </View>
+        {/* 応援ボタン */}
+        <View style = {{
+                position: 'absolute',
+                paddingLeft:"3%",
+                paddingRight:"3%",
+                alignItems:"center",
+                bottom:0
+ 
+            }}>
                 <TouchableOpacity 
                   style ={styles.button}
-                  onPress={this.addGuts}
+                  onPress={() => {this.addGuts()}}
                 >
                   <Text style={{
                     fontSize: 20,
@@ -884,9 +927,6 @@ export default class FesScreen extends Component {
                   </Text>
                 </TouchableOpacity>
             </View>
-
-          </ScrollView>
-        </View>
         {/* ポップアップ */}
         {!this.state.running && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount)}>
@@ -896,7 +936,7 @@ export default class FesScreen extends Component {
             </View>
           </TouchableOpacity>
         )}
-        {this.state.winning && (
+        {this.state.winning && this.state.roundCount <=3 && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>次の相手へ!!</Text>
@@ -904,10 +944,19 @@ export default class FesScreen extends Component {
             </View>
           </TouchableOpacity>
         )}
+        {this.state.winning && this.state.roundCount >4 && (
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
+            <View style={styles.fullScreen}>
+              <Text style={styles.gameOverText}>最終決戦へ...!!</Text>
+              <Text style={styles.gameOverSubText}>準備はいいですか...？</Text>
+            </View>
+          </TouchableOpacity>
+        )}
         {this.state.endFlag && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("ホーム")}>
             <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>おめでとうございます!!遊んでいただきありがとうございました！！</Text>
+              <Text style={styles.gameOverText}>おめでとうございます!!</Text>
+              <Text style={styles.gameOverText}>遊んでいただきありがとうございました！！</Text>
               <Text style={styles.gameOverSubText}>Tap</Text>
             </View>
           </TouchableOpacity>
@@ -944,8 +993,6 @@ const styles = StyleSheet.create({
   gameArea:{
     height: Constants.TITLE_HEIGHT,
     width:Constants.MAX_WIDTH,
-    paddingLeft:"2%" ,
-    paddingRight:"2%",
   },
   fullScreen: {
     position: 'absolute',
@@ -1033,23 +1080,36 @@ const styles = StyleSheet.create({
   },
   move:{
     padding:"5%",
-    backgroundColor:"#eee",
-    fontSize: 14,
+    backgroundColor:"#ffc0cb",
+    fontSize: 18,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'left',
     padding:"5%",
     flex:1,
     opacity:0.7,
+    // borderRadius:20,
+  },
+  move_ene:{
+    padding:"5%",
+    backgroundColor:"#a9a9a9",
+    fontSize: 18,
+    fontWeight: 'bold',
+    // fontFamily: 'DotGothic16_400Regular',
+    textAlign:'left',
+    padding:"5%",
+    flex:1,
+    opacity:0.7,
+    // borderRadius:20,
   },
   moveSub:{
-    fontSize: 11,
+    fontSize: 16,
     backgroundColor:"#eee",
   },
   moveButtons:{
-    padding:"3%",
-    marginRight:"5%",
-    marginLeft:"5%",
+    padding:"2%",
+    // marginRight:"5%",
+    // marginLeft:"5%",
     flex:1,
   }
 });

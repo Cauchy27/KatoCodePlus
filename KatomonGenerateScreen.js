@@ -68,6 +68,13 @@ export default class KatomonGenerateScreen extends Component {
       duration_memo:null,
 
       katomon:"",
+
+      sound:{
+        bmg:new Audio.Sound,
+        change:new Audio.Sound,
+        effect1:new Audio.Sound,
+        effect2:new Audio.Sound,
+      },
     };
   }
 
@@ -145,6 +152,8 @@ export default class KatomonGenerateScreen extends Component {
           this.setState({
             duration_memo:duration,
           });
+          this.soundStart(this.state.sound.effect1,Sounds.generate1,0.05);
+          this.state.sound.effect1 = new Audio.Sound;
       })
       .catch(() => {
           console.log('通信に失敗しました');
@@ -286,21 +295,19 @@ export default class KatomonGenerateScreen extends Component {
        // 守り
        katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+10,
     });
+    this.soundStart(this.state.sound.effect2,Sounds.katomonGenerate,1);
   }
 
   goto = async(destination) => {
     try {
     // destinationごとに音声を変えておく
-      const soundObject = new Audio.Sound();
       switch(destination){
         case "カトフェス":
-          await soundObject.loadAsync(require('./assets/sound/yaruo.mp3'));
+          this.soundStart(this.state.sound.change,Sounds.yaruo,1);
           break;
       }
-
-      await soundObject.playAsync();
-      console.log('success!!!');
-      this.stopBgm();
+      this.stopBgm(this.state.sound.bmg);
+      // this.stopBgm(this.state.sound.effect2);
       this.setState(state =>  ({generate : true}));
 
       var sendKatomonData={
@@ -323,32 +330,24 @@ export default class KatomonGenerateScreen extends Component {
 
   componentDidMount = async() => {
 
-    // // bgm
-    // this.soundId = new Audio.Sound();//オブジェクト導入
-    // await this.soundId.loadAsync(Sounds.bgmGeneMenu);//ファイルロード
-    // // console.log(this.soundId );
-    // await this.soundId.setStatusAsync({ volume: 0.03 });//音量
-    // await this.soundId.playAsync();//スタート
-
-    this.soundStart(Sounds.bgmGeneMenu,0.03);
+    this.state.sound.bmg = new Audio.Sound;
+    this.soundStart(this.state.sound.bmg,Sounds.bgmGeneMenu,0.03);
 
   };
 
-  stopBgm =async()=>{
-    await this.soundId.setStatusAsync({ shouldPlay: false, positionMillis: 0 });
+  stopBgm =async(state)=>{
+    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
   };
 
-  soundStart =async(select,inputVol) =>{
-    // bgm
-      this.soundId = new Audio.Sound();//オブジェクト導入
-      await this.soundId.loadAsync(select);//ファイルロード
-      // console.log(this.soundId );
-      await this.soundId.setStatusAsync({ volume: inputVol });//音量
-      await this.soundId.playAsync();//スタート
-  };
+  soundStart =async(state,select,inputVol) =>{
+    await state.loadAsync(select);
+    await state.setStatusAsync({ volume:inputVol});//音量
+    await state.playAsync();//スタート
+};
 
   componentWillUnmount(){
-    this.stopBgm();
+    this.stopBgm(this.state.sound.bmg);
+    this.stopBgm(this.state.sound.effect1);
     // if(!this.state.generate){
     //   this.soundStart(Sounds.bgm1,0.03);
     // }
@@ -357,7 +356,7 @@ export default class KatomonGenerateScreen extends Component {
 
   render(){
     // console.log(this.state.KatoMonDataStatics);
-    console.log(this.state.duration_memo);
+    // console.log(this.state.duration_memo);
    
     if(this.state.translateFlag){
       this.animate();
@@ -366,122 +365,125 @@ export default class KatomonGenerateScreen extends Component {
       <SafeAreaView style = {styles.container}>
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.background} />
         {!this.state.generateFlag && (
-          <View style={{position:'absolute',}}>
-            <Text style={{
-                fontSize:18,
-                marginTop:"-20%",
-                marginLeft:"3%",
-                marginRight:"3%",
-              }}>好きなjun channel の配信URLを教えてもらうことはできますか？
-            </Text>
-            <Text style={{
-                fontSize:18,
-                marginLeft:"3%",
-                marginRight:"3%",
-                textAlign:"center",
-              }}>↓↓
-            </Text>
-            {/* カトコードにゅうりょく */}
-            <TextInput
-              style={{
-                fontSize:18,
-                borderBottomWidth: 1,
-                backgroundColor: "#d2b48c",
-                // color:"#fff",
-                textAlign:"center",
-                marginLeft:"10%",
-                marginRight:"10%",
-                marginTop:"5%",
-                paddingTop:"5%",
-                paddingBottom:"5%",
-                borderRadius:10,
-              }}
-              onChangeText={(inputKatoCode) => this.setState({inputKatoCode})}
-              value={this.state.inputKatoCode}
-            />
-            <View style={{
-                // backgroundColor: "#696969",
-                color:"#fff",
-                alignItems:"center",
-                marginLeft:"10%",
-                marginRight:"10%",
-                marginTop:"5%",
-                paddingTop:"5%",
-                paddingBottom:"5%",
-              }}>
+            <View style={{position:'absolute',}}>
+              <Text style={{
+                  fontSize:26,
+                  marginLeft:"3%",
+                  marginRight:"3%",
+                }}>好きなjun channel の配信URLを教えてもらうことはできますか？
+              </Text>
+              <Text style={{
+                  fontSize:26,
+                  textAlign:"center",
+                }}>↓↓
+              </Text>
+              {/* カトコードにゅうりょく */}
+              <TextInput
+                style={{
+                  fontSize:18,
+                  borderBottomWidth: 1,
+                  backgroundColor: "#d2b48c",
+                  // color:"#fff",
+                  textAlign:"center",
+                  marginLeft:"10%",
+                  marginRight:"10%",
+                  marginTop:"5%",
+                  paddingTop:"5%",
+                  paddingBottom:"5%",
+                  borderRadius:10,
+                }}
+                onChangeText={(inputKatoCode) => this.setState({inputKatoCode})}
+                value={this.state.inputKatoCode}
+              />
+              <View style={{
+                  // backgroundColor: "#696969",
+                  color:"#fff",
+                  alignItems:"center",
+                  marginLeft:"10%",
+                  marginRight:"10%",
+                  marginTop:"5%",
+                  paddingTop:"5%",
+                  paddingBottom:"5%",
+                }}>
 
-              {this.state.generateFalseFlag && (
-                <View>
-                  <Text style = {{
-                  position:"relative", 
-                  marginBottom:"5%", 
-                  color:"#ff0000" ,
-                  fontSize: 24,
-                  fontWeight: 'bold',
-                  // fontFamily: 'DotGothic16_400Regular',
+                {this.state.generateFalseFlag && (
+                  <View>
+                    <Text style = {{
+                    position:"relative", 
+                    marginBottom:"5%", 
+                    color:"#ff0000" ,
+                    fontSize: 24,
+                    fontWeight: 'bold',
+                    // fontFamily: 'DotGothic16_400Regular',
 
-                  }}>生成失敗です。カトコードが不正な値のようです。</Text>
-                  <TouchableOpacity
-                    onPress={() =>this.changeAPI()}
-                  >
-                    <Text>
-                      APIの制限の可能性もあります。使用するAPIキーを切り替える場合はこちらをTapしてください。
-                    </Text>
+                    }}>生成失敗です。カトコードが不正な値のようです。</Text>
+                    <TouchableOpacity
+                      onPress={() =>this.changeAPI()}
+                    >
+                      <Text>
+                        APIの制限の可能性もあります。使用するAPIキーを切り替える場合はこちらをTapしてください。
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+
+                <View style={{flexDirection: 'row',marginTop:"3%"}}>
+                  <TouchableOpacity 
+                  onPress={this.inputReset}
+                  style={{
+                    backgroundColor:"#eee",
+                    flex:1,
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    paddingTop:"10%",
+                    paddingBottom:"10%",
+                    paddingBottom:"5%",
+                    borderRadius:20,
+                  }}>
+                    <View style={{
+                      flexDirection:"column",
+                      justifyContent:"center",}}
+                    >
+                      <Text style = {{
+                        textAlign:"center",
+                        paddingLeft:"5%",
+                        paddingRight:"5%",
+                        fontSize:20,
+                      }}>リセット</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                  onPress={() => {this.generateKatomon}}
+                  style={{
+                    borderRadius:20,
+                    flex:2,
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    paddingTop:"10%",
+                    paddingBottom:"10%",
+                    backgroundColor:"#ffc0cb"
+
+                  }}>
+                    <View style={{
+                      flexDirection:"column",
+                      justifyContent:"center",
+                    }}>
+                      <Text style = {{
+                        textAlign:"center",
+                        paddingLeft:"5%",
+                        paddingRight:"5%",
+                        fontSize:24,
+                      }}>カトモン生成</Text>
+                    </View>
                   </TouchableOpacity>
                 </View>
-              )}
 
-              <View style={{flexDirection: 'row',marginTop:"3%"}}>
-                <TouchableOpacity 
-                onPress={this.inputReset}
-                style={{
-                  backgroundColor:"#eee",
-                  flex:1,
-                  marginLeft:"5%",
-                  marginRight:"5%",
-                  marginTop:"10%",
-                  marginBottom:"10%",
-                  borderRadius:20,
-                }}>
-                  <View>
-                    <Text style = {{
-                      textAlign:"center",
-                      fontSize:20,
-                      marginTop:"5%",
-                      marginBottom:"5%",
-                    }}>リセット</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                onPress={this.generateKatomon}
-                style={{
-                  borderRadius:20,
-                  flex:2,
-                  marginLeft:"5%",
-                  marginRight:"5%",
-                  paddingTop:"10%",
-                  paddingBottom:"10%",
-                  paddingBottom:"5%",
-                  backgroundColor:"#ffc0cb"
 
-                }}>
-                  <View>
-                    <Text style = {{
-                      textAlign:"center",
-                      paddingLeft:"5%",
-                      paddingRight:"5%",
-                      fontSize:24,
-                    }}>カトモン生成</Text>
-                  </View>
-                </TouchableOpacity>
+                {/* test */}
+                {/* <Text>入力されたKatoCode</Text>
+                <Text>＝＞{this.state.inputKatoCode}</Text> */}
               </View>
-
-
-              {/* test */}
-              {/* <Text>入力されたKatoCode</Text>
-              <Text>＝＞{this.state.inputKatoCode}</Text> */}
-            </View>
-          </View>
+            </View>       
         )}
 
         {this.state.generateFlag && !this.state.translateFlag && (
@@ -494,8 +496,9 @@ export default class KatomonGenerateScreen extends Component {
                 <Image
                   source={{ uri: `${this.state.KatoMonImage}` }}
                   style={{ 
-                    width:368, //16:9
-                    height:207,
+                    width:Constants.MAX_WIDTH * 0.8, //16:9
+                    height:Constants.MAX_WIDTH * 0.8 * 9/16,
+                    resizeMode:"cover",
                     marginLeft:"5%",
                     marginRight:"5%",
                    }}
@@ -582,14 +585,14 @@ export default class KatomonGenerateScreen extends Component {
             // height:Constants.MAX_HEIGHT * 2/10
           }}>
             <Text style={{
-              fontSize:18,
+              fontSize:24,
               marginTop:"5%",
               height:30,
             }}>
               今ここに、新たなカトモンが誕生しました。
             </Text>
             <ScrollView style={{
-              height:Constants.MAX_HEIGHT - 30 -30
+              height:Constants.MAX_HEIGHT - 30
             }}>
               <Animated.View style={{ opacity: this.state.opacity}}>
                 <View style={{flexDirection: 'row',position:'relative',
@@ -600,7 +603,7 @@ export default class KatomonGenerateScreen extends Component {
                   <View style={{width:Constants.MAX_WIDTH/2,alignItems:"center"}}>
                     <Image
                       source={this.state.katomon.image}
-                      style={{ width: 128, height: 128 ,position:'relative',
+                      style={{ width: Constants.MAX_WIDTH/4, height: Constants.MAX_WIDTH/4 ,position:'relative',
                       marginTop:"5%",
                       marginBottom:"5%",
                       // marginLeft:"5%",
@@ -613,21 +616,21 @@ export default class KatomonGenerateScreen extends Component {
                     <View style={{flexDirection:"row"}}>
                       <View>
                         <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                          <Text style={{fontSize:18}} >パワー：</Text>
-                          <Text  style={{fontSize:18}}>{this.state.katoPower}</Text>
+                          <Text style={{fontSize:20}} >パワー：</Text>
+                          <Text  style={{fontSize:20}}>{this.state.katoPower}</Text>
                         </View>
                         <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                          <Text  style={{fontSize:18}}>勢い：</Text>
-                          <Text  style={{fontSize:18}}>{this.state.katoIkioi}</Text>
+                          <Text  style={{fontSize:20}}>勢い：</Text>
+                          <Text  style={{fontSize:20}}>{this.state.katoIkioi}</Text>
                         </View>
                         <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                          <Text  style={{fontSize:18}}>守り：</Text>
-                          <Text  style={{fontSize:18}}>{this.state.katoMamori}</Text>
+                          <Text  style={{fontSize:20}}>守り：</Text>
+                          <Text  style={{fontSize:20}}>{this.state.katoMamori}</Text>
                         </View>
                       </View>
                     </View>
                   </View>
-                  <View style={{marginTop:"5%",width:Constants.MAX_WIDTH/2}}>
+                  <View style={{marginTop:"5%",width:Constants.MAX_WIDTH/3}}>
                         <View>
                           < Text style={styles.move}>1.{this.state.katomon.move.move1.name}</Text>
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move1.consumption_Guts}</Text>
@@ -652,16 +655,20 @@ export default class KatomonGenerateScreen extends Component {
                     </Text>  
                 <TouchableOpacity 
                 style={{
-                  marginTop:"10%",
                   backgroundColor:"#f5deb3",
-                  marginLeft:"20%",
-                  marginRight:"20%",
-                  borderRadius:20,
+                    borderRadius:20,
+                    flex:1,
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    paddingTop:"10%",
+                    paddingBottom:"10%",
                 }}
                 onPress={() =>
                   this.goto('カトフェス')}
                 >
-                  <Text style={{fontSize:24,textAlign:"center",margin:"3%"}}>
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7),
+                    textAlign:"center",margin:"3%",flex:1}}>
                     戦場へ向かう...
                   </Text>
                 </TouchableOpacity>
@@ -695,7 +702,7 @@ const styles = StyleSheet.create({
     // fontFamily: 'DotGothic16_400Regular',
     position: "relative",
     alignItems: "center",
-    paddingBottom: "10%",
+    paddingBottom: "5%",
     color: "red",
     marginTop:"5%",
   },
@@ -740,8 +747,10 @@ const styles = StyleSheet.create({
     // fontFamily: 'DotGothic16_400Regular',
     position: "relative",
     alignItems: "center",
+    textAlign:"center",
     marginLeft:"5%",
     marginRight:"5%",
+    // width:Constants.MAX_WIDTH * 0.8,
   },
   katomon_detail:{
     fontSize: 24,
@@ -757,19 +766,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   katomon_detail_text:{
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
   },
   move:{
     padding:"5%",
     backgroundColor:"#eee",
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'left',
     padding:"5%",
+    marginTop:"3%",
     flex:1,
     opacity:0.9,
+  },
+  moveSub:{
+    fontSize: 16,
+    backgroundColor:"#eee",
   },
 });

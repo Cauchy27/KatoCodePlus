@@ -12,6 +12,10 @@ export default Sounds = {
   bgmGeneMenu:require('./sound/bgm/KatomonGenerateSlow.mp3'),
 
   battle1:require('./sound/bgm/battle1.mp3'),
+  battle2:require('./sound/bgm/battle2.mp3'),
+  battle3:require('./sound/bgm/battle3.mp3'),
+  battle4:require('./sound/bgm/champ2.mp3'),
+  battle5:require('./sound/bgm/casino.mp3'),
 
   gameOver:require('./sound/bgm/gameOver.mp3'),
   next1:require('./sound/fujinami2.mp3'),
@@ -37,4 +41,8 @@ export default Sounds = {
   katou6:require('./sound/fujinami4.mp3'),
   katou7:require('./sound/pubg1-1.mp3'),
   katou8:require('./sound/fujinami3.mp3'),
+
+  katomonGenerate:require('./sound/tetuya2.mp3'),
+  generate1:require('./sound/generate1.mp3'),
+
 }

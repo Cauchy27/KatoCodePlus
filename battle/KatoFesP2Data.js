@@ -80,7 +80,7 @@ export default KatoFesP2Data = {
     move:{
       move1:KatoFesP2MoveList.mai,
       move2:KatoFesP2MoveList.craver,
-      move3:KatoFesP2MoveList.kick,
+      move3:KatoFesP2MoveList.isogashi,
     }
   },
 }
