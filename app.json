@@ -2,9 +2,9 @@
   "expo": {
     "name": "カトコードバトラー",
     "slug": "KatoCode",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
-    "icon": "./assets/img/icon_1130_2.png",
+    "icon": "./assets/img/icon_1130_fix.png",
     "splash": {
       "image": "./assets/img/splash_test.png",
       "resizeMode": "contain",

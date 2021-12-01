@@ -112,7 +112,7 @@ export default class TitleScreen extends Component {
         {console.log(this.testData)}
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
         <View style = {styles.title}>
-          <View>
+          <View style={{flex:1}}>
             <Text style = {styles.hello}>
               カトコードの世界へ
             </Text>
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
   hello: {
     fontSize: 30,
     fontWeight: 'bold',
-    fontFamily: 'DotGothic16_400Regular',
+    // fontFamily: 'DotGothic16_400Regular',
     // backgroundColor:"#d2b48c",
     paddingTop:"5%",
     // paddingBottom:0,
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "5%",
     borderRadius:10,
+    flex:1.5,
   },
   bottun:{
     margin:"5%",

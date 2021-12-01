@@ -101,9 +101,9 @@ export default KatoFesP2MoveList = {
     mai:{
       name:"龍のような舞",
       sound:Sounds.katou2,//音声ファイルのディレクトリ指定
-      power:5,
-      consumption_Guts:50,
-      add_Guts:10,
+      power:10,
+      consumption_Guts:100,
+      add_Guts:0,
       range:500,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
@@ -111,11 +111,11 @@ export default KatoFesP2MoveList = {
       },
       additional2:{
         param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
-        change:10,//変化量
+        change:20,//変化量
       },
       additional3:{
         param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
-        change:10,//変化量
+        change:20,//変化量
       },
       personality:1.5,//移動に影響する性格の設定
     },

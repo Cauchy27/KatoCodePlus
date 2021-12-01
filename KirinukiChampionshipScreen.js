@@ -36,7 +36,7 @@ const YOUTUBE_API_KEY = {
  9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
 };
 // 使用するキー
-var useApiNum = 8 ;
+var useApiNum = 7 ;
 
 // 最初に開くところ
 export default class ChampionshipScreen extends Component {
@@ -62,6 +62,9 @@ export default class ChampionshipScreen extends Component {
       endD:false,
 
       final:false,
+
+      firstFlag:true,
+      expFlag:false,
 
       // final用
       tableR1_final:null,
@@ -220,12 +223,12 @@ export default class ChampionshipScreen extends Component {
 
       // 戦闘関係
       timer:30,
-      width: 440, 
-      height: 260,
-      position1X: 50,
-      position1Y: 160,
-      position2X: Constants.MAX_WIDTH - 110,
-      position2Y: 160,
+      width: Constants.MAX_WIDTH, 
+      height: Constants.MAX_WIDTH * 250/400,
+      position1X: 0,
+      position1Y: Constants.MAX_WIDTH * 250/400/1.5,
+      position2X: Constants.MAX_WIDTH - 50 -40,
+      position2Y: Constants.MAX_WIDTH * 250/400/1.5,
 
       battleFlag:false,
 
@@ -282,6 +285,11 @@ export default class ChampionshipScreen extends Component {
       this.soundId.setStatusAsync({ volume: 0.03 });//音量
     }, 3 * 1000);
 
+    this.getList();
+
+  };
+
+  getList = async() =>{
     // 切り抜きチャンネルの取得
     const url = `https://www.googleapis.com/youtube/v3/search?type=channel&part=snippet&q=加藤純一&maxResults=20&order=relevance&key=${YOUTUBE_API_KEY[this.state.useAPI]}`;
 
@@ -302,8 +310,8 @@ export default class ChampionshipScreen extends Component {
               piza = true;
             }
             pizaCount += 1;
-            console.log(pizaCount);
-            console.log(response["data"]["items"][pizaCount]["snippet"]["channelId"]);
+            // console.log(pizaCount);
+            // console.log(response["data"]["items"][pizaCount]["snippet"]["channelId"]);
           }
 
           this.setState({
@@ -435,7 +443,7 @@ export default class ChampionshipScreen extends Component {
           console.log('通信に失敗しました');
           this.state.apiSuccess = false;
       });
-  };
+  }
   
   changeAPI =() =>{
     this.state.useAPI -=1;
@@ -443,6 +451,8 @@ export default class ChampionshipScreen extends Component {
       this.state.useAPI = 9;
     }
     console.log(this.state.useAPI);
+
+    this.getList();
   };
 
   componentWillUnmount(){
@@ -466,6 +476,13 @@ export default class ChampionshipScreen extends Component {
 
   // シーンを変更して、チャンネル情報を表に渡す
   changeScene = async(select) =>{
+    if(this.state.firstFlag){
+      this.state.firstFlag = false;
+      this.state.expFlag = true;
+      console.log("first!");
+      console.log(this.state.expFlag);
+    }
+
     this.setState(state =>  ({
       tableData:{
         1:{
@@ -918,7 +935,7 @@ export default class ChampionshipScreen extends Component {
       await soundObject.playAsync();
     }
     catch(error){
-      // console.log("sound error");
+      console.log("sound error");
     }
   };
 
@@ -1458,8 +1475,8 @@ export default class ChampionshipScreen extends Component {
       now: Date.now(),
       startTime: Date.now(),
 
-      position1X: 50,
-      position2X: Constants.MAX_WIDTH - 110,
+      position1X: 0,
+      position2X: Constants.MAX_WIDTH - 50 -50,
 
       timer:30,
 
@@ -1561,15 +1578,23 @@ export default class ChampionshipScreen extends Component {
     }
 
     return(
-      <SafeAreaView style = {styles.container}>
+      <SafeAreaView style = {styles.fullScreen}>
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.background} />
         {this.state.memberListFlag && !this.state.resultFlag && (
           <View>
             {/* コメントの表示切り替え */}
             {!this.state.groupA && !this.state.groupB && !this.state.groupC && !this.state.groupD && (
-              <View style={{flex: 0.2,marginTop:"5%",marginBottom:"5%"}}>
+              <View style={{flex: 0.2,marginTop:"5%",marginBottom:"5%" }}>
                 {this.state.running && (
-                  <Text style = {styles.hello}>さて、今回エントリーの16チャンネルは...</Text>
+                  <View style={{flexDirection:"row"}}>
+                    <Text style = {styles.hello}>さて、今回エントリーの16チャンネルは...</Text>
+                      <TouchableOpacity 
+                        style={{backgroundColor:"#eee",marginLeft:"3%"}}
+                        onPress={() =>this.changeAPI()}
+                      >
+                        <Text>再読み込み ☜</Text>
+                    </TouchableOpacity>
+                  </View>
                   
                 )}
               </View>
@@ -1897,7 +1922,7 @@ export default class ChampionshipScreen extends Component {
         {/* 対戦表→バトルフィールド */}
         {!this.state.memberListFlag && !this.state.resultFlag  && (
           <View 
-            // style={{backgroundColor:"#ff1493"}}
+            style={{flex:1}}
           >
             {/* フィールド */}
             <View 
@@ -1947,8 +1972,6 @@ export default class ChampionshipScreen extends Component {
               /> 
               <Text style={{ width:Math.round(this.state.p1HP/1000 *100),height: 15,top:this.state.position1Y-20, left: this.state.position1X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p1HP)}</Text>  
               <Text style={{ width:100,height: 15,top:this.state.position1Y-40, left: this.state.position1X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p1HP/1000 *100)}%</Text>  
-
-              <Text style={{ width:200,height: 30,top:this.state.position1Y+140, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p1KatoPoint}</Text>  
               
 
               {/* Player2 */}
@@ -1962,16 +1985,18 @@ export default class ChampionshipScreen extends Component {
 
               <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/1000*100)}%</Text>  
 
-              <Text style={{ width:200,height: 30,top:this.state.position1Y+140, left: Constants.MAX_WIDTH - 175, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p2KatoPoint}</Text>  
+
+              <Text style={{ width:200,height: 30,top:this.state.position1Y+130, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p1KatoPoint}</Text>  
+              <Text style={{ width:200,height: 30,top:this.state.position1Y+130, left: Constants.MAX_WIDTH - 200+10, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p2KatoPoint}</Text>  
             </View>
             {/* 対戦表 */}
-            <View  style={{margin:"3%",}}>
+            <View style={{flex:1,position:"absolute",bottom:30,}}>
               <View style={styles.tableRow}>
                 <View 
                   style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
                   backgroundColor:"#000000",borderColor:"#000000",}}
                 >
-                  <Text style={{color:"#eee",textAlign:"center",fontSize:24,padding:"25%"}}>
+                  <Text style={{color:"#eee",textAlign:"center",fontSize:16,padding:"25%"}}>
                     {this.state.groupA && ("A予")}
                     {this.state.groupB && ("B予")}
                     {this.state.groupC && ("C予")}
@@ -2002,102 +2027,102 @@ export default class ChampionshipScreen extends Component {
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 }}
                   source={{ uri: `${this.state.tableR1}` }}
                 />
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
                   backgroundColor:"#000000",borderColor:"#000000", }}
                 >
                 </View>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
                   source={{ uri: `${this.state.tableR2}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
                   source={{ uri: `${this.state.tableR3}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
                   source={{ uri: `${this.state.tableR4}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5 ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:18,padding:"25%"}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
                     backgroundColor:"#000000"}}
                 />
               </View>
@@ -2126,15 +2151,15 @@ export default class ChampionshipScreen extends Component {
           </TouchableOpacity>
           </View>
         )}
-        {!this.state.apiSuccess &&(
+        {/* {!this.state.apiSuccess &&(
           <View>
-            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.changeAPI()}>
+            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.changeAPI}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>YouTube情報の取得に失敗しました。画面をTapして使用するAPIキーを切り替えてください。</Text>
             </View>
           </TouchableOpacity>
           </View>
-        )}
+        )} */}
       </SafeAreaView>
     );
   }
@@ -2232,8 +2257,8 @@ const styles = StyleSheet.create({
     borderColor:"#000000",
     width: Constants.TITLE_WIDTH,
     textAlign:"center",
-    marginLeft:"3%",
-    marginRight:"3%",
+    justifyContent: 'center',
+    paddingRight:"1%",
   },
   tableCol:{
     // 

@@ -57,14 +57,14 @@ export default KatomonMoveList = {
     name:"舞えるだけ舞う",
     sound:Sounds.katou2,//音声ファイルのディレクトリ指定
     power:5,
-    consumption_Guts:50,
+    consumption_Guts:100,
     add_Guts:0,
-    range:300,
+    range:500,
     additional1:{
       param:"p1ATK",//変化するパラメータ(position/HP/ATK,,,)
-      change:10,//変化量
+      change:30,//変化量
     },
-    personality:1.1,//移動に影響する性格の設定
+    personality:1.3,//移動に影響する性格の設定
   },
   kisei:{
     name:"奇声",
