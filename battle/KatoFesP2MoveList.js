@@ -73,7 +73,7 @@ export default KatoFesP2MoveList = {
 
     watch:{
       name:"放送を見る",
-      sound:Sounds.gear1,//音声ファイルのディレクトリ指定
+      sound:Sounds.yatteru,//音声ファイルのディレクトリ指定
       power:10,
       consumption_Guts:50,
       add_Guts:0,

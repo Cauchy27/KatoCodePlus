@@ -5,9 +5,7 @@ export default Sounds = {
   drill:require('./sound/mach-drill.mp3'),
 
   voice1:require('./sound/voice1.mp3'),
-
-  test1:require('./sound/tetuya1.mp3'),
-  test2:require('./sound/yatteru-.mp3'),
+  yatteru:require('./sound/yatteru-.mp3'),
 
   bgm1:require('./sound/bgm/cryagain.mp3'),
   bgmGeneMenu:require('./sound/bgm/KatomonGenerateSlow.mp3'),
