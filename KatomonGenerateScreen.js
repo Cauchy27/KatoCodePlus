@@ -34,7 +34,7 @@ const YOUTUBE_API_KEY = {
  9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
  };
  // 使用するキー
- var useApiNum = 9 ;
+ var useApiNum = 4 ;
 
  
 

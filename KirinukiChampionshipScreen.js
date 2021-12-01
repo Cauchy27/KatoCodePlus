@@ -1671,8 +1671,8 @@ export default class ChampionshipScreen extends Component {
       now: Date.now(),
       startTime: Date.now(),
 
-      position1X: 0,
-      position2X: Constants.MAX_WIDTH - 90-20,
+      position1X: Constants.MAX_WIDTH * 250/400/10,
+      position2X: Constants.MAX_WIDTH -Constants.MAX_WIDTH * 250/400/10 ,
 
       timer:30,
 
@@ -2096,7 +2096,7 @@ export default class ChampionshipScreen extends Component {
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
-                        null}
+                        this.skipGroup()}
                     >
                       <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
                         残りのグループを1つスキップ
