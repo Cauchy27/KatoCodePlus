@@ -4,7 +4,7 @@ export default KatomonMoveList = {
   rightStraight:{
     name:"右ストレート",
     sound:Sounds.rightStraight,//音声ファイルのディレクトリ指定
-    power:50,
+    power:100,
     consumption_Guts:100,
     add_Guts:0,
     range:150,
@@ -17,7 +17,7 @@ export default KatomonMoveList = {
   gaia:{
     name:"ガイアの咆哮",
     sound:Sounds.gaia,//音声ファイルのディレクトリ指定
-    power:10,
+    power:30,
     consumption_Guts:50,
     add_Guts:0,
     range:200,
@@ -30,10 +30,10 @@ export default KatomonMoveList = {
   escape:{
     name:"よけろ！",
     sound:Sounds.yokero,//音声ファイルのディレクトリ指定
-    power:0,
+    power:5,
     consumption_Guts:100,
     add_Guts:0,
-    range:1000,
+    range:500,
     additional1:{
       param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
       change:-50,//変化量
@@ -43,7 +43,7 @@ export default KatomonMoveList = {
   drill:{
     name:"マッハドリル",
     sound:Sounds.drill,//音声ファイルのディレクトリ指定
-    power:5,
+    power:20,
     consumption_Guts:30,
     add_Guts:0,
     range:200,
@@ -69,7 +69,7 @@ export default KatomonMoveList = {
   kisei:{
     name:"奇声",
     sound:Sounds.katou2,//音声ファイルのディレクトリ指定
-    power:10,
+    power:20,
     consumption_Guts:100,
     add_Guts:0,
     range:500,
@@ -82,7 +82,7 @@ export default KatomonMoveList = {
   moko1:{
     name:"もこう呼び",
     sound:Sounds.moko1,//音声ファイルのディレクトリ指定
-    power:10,
+    power:50,
     consumption_Guts:100,
     add_Guts:0,
     range:500,
@@ -95,10 +95,10 @@ export default KatomonMoveList = {
   fuji:{
     name:"危険球",
     sound:Sounds.katou6,//音声ファイルのディレクトリ指定
-    power:100,
+    power:300,
     consumption_Guts:200,
     add_Guts:0,
-    range:500,
+    range:1000,
     additional1:{
       param:"p1DEF",//変化するパラメータ(position/HP/ATK,,,)
       change:5,//変化量
@@ -108,7 +108,7 @@ export default KatomonMoveList = {
   kussinn:{
     name:"魂の屈伸",
     sound:Sounds.katou7,//音声ファイルのディレクトリ指定
-    power:0,
+    power:30,
     consumption_Guts:150,
     add_Guts:50,
     range:1000,

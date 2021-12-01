@@ -280,11 +280,11 @@ export default class KatomonGenerateScreen extends Component {
 
     this.setState({
       // パワー
-      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/1500),
+      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+50,
       // 勢い
-      katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000),
+      katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000)+10,
        // 守り
-       katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000),
+       katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+10,
     });
   }
 
@@ -418,7 +418,7 @@ export default class KatomonGenerateScreen extends Component {
                   color:"#ff0000" ,
                   fontSize: 24,
                   fontWeight: 'bold',
-                  fontFamily: 'DotGothic16_400Regular',
+                  // fontFamily: 'DotGothic16_400Regular',
 
                   }}>生成失敗です。カトコードが不正な値のようです。</Text>
                   <TouchableOpacity
@@ -579,83 +579,86 @@ export default class KatomonGenerateScreen extends Component {
         )}
         {this.state.translateFlag && (
           <View style={{
-            marginTop:"-60%",
+            // marginTop:"-60%",
           }}>
             <Text style={{
               fontSize:18,
-              marginTop:"30%",
+              marginTop:"5%",
             }}>
               今ここに、新たなカトモンが誕生しました。
             </Text>
-            <Animated.View style={{ opacity: this.state.opacity}}>
-              <View style={{flexDirection: 'row',}}>
-                <Image
-                  source={this.state.katomon.image}
-                  style={{ width: 128, height: 128 ,position:'relative',
-                  marginTop:"5%",
-                  marginBottom:"5%",
-                  marginLeft:"5%",
-                  marginRight:"5%",
-                  backgroundColor:"#fff"}}
-                /> 
-                <View style={{marginTop:"10%"}}>
-                  <Text></Text>
-                </View>
-              </View>
-                  <Text style={{marginTop:"5%",fontSize:24,marginLeft:"5%",marginRight:"5%"}}>
-                    名前: {this.state.katomon.name}
-                  </Text>
-                  <Text style={{marginTop:"5%",
-                  marginBottom:"5%",
-                  fontSize:14,marginLeft:"5%",marginRight:"5%"}}>
-                    {this.state.katomon.destination}
-                  </Text>
-                  <View style={{flexDirection:"row"}}>
-                    <View>
-                      <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                        <Text style={{fontSize:18}} >パワー：</Text>
-                        <Text  style={{fontSize:18}}>{this.state.katoPower}</Text>
-                      </View>
-                      <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                        <Text  style={{fontSize:18}}>勢い：</Text>
-                        <Text  style={{fontSize:18}}>{this.state.katoIkioi}</Text>
-                      </View>
-                      <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
-                        <Text  style={{fontSize:18}}>守り：</Text>
-                        <Text  style={{fontSize:18}}>{this.state.katoMamori}</Text>
-                      </View>
-                    </View>
-                    <View>
-                      <View>
-                        < Text style={styles.move}>1.{this.state.katomon.move.move1.name}</Text>
-                        <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move1.consumption_Guts}</Text>
-                        <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move1.range} 威力：{this.state.katomon.move.move1.power}</Text>
-                      </View>
-                      <View>
-                        < Text style={styles.move}>2.{this.state.katomon.move.move2.name}</Text>
-                        <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move2.consumption_Guts}</Text>
-                        <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move2.range} 威力：{this.state.katomon.move.move2.power}</Text>
-                      </View>
-                      <View>
-                        < Text style={styles.move}>3.{this.state.katomon.move.move3.name}</Text>
-                        <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move3.consumption_Guts}</Text>
-                        <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move3.range} 威力：{this.state.katomon.move.move3.power}</Text>
-                      </View>
-                    </View>
+            <ScrollView>
+              <Animated.View style={{ opacity: this.state.opacity}}>
+                <View style={{flexDirection: 'row',}}>
+                  <Image
+                    source={this.state.katomon.image}
+                    style={{ width: 128, height: 128 ,position:'relative',
+                    marginTop:"5%",
+                    marginBottom:"5%",
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    backgroundColor:"#fff"}}
+                  /> 
+                  <View style={{marginTop:"10%"}}>
+                    <Text></Text>
                   </View>
-              <TouchableOpacity 
-              style={{
-                marginTop:"10%",backgroundColor:"#f5deb3",marginLeft:"20%",marginRight:"20%",
-                borderRadius:20,
-              }}
-              onPress={() =>
-                this.goto('カトフェス')}
-              >
-                <Text style={{fontSize:24,textAlign:"center",margin:"3%"}}>
-                  戦場へ向かう...
-                </Text>
-              </TouchableOpacity>
-            </Animated.View>
+                </View>
+                    <Text style={{marginTop:"5%",fontSize:24,marginLeft:"5%",marginRight:"5%"}}>
+                      名前: {this.state.katomon.name}
+                    </Text>
+                    <Text style={{marginTop:"5%",
+                    marginBottom:"5%",
+                    fontSize:14,marginLeft:"5%",marginRight:"5%"}}>
+                      {this.state.katomon.destination}
+                    </Text>
+                    <View style={{flexDirection:"row"}}>
+                      <View>
+                        <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
+                          <Text style={{fontSize:18}} >パワー：</Text>
+                          <Text  style={{fontSize:18}}>{this.state.katoPower}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
+                          <Text  style={{fontSize:18}}>勢い：</Text>
+                          <Text  style={{fontSize:18}}>{this.state.katoIkioi}</Text>
+                        </View>
+                        <View style={{flexDirection: 'row',marginLeft:"5%",marginRight:"5%"}}>
+                          <Text  style={{fontSize:18}}>守り：</Text>
+                          <Text  style={{fontSize:18}}>{this.state.katoMamori}</Text>
+                        </View>
+                      </View>
+                      <View>
+                        <View>
+                          < Text style={styles.move}>1.{this.state.katomon.move.move1.name}</Text>
+                          <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move1.consumption_Guts}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move1.range} 威力：{this.state.katomon.move.move1.power}</Text>
+                        </View>
+                        <View>
+                          < Text style={styles.move}>2.{this.state.katomon.move.move2.name}</Text>
+                          <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move2.consumption_Guts}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move2.range} 威力：{this.state.katomon.move.move2.power}</Text>
+                        </View>
+                        <View>
+                          < Text style={styles.move}>3.{this.state.katomon.move.move3.name}</Text>
+                          <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move3.consumption_Guts}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move3.range} 威力：{this.state.katomon.move.move3.power}</Text>
+                        </View>
+                      </View>
+                    </View>
+                <TouchableOpacity 
+                style={{
+                  marginTop:"10%",backgroundColor:"#f5deb3",marginLeft:"20%",marginRight:"20%",
+                  borderRadius:20,
+                }}
+                onPress={() =>
+                  this.goto('カトフェス')}
+                >
+                  <Text style={{fontSize:24,textAlign:"center",margin:"3%"}}>
+                    戦場へ向かう...
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+
+            </ScrollView>
           </View>
         )}
       </SafeAreaView>

@@ -32,12 +32,12 @@ export default class FesScreen extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      width: 360, 
-      height: 300,
-      position1X: 50,
-      position1Y: 220,
-      position2X: Constants.MAX_WIDTH - 150,
-      position2Y: 220,
+      width:Constants.MAX_WIDTH, 
+      height: Constants.MAX_WIDTH * 200/400,
+      position1X: 0,
+      position1Y: Constants.MAX_WIDTH * 200/400/2+24+24+18,
+      position2X: Constants.MAX_WIDTH - 90-20,
+      position2Y: Constants.MAX_WIDTH * 200/400/2+24+24+18,
       now: Date.now(),
       startTime: Date.now(),
       timer:55,
@@ -740,15 +740,16 @@ export default class FesScreen extends Component {
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.background} />
         <View style={{
           position:'absolute',
-          top:"3%"}}>
+          top:"1%"}}>
           <Text style = {{
             textAlign:'center',
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 'bold',
             // fontFamily: 'DotGothic16_400Regular',
             backgroundColor:"#fff",
             marginLeft:"30%",
             marginRight:"30%",
+            height:24,
             }}>
               現在{this.state.roundCount}戦目
           </Text>
@@ -758,10 +759,11 @@ export default class FesScreen extends Component {
             </Text>
             <Text style = {{
             textAlign:'center',
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: 'bold',
             // fontFamily: 'DotGothic16_400Regular',
             backgroundColor:"#fff",
+            height:24,
             flex:0.3,
             }}>
               {Math.round(this.state.timer)}
@@ -771,10 +773,18 @@ export default class FesScreen extends Component {
             </Text>
           </View>
           <View style = {styles.names}>
-            <Text style = {styles.name_r}>
+            <Text style = {{fontSize: 16,
+              textAlign:'center',
+              height:18,
+              flex:0.5,}}
+            >
               ガッツ：{this.state.p1Guts}
             </Text>
-            <Text style = {styles.name_l}>
+            <Text style = {{fontSize: 16,
+              textAlign:'center',
+              height:18,
+              flex:0.5,}}
+            >
               ガッツ：{this.state.p2Guts}
             </Text>
           </View>
@@ -807,71 +817,75 @@ export default class FesScreen extends Component {
             <Text style={{ width:Math.round(this.state.p2HP/this.state.p2HPmax * 100), height: 15 ,top:this.state.position2Y-20, left: this.state.position2X, position:'absolute',backgroundColor:"#ff6347",textAlign:"center",borderRadius:10}}>HP:{Math.round(this.state.p2HP)}</Text>  
             <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%</Text>  
 
-          {/* 技ボタン */}
-          <View style={{marginBottom:"-3%"}}>
-            <View style={styles.names}>
-              <TouchableOpacity 
-                style={styles.moveButtons}
-                onPress={() => this.p1move("1")}
-              >
-                <Text style={styles.move}>1.{this.state.p1MOVE_1.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_1.consumption_Guts}</Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_1.range} 威力：{this.state.p1MOVE_1.power}</Text>
-              </TouchableOpacity>
-              <View style={styles.moveButtons}>
-                <Text style={styles.move}>1.{this.state.p2MOVE_1.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_1.consumption_Guts}</Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_1.range} 威力：{this.state.p2MOVE_1.power}</Text>
+          {/* 画面下半分 */}
+          <ScrollView style={{height:Constants.MAX_HEIGHT - Constants.MAX_WIDTH * 200/400+24+24+18}}>
+            {/* 技ボタン */}
+            <View style={{marginBottom:"0%"}}>
+              <View style={styles.names}>
+                <TouchableOpacity 
+                  style={styles.moveButtons}
+                  onPress={() => this.p1move("1")}
+                >
+                  <Text style={styles.move}>1.{this.state.p1MOVE_1.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_1.consumption_Guts}</Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_1.range} 威力：{this.state.p1MOVE_1.power}</Text>
+                </TouchableOpacity>
+                <View style={styles.moveButtons}>
+                  <Text style={styles.move}>1.{this.state.p2MOVE_1.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_1.consumption_Guts}</Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_1.range} 威力：{this.state.p2MOVE_1.power}</Text>
+                </View>
+              </View>
+              <View style={styles.names}>
+                <TouchableOpacity 
+                  style={styles.moveButtons}
+                  onPress={() => this.p1move("2")}
+                >
+                  <Text style={styles.move}>2.{this.state.p1MOVE_2.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_2.consumption_Guts} </Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_2.range} 威力：{this.state.p1MOVE_2.power}</Text>
+                </TouchableOpacity>
+                <View style={styles.moveButtons}>
+                  <Text style={styles.move}>2.{this.state.p2MOVE_2.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_2.consumption_Guts}</Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_2.range} 威力：{this.state.p2MOVE_2.power}</Text>
+                </View>
+              </View>
+              <View style={styles.names}>
+                <TouchableOpacity 
+                  style={styles.moveButtons}
+                  onPress={() => this.p1move("3")}
+                >
+                  <Text style={styles.move}>3.{this.state.p1MOVE_3.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_3.consumption_Guts}</Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_3.range} 威力：{this.state.p1MOVE_3.power}</Text>
+                </TouchableOpacity>
+                <View style={styles.moveButtons}>
+                  <Text style={styles.move}>3.{this.state.p2MOVE_3.name}</Text>
+                  <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_3.consumption_Guts}</Text>
+                  <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_3.range} 威力：{this.state.p2MOVE_3.power}</Text>
+                </View>
               </View>
             </View>
-            <View style={styles.names}>
-              <TouchableOpacity 
-                style={styles.moveButtons}
-                onPress={() => this.p1move("2")}
-              >
-                <Text style={styles.move}>2.{this.state.p1MOVE_2.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_2.consumption_Guts} </Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_2.range} 威力：{this.state.p1MOVE_2.power}</Text>
-              </TouchableOpacity>
-              <View style={styles.moveButtons}>
-                <Text style={styles.move}>2.{this.state.p2MOVE_2.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_2.consumption_Guts}</Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_2.range} 威力：{this.state.p2MOVE_2.power}</Text>
-              </View>
-            </View>
-            <View style={styles.names}>
-              <TouchableOpacity 
-                style={styles.moveButtons}
-                onPress={() => this.p1move("3")}
-              >
-                <Text style={styles.move}>3.{this.state.p1MOVE_3.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p1MOVE_3.consumption_Guts}</Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p1MOVE_3.range} 威力：{this.state.p1MOVE_3.power}</Text>
-              </TouchableOpacity>
-              <View style={styles.moveButtons}>
-                <Text style={styles.move}>3.{this.state.p2MOVE_3.name}</Text>
-                <Text style={styles.moveSub}> 必要ガッツ：{this.state.p2MOVE_3.consumption_Guts}</Text>
-                <Text style={styles.moveSub}> 射程：{this.state.p2MOVE_3.range} 威力：{this.state.p2MOVE_3.power}</Text>
-              </View>
-            </View>
-          </View>
 
-          {/* 応援ボタン */}
-          <View style = {styles.buttons}>
-              <TouchableOpacity 
-                style ={styles.button}
-                onPress={this.addGuts}
-              >
-                <Text style={{
-                  fontSize: 20,
-                  fontWeight: 'bold',
-                  // fontFamily: 'DotGothic16_400Regular',
-                  textAlign:'center',
-                }}>
-                  応援:ガッツ増加
-                </Text>
-              </TouchableOpacity>
-          </View>
+            {/* 応援ボタン */}
+            <View style = {styles.buttons}>
+                <TouchableOpacity 
+                  style ={styles.button}
+                  onPress={this.addGuts}
+                >
+                  <Text style={{
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                    // fontFamily: 'DotGothic16_400Regular',
+                    textAlign:'center',
+                  }}>
+                    応援:ガッツ増加
+                  </Text>
+                </TouchableOpacity>
+            </View>
+
+          </ScrollView>
         </View>
         {/* ポップアップ */}
         {!this.state.running && (
@@ -996,22 +1010,25 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginLeft:"5%",
     marginRight:"5%",
-    marginTop:"5%",
+    marginTop:"1%",
     textAlign:'center',
+    height:36,
     // backgroundColor: "red",
   },
   name_r:{
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
+    height:24,
     flex:1,
   },
   name_l:{
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
+    height:30,
     flex:1,
   },
   move:{
