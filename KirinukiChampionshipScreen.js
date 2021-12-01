@@ -500,10 +500,8 @@ export default class ChampionshipScreen extends Component {
   // シーンを変更して、チャンネル情報を表に渡す
   changeScene = async(select) =>{
     if(this.state.firstFlag){
-      this.state.firstFlag = false;
       this.state.expFlag = true;
-      console.log("first!");
-      console.log(this.state.expFlag);
+      this.state.firstFlag = false;
     }
     this.state.soundPreload.bgm.change = new Audio.Sound;
     await this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.03);
@@ -2232,13 +2230,13 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: Constants.TITLE_WIDTH/5,
                   backgroundColor:"#000000",borderColor:"#000000",justifyContent:"center"}}
                 >
-                  {/* <Text style={{color:"#eee",textAlign:"center",fontSize:24,}}>
+                  <Text style={{color:"#eee",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>
                     {this.state.groupA && ("A予")}
                     {this.state.groupB && ("B予")}
                     {this.state.groupC && ("C予")}
                     {this.state.groupD && ("D予")}
                     {this.state.final && ("決勝")}
-                  </Text> */}
+                  </Text>
                 </View>
                 <Image 
                   style ={styles.image}
@@ -2275,17 +2273,17 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40 )/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
@@ -2296,7 +2294,7 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
                 <View 
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  ,
                     backgroundColor:"#000000"}}
@@ -2305,12 +2303,12 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
@@ -2321,12 +2319,12 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
                 <View 
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5  ,
                     backgroundColor:"#000000"}}
@@ -2335,7 +2333,7 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,4)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
@@ -2346,17 +2344,17 @@ export default class ChampionshipScreen extends Component {
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,1)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,2)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
                   style={{ width: this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,3)}
-                ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
+                ><Text style={{color:"#000000",textAlign:"center",fontSize:Math.round(Constants.MAX_WIDTH/5/3),flex:1}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
                 <View 
                   style={{ width:this.state.width/5, height: (Constants.TITLE_HEIGHT - this.state.height - this.state.width/5 -40)/5 ,
                     backgroundColor:"#000000"}}
@@ -2386,6 +2384,20 @@ export default class ChampionshipScreen extends Component {
             </View>
           </TouchableOpacity>
           </View>
+        )}
+        {this.state.expFlag &&(
+          <TouchableOpacity 
+            style={styles.fullScreenButton}
+            onPress={()=>{this.setState(state =>  ({
+              expFlag:false,
+            }))}}
+          >
+            <View style={styles.fullScreen}>
+              <Text style={styles.gameOverText}>
+                対戦表をタップして、戦闘開始！！
+              </Text>
+            </View>
+          </TouchableOpacity>
         )}
         {/* {!this.state.apiSuccess &&(
           <View>
@@ -2502,6 +2514,7 @@ const styles = StyleSheet.create({
   },
   tableData:{
     textAlign:"center",
+    fontSize:18,
   },
   names:{
     flexDirection: 'row',
