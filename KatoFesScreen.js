@@ -1020,7 +1020,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
-    height:24,
+    height:30,
     flex:1,
   },
   name_l:{

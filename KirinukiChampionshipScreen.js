@@ -265,6 +265,31 @@ export default class ChampionshipScreen extends Component {
       katoPoint2:0,
       katoPoint3:0,
       katoPoint4:0,
+
+      // 音声をロードしておくところ
+      soundPreload:{
+        r1:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+        },
+        r2:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+        },
+        r3:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+        },
+        r4:{
+          move1:new Audio.Sound,
+          move2:new Audio.Sound,
+        },
+        bgm:{
+          battle1:new Audio.Sound,
+          title:new Audio.Sound,
+        }
+      },
+
     };
   };
 
@@ -276,17 +301,19 @@ export default class ChampionshipScreen extends Component {
     });
   };
 
-  componentDidMount = () => {
+  componentDidMount = async() => {
 
-    this.soundStart(Sounds.bgm1,0.03);
+    this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
     // セリフをBGMが邪魔しないように音量調整
-    setTimeout(() => {
-      //some action
-      this.soundId.setStatusAsync({ volume: 0.03 });//音量
-    }, 3 * 1000);
 
+    // 切り抜き情報取得
     this.getList();
 
+  };
+
+  componentWillUnmount =async()=>{
+    this.stopBgm(this.state.soundPreload.bgm.title);
+    clearInterval(this.intervalId);
   };
 
   getList = async() =>{
@@ -455,23 +482,17 @@ export default class ChampionshipScreen extends Component {
     this.getList();
   };
 
-  componentWillUnmount(){
-    this.stopBgm();
-    clearInterval(this.intervalId);
-  };
-
-  stopBgm =async()=>{
-    await this.soundId.setStatusAsync({ shouldPlay: false, positionMillis: 0 });
+  stopBgm =async(state)=>{
+    await state.setStatusAsync({ shouldPlay: false});
   };
 
   // BGM再生用（音量なども調整）
-  soundStart =async(select,inputVol) =>{
+  soundStart =async(state,select,inputVol) =>{
     // bgm
-      this.soundId = new Audio.Sound();//オブジェクト導入
-      await this.soundId.loadAsync(select);//ファイルロード
-      // console.log(this.soundId );
-      await this.soundId.setStatusAsync({ volume: inputVol });//音量
-      await this.soundId.playAsync();//スタート
+      await state.loadAsync(select);//ファイルロード
+      // console.log(state );
+      await state.setStatusAsync({ volume: inputVol });//音量
+      await state.playAsync();//スタート
   };
 
   // シーンを変更して、チャンネル情報を表に渡す
@@ -882,9 +903,9 @@ export default class ChampionshipScreen extends Component {
 
   // p1技発動
   p1move = async(select) =>{
-    const soundObject = new Audio.Sound();
     switch(select){
       case "1":
+        this.state.soundPreload.r1.move1 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
@@ -904,10 +925,11 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_1.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p1MOVE_1.sound);
+          return this.soundStart(this.state.soundPreload.r1.move1,this.state.p1MOVE_1.sound,1);
         }
         break;
       case "2"://通常攻撃
+        this.state.soundPreload.r1.move2 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
@@ -927,15 +949,9 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_2.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p1MOVE_2.sound);
+          return this.soundStart(this.state.soundPreload.r1.move2,this.state.p1MOVE_2.sound,1);
         }
         break;
-    }
-    try{
-      await soundObject.playAsync();
-    }
-    catch(error){
-      console.log("sound error");
     }
   };
 
@@ -944,6 +960,7 @@ export default class ChampionshipScreen extends Component {
     const soundObject = new Audio.Sound();
     switch(select){
       case "1":
+        this.state.soundPreload.r2.move1 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
@@ -955,18 +972,19 @@ export default class ChampionshipScreen extends Component {
             this.paramChange(this.state.p2MOVE_1.additional1.param,this.state.p2MOVE_1.additional1.change);
           }
           if(this.state.p2MOVE_1.additional2){
-            // 
+            this.paramChange(this.state.p2MOVE_1.additional2.param,this.state.p2MOVE_1.additional2.change);
           }
           if(this.state.p2MOVE_1.additional3){
-            // 
+            this.paramChange(this.state.p2MOVE_1.additional3.param,this.state.p2MOVE_1.additional3.change);
           }
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_1.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p2MOVE_1.sound);
+          return this.soundStart(this.state.soundPreload.r2.move1,this.state.p2MOVE_1.sound,1);
         }
         break;
       case "2"://通常攻撃
+        this.state.soundPreload.r2.move2 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
@@ -978,24 +996,18 @@ export default class ChampionshipScreen extends Component {
             this.paramChange(this.state.p2MOVE_2.additional1.param,this.state.p2MOVE_2.additional1.change);
           }
           if(this.state.p2MOVE_2.additional2){
-            // 
+            this.paramChange(this.state.p2MOVE_2.additional2.param,this.state.p2MOVE_2.additional2.change);
           }
           if(this.state.p2MOVE_2.additional3){
-            // 
+            this.paramChange(this.state.p2MOVE_2.additional3.param,this.state.p2MOVE_2.additional3.change);
           }
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_2.personality}));
           // 音声
-          await soundObject.loadAsync(this.state.p2MOVE_2.sound);
+          return this.soundStart(this.state.soundPreload.r2.move2,this.state.p2MOVE_2.sound,1);
         }
         break;
 
-    }
-    try{
-      await soundObject.playAsync();
-    }
-    catch(error){
-      // console.log("sound error");
     }
   };
 
@@ -1038,19 +1050,7 @@ export default class ChampionshipScreen extends Component {
     }
   };
 
-  stopBgm =async()=>{
-    await this.soundId.setStatusAsync({ shouldPlay: false, positionMillis: 0 });
-  };
 
-  // BGM再生用（音量なども調整）
-  soundStart =async(select,inputVol) =>{
-    // bgm
-      this.soundId = new Audio.Sound();//オブジェクト導入
-      await this.soundId.loadAsync(select);//ファイルロード
-      // console.log(this.soundId );
-      await this.soundId.setStatusAsync({ volume: inputVol });//音量
-      await this.soundId.playAsync();//スタート
-  };
 
   // 戦闘システム全体
   system = () =>{
@@ -1432,7 +1432,7 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         resultFlag:true,
       }));
-      this.soundStart(Sounds.next1,1);
+      this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.next1,1);
     }
     this.setState(state =>  ({
       tableData:{
@@ -1575,6 +1575,7 @@ export default class ChampionshipScreen extends Component {
           this.checkTable();
           // this.state.timer = 55;
          }
+         console.log(this.state.soundPreload);
     }
 
     return(
@@ -1899,7 +1900,7 @@ export default class ChampionshipScreen extends Component {
                   </Text>
                   </TouchableOpacity>
                 )}
-                {this.state.groupA && this.state.groupB && this.state.groupC && this.state.groupD && (
+                {this.state.final && (
                   <TouchableOpacity 
                     style={styles.button}
                     onPress={() => 

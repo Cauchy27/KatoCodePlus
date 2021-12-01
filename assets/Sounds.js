@@ -6,6 +6,7 @@ export default Sounds = {
 
   voice1:require('./sound/voice1.mp3'),
   yatteru:require('./sound/yatteru-.mp3'),
+  yaruo:require('./sound/yaruo.mp3'),
 
   bgm1:require('./sound/bgm/cryagain.mp3'),
   bgmGeneMenu:require('./sound/bgm/KatomonGenerateSlow.mp3'),
@@ -35,4 +36,5 @@ export default Sounds = {
   katou5:require('./sound/tetuya1.mp3'),
   katou6:require('./sound/fujinami4.mp3'),
   katou7:require('./sound/pubg1-1.mp3'),
+  katou8:require('./sound/fujinami3.mp3'),
 }

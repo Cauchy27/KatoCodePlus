@@ -23,33 +23,41 @@ import { AdMobBanner } from 'expo-ads-admob';
 // 最初に開くところ
 export default class TitleScreen extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = { 
+      bgm:{
+        title:null,
+        change:null,
+      }
+    };
+  }
+
   componentDidMount = async() => {
 
-    // bgm
-    this.soundId = new Audio.Sound();//オブジェクト導入
-    await this.soundId.loadAsync(Sounds.bgm1);//ファイルロード
-    // console.log(this.soundId );
-    await this.soundId.setStatusAsync({ volume: 0.03 });//音量
-    await this.soundId.playAsync();//スタート
-
+    this.state.bgm.title = new Audio.Sound;
+    this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03);
   };
 
-  stopBgm =async()=>{
-    await this.soundId.setStatusAsync({ shouldPlay: false, positionMillis: 0 });
+  stopBgm =async(state)=>{
+    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
   };
 
-  soundStart =async(select,inputVol) =>{
+  soundStart =async(state,select,inputVol) =>{
     // bgm
-      this.soundId = new Audio.Sound();//オブジェクト導入
-      await this.soundId.loadAsync(select);//ファイルロード
-      // console.log(this.soundId );
-      await this.soundId.setStatusAsync({ volume: inputVol });//音量
-      await this.soundId.playAsync();//スタート
+      await state.loadAsync(select);//ファイルロード
+      // console.log(state );
+      await state.setStatusAsync({ volume: inputVol });//音量
+      await state.playAsync();//スタート
   };
 
   componentWillUnmount(){
-    this.stopBgm();
+    this.stopBgm(this.state.bgm.title);
   }
+
+  restartSound = async(state) =>{
+    return await state.playAsync();
+  };
 
   testData =777;
 
@@ -75,35 +83,29 @@ export default class TitleScreen extends Component {
   goto = async(destination) => {
     try {
     // destinationごとに音声を変えておく
-      const soundObject = new Audio.Sound();
+      this.state.bgm.change = new Audio.Sound();
       switch(destination){
-        case "フリー対戦":
-          await soundObject.loadAsync(require('./assets/sound/yaruo.mp3'));
-          break;
-        case "カトフェス":
-          await soundObject.loadAsync(require('./assets/sound/jun-effect1.mp3'));
-          break;
+        // case "フリー対戦":
+        //   selector = Sounds.yaruo;
+        //   break;
+        // case "カトフェス":
+        //   selector = Sounds.yaruo;
+        //   break;
         case "切り抜きチャンピオンシップ":
-          await soundObject.loadAsync(require('./assets/sound/pubg1-1.mp3'));
-          await soundObject.setStatusAsync({ volume: 0.5 });//音量
-          break;
+          this.soundStart(this.state.bgm.change,Sounds.katou7,0.5);
+          
+          await this.stopBgm(this.state.bgm.title);
+          return this.props.navigation.navigate(destination);
         case "カトモン生成":
-          await soundObject.loadAsync(require('./assets/sound/fujinami3.mp3')); 
-          break;  
+          this.soundStart(this.state.bgm.change,Sounds.katou8,1);
+          await this.stopBgm(this.state.bgm.title);
+          return this.props.navigation.navigate(destination);
       }
-
-      await soundObject.playAsync();
-      console.log('success!!!');
-      await this.stopBgm();
-
-      this.props.navigation.navigate(destination)
     } 
     catch (error) {
       console.log('error...');
     }
   };
-  
-
 
   render(){
     
@@ -138,6 +140,16 @@ export default class TitleScreen extends Component {
             >
               <Text style={{color : "#00ffff",textAlign:"center"}}>
                 カトモン生成/カトフェス
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.restartSound(this.state.bgm.title)
+              }
+              style = {styles.bottun}
+            >
+              <Text style={{color : "#00ffff",textAlign:"center"}}>
+                BGM再再生
               </Text>
             </TouchableOpacity>
           </View>
