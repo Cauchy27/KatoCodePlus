@@ -226,9 +226,9 @@ export default class ChampionshipScreen extends Component {
       width: Constants.MAX_WIDTH, 
       height: Constants.MAX_WIDTH * 250/400,
       position1X: 0,
-      position1Y: Constants.MAX_WIDTH * 250/400/1.5,
-      position2X: Constants.MAX_WIDTH - 50 -40,
-      position2Y: Constants.MAX_WIDTH * 250/400/1.5,
+      position1Y: Constants.MAX_WIDTH * 250/400/2+45,
+      position2X: Constants.MAX_WIDTH - 90-20,
+      position2Y: Constants.MAX_WIDTH * 250/400/2+45,
 
       battleFlag:false,
 
@@ -1476,7 +1476,7 @@ export default class ChampionshipScreen extends Component {
       startTime: Date.now(),
 
       position1X: 0,
-      position2X: Constants.MAX_WIDTH - 50 -50,
+      position2X: Constants.MAX_WIDTH - 90-20,
 
       timer:30,
 
@@ -1986,11 +1986,11 @@ export default class ChampionshipScreen extends Component {
               <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/1000*100)}%</Text>  
 
 
-              <Text style={{ width:200,height: 30,top:this.state.position1Y+130, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p1KatoPoint}</Text>  
-              <Text style={{ width:200,height: 30,top:this.state.position1Y+130, left: Constants.MAX_WIDTH - 200+10, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p2KatoPoint}</Text>  
+              <Text style={{ width:200,height: 25,top:Constants.MAX_WIDTH * 250/400 + 25, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p1KatoPoint}</Text>  
+              <Text style={{ width:200,height: 25,top:Constants.MAX_WIDTH * 250/400 + 25, left: Constants.MAX_WIDTH - 200-10, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10}}>戦闘力:{this.state.p2KatoPoint}</Text>  
             </View>
             {/* 対戦表 */}
-            <View style={{flex:1,position:"absolute",bottom:30,}}>
+            <View style={{flex:1,position:"absolute",bottom:10,}}>
               <View style={styles.tableRow}>
                 <View 
                   style={{ width: Constants.TITLE_WIDTH/5, height: Constants.TITLE_WIDTH/5,
@@ -2027,102 +2027,102 @@ export default class ChampionshipScreen extends Component {
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  }}
                   source={{ uri: `${this.state.tableR1}` }}
                 />
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
                   backgroundColor:"#000000",borderColor:"#000000", }}
                 >
                 </View>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(1,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[1][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
                   source={{ uri: `${this.state.tableR2}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][1]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][3]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(2,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[2][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
                   source={{ uri: `${this.state.tableR3}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][2]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5  ,
                     backgroundColor:"#000000"}}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(3,4)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[3][4]}</Text></TouchableOpacity>
               </View>
               <View style={styles.tableRow}>
                 <Image 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  }}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   }}
                   source={{ uri: `${this.state.tableR4}` }}
                 />
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,1)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][1]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,2)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][2]}</Text></TouchableOpacity>
                 <TouchableOpacity
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5  ,backgroundColor:"#deb887"}}
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5   ,backgroundColor:"#deb887"}}
                   onPress={() => 
                     this.setBattle(4,3)}
                 ><Text style={{color:"#000000",textAlign:"center",fontSize:16,padding:"20%"}}>{this.state.tableData[4][3]}</Text></TouchableOpacity>
                 <View 
-                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_WIDTH - this.state.position1Y+180 - Constants.TITLE_WIDTH/5)/5 ,
+                  style={{ width: Constants.TITLE_WIDTH/5, height: (Constants.TITLE_HEIGHT - this.state.position1Y-140 -100 - Constants.TITLE_WIDTH/5)/5 ,
                     backgroundColor:"#000000"}}
                 />
               </View>
@@ -2271,7 +2271,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     marginLeft:"5%",
     marginRight:"5%",
-    paddingTop:"2%",
+    paddingTop:"1%",
     textAlign:'center',
     // backgroundColor: "red",
   },
@@ -2281,7 +2281,9 @@ const styles = StyleSheet.create({
     marginLeft:"5%",
     marginRight:"5%",
     marginBottom:"1%",
+    marginTop:"1%",
     textAlign:'center',
+    height:60,
     // backgroundColor: "red",
   },
   name_r:{
