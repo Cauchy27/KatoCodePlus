@@ -726,10 +726,10 @@ export default class FesScreen extends Component {
       // 対戦の終了判定
       if(Math.round(
       this.state.timer) <= 0){
+        this.state.running = false;
         clearInterval(this.intervalId);
         this.stopBgm(this.state.soundPreload.bgm.battle1);
         if(this.state.p1HP/this.state.p1HPmax <= this.state.p2HP/this.state.p2HPmax){
-          this.state.running = false;
           // 負け広告
           var random = Math.random();
           if(random < 0.2){
@@ -749,18 +749,19 @@ export default class FesScreen extends Component {
         }
         // this.state.timer = 55;
       }else{
+        this.state.running = false;
         if(this.state.p1HP <= 0){
             clearInterval(this.intervalId);
             this.stopBgm(this.state.soundPreload.bgm.battle1);
             if(this.state.p1HP <= this.state.p2HP){
-              this.state.running = false;
+              // this.state.running = false;
               // 負け広告
               var random = Math.random();
             if(random < 0.2){
               this.Interstitial()
             }
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
-              this.state.running = false
+              // this.state.running = false
             }
             // this.state.timer = 55;
           }
@@ -769,10 +770,12 @@ export default class FesScreen extends Component {
           this.stopBgm(this.state.soundPreload.bgm.battle1);
           this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
             if(this.state.roundCount>=5){
+              // this.state.running = false;
               this.state.endFlag = true;
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
             }
             else{
+              // this.state.running = false;
               this.state.winning = true;
             }
         }
@@ -990,7 +993,7 @@ export default class FesScreen extends Component {
             </View>
         )}
         {/* ポップアップ */}
-        {!this.state.running && (
+        {!this.state.running && !this.state.winning && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount)}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>敗戦...</Text>
