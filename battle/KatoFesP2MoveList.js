@@ -18,7 +18,7 @@ export default KatoFesP2MoveList = {
       name:"論破",
       sound:Sounds.hiroyuki2,//音声ファイルのディレクトリ指定
       power:70,
-      consumption_Guts:130,
+      consumption_Guts:60,
       add_Guts:0,
       range:400,
       additional1:{
