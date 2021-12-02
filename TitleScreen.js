@@ -39,14 +39,15 @@ export default class TitleScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
+    await state.stopAsync();
   };
 
-  // ページ内のサウンドを一括ロード
-
+  // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
-      await state.loadAsync(select);
-      await state.setStatusAsync({ volume:inputVol});//音量
+    // bgm
+      await state.loadAsync(select);//ファイルロード
+      // console.log(state );
+      await state.setVolumeAsync(inputVol);//音量
       await state.playAsync();//スタート
   };
 

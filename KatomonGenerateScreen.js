@@ -336,14 +336,17 @@ export default class KatomonGenerateScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
+    await state.stopAsync();
   };
 
+  // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
-    await state.loadAsync(select);
-    await state.setStatusAsync({ volume:inputVol});//音量
-    await state.playAsync();//スタート
-};
+    // bgm
+      await state.loadAsync(select);//ファイルロード
+      // console.log(state );
+      await state.setVolumeAsync(inputVol);//音量
+      await state.playAsync();//スタート
+  };
 
   componentWillUnmount(){
     this.stopBgm(this.state.sound.bmg);
@@ -585,7 +588,7 @@ export default class KatomonGenerateScreen extends Component {
             // height:Constants.MAX_HEIGHT * 2/10
           }}>
             <Text style={{
-              fontSize:24,
+              fontSize:Math.round(Constants.MAX_WIDTH/20),
               marginTop:"5%",
               height:30,
             }}>

@@ -90,6 +90,8 @@ export default class ChampionshipScreen extends Component {
       katoPoint3_final:null,
       katoPoint4_final:null,
 
+      final_count:0,
+
       // Champion用
       champ_image:null,
       champ_name:null,
@@ -487,7 +489,7 @@ export default class ChampionshipScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
+    await state.stopAsync();
   };
 
   // BGM再生用（音量なども調整）
@@ -495,7 +497,7 @@ export default class ChampionshipScreen extends Component {
     // bgm
       await state.loadAsync(select);//ファイルロード
       // console.log(state );
-      await state.setStatusAsync({ volume: inputVol });//音量
+      await state.setVolumeAsync(inputVol);//音量
       await state.playAsync();//スタート
   };
 
@@ -663,6 +665,7 @@ export default class ChampionshipScreen extends Component {
 
       // 後で設定
       case "final":
+        this.setFinal();
         this.setState(state =>  ({
           memberListFlag:false,
           final:true,
@@ -705,21 +708,6 @@ export default class ChampionshipScreen extends Component {
 
         groupA:true,
 
-        tableR1:this.state.KirinukiImage1,
-        tableR2:this.state.KirinukiImage2,
-        tableR3:this.state.KirinukiImage3,
-        tableR4:this.state.KirinukiImage4,
-
-        tableR1_name:this.state.KirinukiData1,
-        tableR2_name:this.state.KirinukiData2,
-        tableR3_name:this.state.KirinukiData3,
-        tableR4_name:this.state.KirinukiData4,
-
-        tableR1_st:this.state.KirinukiDes1,
-        tableR2_st:this.state.KirinukiDes2,
-        tableR3_st:this.state.KirinukiDes3,
-        tableR4_st:this.state.KirinukiDes4,
-
         katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"],
         katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"],
         katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"],
@@ -729,19 +717,31 @@ export default class ChampionshipScreen extends Component {
       // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        this.loseSynser(false,true,true,true);
+        try{this.loseSynser(false,true,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        this.loseSynser(true,false,true,true);
+        try{this.loseSynser(true,false,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        this.loseSynser(true,true,false,true);
+        try{this.loseSynser(true,true,false,true);}
+        catch(error){
+          console.log("lose error");
+        }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        this.loseSynser(true,true,true,false);
+        try{this.loseSynser(true,true,true,false);}
+        catch(error){
+          console.log("lose error");
+        }
       }
       // 同着はスキップできないように。
     }
@@ -750,21 +750,6 @@ export default class ChampionshipScreen extends Component {
         this.setState(state =>  ({
 
           groupB:true,
-  
-          tableR1:this.state.KirinukiImage5,
-          tableR2:this.state.KirinukiImage6,
-          tableR3:this.state.KirinukiImage7,
-          tableR4:this.state.KirinukiImage8,
-  
-          tableR1_name:this.state.KirinukiData5,
-          tableR2_name:this.state.KirinukiData6,
-          tableR3_name:this.state.KirinukiData7,
-          tableR4_name:this.state.KirinukiData8,
-  
-          tableR1_st:this.state.KirinukiDes5,
-          tableR2_st:this.state.KirinukiDes6,
-          tableR3_st:this.state.KirinukiDes7,
-          tableR4_st:this.state.KirinukiDes8,
   
           katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes5["videoCount"],
           katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes6["videoCount"],
@@ -775,19 +760,31 @@ export default class ChampionshipScreen extends Component {
         // 戦闘力で決定)
         // 1の勝ち抜け
         if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-          this.loseSynser(false,true,true,true);
+          try{this.loseSynser(false,true,true,true);}
+          catch(error){
+            console.log("lose error");
+          }
         }
         // 2の勝ち抜け
         if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-          this.loseSynser(true,false,true,true);
+          try{this.loseSynser(true,false,true,true);}
+          catch(error){
+            console.log("lose error");
+          }
         }
         // 3の勝ち抜け
         if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-          this.loseSynser(true,true,false,true);
+          try{this.loseSynser(true,true,false,true);}
+          catch(error){
+            console.log("lose error");
+          }
         }
         // 4の勝ち抜け
         if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-          this.loseSynser(true,true,true,false);
+          try{this.loseSynser(true,true,true,false);}
+          catch(error){
+            console.log("lose error");
+          }
         }
         // 同着はスキップできないように。
       }
@@ -796,21 +793,6 @@ export default class ChampionshipScreen extends Component {
           this.setState(state =>  ({
 
             groupC:true,
-    
-            tableR1:this.state.KirinukiImage9,
-            tableR2:this.state.KirinukiImage10,
-            tableR3:this.state.KirinukiImage11,
-            tableR4:this.state.KirinukiImage12,
-
-            tableR1_name:this.state.KirinukiData9,
-            tableR2_name:this.state.KirinukiData10,
-            tableR3_name:this.state.KirinukiData11,
-            tableR4_name:this.state.KirinukiData12,
-
-            tableR1_st:this.state.KirinukiDes9,
-            tableR2_st:this.state.KirinukiDes10,
-            tableR3_st:this.state.KirinukiDes11,
-            tableR4_st:this.state.KirinukiDes12,
 
             katoPoint1:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"],
             katoPoint2:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"],
@@ -821,19 +803,31 @@ export default class ChampionshipScreen extends Component {
           // 戦闘力で決定)
           // 1の勝ち抜け
           if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-            this.loseSynser(false,true,true,true);
+            try{this.loseSynser(false,true,true,true);}
+            catch(error){
+              console.log("lose error");
+            }
           }
           // 2の勝ち抜け
           if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-            this.loseSynser(true,false,true,true);
+            try{this.loseSynser(true,false,true,true);}
+            catch(error){
+              console.log("lose error");
+            }
           }
           // 3の勝ち抜け
           if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-            this.loseSynser(true,true,false,true);
+            try{this.loseSynser(true,true,false,true);}
+            catch(error){
+              console.log("lose error");
+            }
           }
           // 4の勝ち抜け
           if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-            this.loseSynser(true,true,true,false);
+            try{this.loseSynser(true,true,true,false);}
+            catch(error){
+              console.log("lose error");
+            }
           }
           // 同着はスキップできないように。
         }
@@ -842,21 +836,6 @@ export default class ChampionshipScreen extends Component {
             this.setState(state =>  ({
 
               groupD:true,
-      
-              tableR1:this.state.KirinukiImage13,
-              tableR2:this.state.KirinukiImage14,
-              tableR3:this.state.KirinukiImage15,
-              tableR4:this.state.KirinukiImage16,
-
-              tableR1_name:this.state.KirinukiData13,
-              tableR2_name:this.state.KirinukiData14,
-              tableR3_name:this.state.KirinukiData15,
-              tableR4_name:this.state.KirinukiData16,
-
-              tableR1_st:this.state.KirinukiDes13,
-              tableR2_st:this.state.KirinukiDes14,
-              tableR3_st:this.state.KirinukiDes15,
-              tableR4_st:this.state.KirinukiDes16,
 
               katoPoint1:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"],
               katoPoint2:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"],
@@ -867,19 +846,31 @@ export default class ChampionshipScreen extends Component {
             // 戦闘力で決定)
             // 1の勝ち抜け
             if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-              this.loseSynser(false,true,true,true);
+              try{this.loseSynser(false,true,true,true);}
+              catch(error){
+                console.log("lose error");
+              }
             }
             // 2の勝ち抜け
             if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-              this.loseSynser(true,false,true,true);
+              try{this.loseSynser(true,false,true,true);}
+              catch(error){
+                console.log("lose error");
+              }
             }
             // 3の勝ち抜け
             if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-              this.loseSynser(true,true,false,true);
+              try{this.loseSynser(true,true,false,true);}
+              catch(error){
+                console.log("lose error");
+              }
             }
             // 4の勝ち抜け
             if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-              this.loseSynser(true,true,true,false);
+              try{this.loseSynser(true,true,true,false);}
+              catch(error){
+                console.log("lose error");
+              }
             }
             // 同着はスキップできないように。
           }
@@ -1380,37 +1371,37 @@ export default class ChampionshipScreen extends Component {
 
     // 1の勝ち抜け
     if(this.state.table1Count > this.state.table2Count &&　this.state.table1Count > this.state.table3Count && this.state.table1Count > this.state.table4Count){
-      this.loseSynser(false,true,true,true);
+     this.loseSynser(false,true,true,true);
     }
     // 2の勝ち抜け
     if(this.state.table2Count > this.state.table1Count &&　this.state.table2Count > this.state.table3Count && this.state.table2Count > this.state.table4Count){
-      this.loseSynser(true,false,true,true);
+     this.loseSynser(true,false,true,true);
     }
     // 3の勝ち抜け
     if(this.state.table3Count > this.state.table1Count &&　this.state.table3Count > this.state.table2Count && this.state.table3Count > this.state.table4Count){
-      this.loseSynser(true,true,false,true);
+     this.loseSynser(true,true,false,true);
     }
     // 4の勝ち抜け
     if(this.state.table4Count > this.state.table1Count &&　this.state.table4Count > this.state.table2Count && this.state.table4Count > this.state.table3Count){
-      this.loseSynser(true,true,true,false);
+     this.loseSynser(true,true,true,false);
     }
 
     // 同着がある場合(戦闘力*勝敗で決定)
     // 1の勝ち抜け
     if(this.state.table1Count * this.state.katoPoint1 > this.state.table2Count * this.state.katoPoint2 &&　this.state.table1Count * this.state.katoPoint1 > this.state.table3Count * this.state.katoPoint3 && this.state.table1Count * this.state.katoPoint1 > this.state.table4Count * this.state.katoPoint4){
-      this.loseSynser(false,true,true,true);
+     this.loseSynser(false,true,true,true);
     }
     // 2の勝ち抜け
     if(this.state.table2Count * this.state.katoPoint2 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table2Count * this.state.katoPoint2 > this.state.table3Count * this.state.katoPoint3 && this.state.table2Count * this.state.katoPoint2 > this.state.table4Count * this.state.katoPoint4){
-      this.loseSynser(true,false,true,true);
+     this.loseSynser(true,false,true,true);
     }
     // 3の勝ち抜け
     if(this.state.table3Count * this.state.katoPoint3 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table3Count * this.state.katoPoint3 > this.state.table2Count * this.state.katoPoint2 && this.state.table3Count * this.state.katoPoint3 > this.state.table4Count * this.state.katoPoint4){
-      this.loseSynser(true,true,false,true);
+     this.loseSynser(true,true,false,true);
     }
     // 4の勝ち抜け
     if(this.state.table4Count * this.state.katoPoint4 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table4Count * this.state.katoPoint4 > this.state.table2Count * this.state.katoPoint2 && this.state.table4Count * this.state.katoPoint4 > this.state.table3Count * this.state.katoPoint3){
-      this.loseSynser(true,true,true,false);
+    this.loseSynser(true,true,true,false);
     }
 
   };
@@ -1426,38 +1417,6 @@ export default class ChampionshipScreen extends Component {
         memberListFlag:true,
         endA:true,
       }));
-      if(!this.state.Kirinuki1_lose){
-        this.setState(state =>  ({
-          tableR1_final:this.state.tableR1,
-          tableR1_name_final:this.state.tableR1_name,
-          tableR1_st_final:this.state.KirinukiDes1,
-          katoPoint1_final:this.state.katoPoint1,
-        }));
-      }
-      if(!this.state.Kirinuki2_lose){
-        this.setState(state =>  ({
-          tableR1_final:this.state.tableR2,
-          tableR1_name_final:this.state.tableR2_name,
-          tableR1_st_final:this.state.KirinukiDes2,
-          katoPoint1_final:this.state.katoPoint2,
-        }));
-      }
-      if(!this.state.Kirinuki3_lose){
-        this.setState(state =>  ({
-          tableR1_final:this.state.tableR3,
-          tableR1_name_final:this.state.tableR3_name,
-          tableR1_st_final:this.state.KirinukiDes3,
-          katoPoint1_final:this.state.katoPoint3,
-        }));
-      }
-      if(!this.state.Kirinuki4_lose){
-        this.setState(state =>  ({
-          tableR1_final:this.state.tableR4,
-          tableR1_name_final:this.state.tableR4_name,
-          tableR1_st_final:this.state.KirinukiDes4,
-          katoPoint1_final:this.state.katoPoint4,
-        }));
-      }
     }
     if(this.state.groupB){
       this.setState(state =>  ({
@@ -1469,38 +1428,7 @@ export default class ChampionshipScreen extends Component {
         memberListFlag:true,
         endB:true,
       }));
-      if(!this.state.Kirinuki5_lose){
-        this.setState(state =>  ({
-          tableR2_final:this.state.tableR1,
-          tableR2_name_final:this.state.tableR1_name,
-          tableR2_st_final:this.state.KirinukiDes5,
-          katoPoint2_final:this.state.katoPoint5,
-        }));
-      }
-      if(!this.state.Kirinuki6_lose){
-        this.setState(state =>  ({
-          tableR2_final:this.state.tableR2,
-          tableR2_name_final:this.state.tableR2_name,
-          tableR2_st_final:this.state.KirinukiDes6,
-          katoPoint2_final:this.state.katoPoint6,
-        }));
-      }
-      if(!this.state.Kirinuki7_lose){
-        this.setState(state =>  ({
-          tableR2_final:this.state.tableR3,
-          tableR2_name_final:this.state.tableR3_name,
-          tableR2_st_final:this.state.KirinukiDes7,
-          katoPoint2_final:this.state.katoPoint7,
-        }));
-      }
-      if(!this.state.Kirinuki8_lose){
-        this.setState(state =>  ({
-          tableR2_final:this.state.tableR4,
-          tableR2_name_final:this.state.tableR4_name,
-          tableR2_st_final:this.state.KirinukiDes8,
-          katoPoint2_final:this.state.katoPoint8,
-        }));
-      }
+    
     }
     if(this.state.groupC){
       this.setState(state =>  ({
@@ -1512,38 +1440,6 @@ export default class ChampionshipScreen extends Component {
         memberListFlag:true,
         endC:true,
       }));
-      if(!this.state.Kirinuki9_lose){
-        this.setState(state =>  ({
-          tableR3_final:this.state.tableR1,
-          tableR3_name_final:this.state.tableR1_name,
-          tableR3_st_final:this.state.KirinukiDes9,
-          katoPoint3_final:this.state.katoPoint9,
-        }));
-      }
-      if(!this.state.Kirinuki10_lose){
-        this.setState(state =>  ({
-          tableR3_final:this.state.tableR2,
-          tableR3_name_final:this.state.tableR2_name,
-          tableR3_st_final:this.state.KirinukiDes10,
-          katoPoint3_final:this.state.katoPoint10,
-        }));
-      }
-      if(!this.state.Kirinuki11_lose){
-        this.setState(state =>  ({
-          tableR3_final:this.state.tableR3,
-          tableR3_name_final:this.state.tableR3_name,
-          tableR3_st_final:this.state.KirinukiDes11,
-          katoPoint3_final:this.state.katoPoint11,
-        }));
-      }
-      if(!this.state.Kirinuki12_lose){
-        this.setState(state =>  ({
-          tableR3_final:this.state.tableR4,
-          tableR3_name_final:this.state.tableR4_name,
-          tableR3_st_final:this.state.KirinukiDes12,
-          katoPoint3_final:this.state.katoPoint12,
-        }));
-      }
     }
     if(this.state.groupD){
       this.setState(state =>  ({
@@ -1554,40 +1450,7 @@ export default class ChampionshipScreen extends Component {
 
         memberListFlag:true,
         endD:true,
-      }));
-      if(!this.state.Kirinuki13_lose){
-        this.setState(state =>  ({
-          tableR4_final:this.state.tableR1,
-          tableR4_name_final:this.state.tableR1_name,
-          tableR4_st_final:this.state.KirinukiDes13,
-          katoPoint4_final:this.state.katoPoint13,
-        }));
-      }
-      if(!this.state.Kirinuki14_lose){
-        this.setState(state =>  ({
-          tableR4_final:this.state.tableR2,
-          tableR4_name_final:this.state.tableR2_name,
-          tableR4_st_final:this.state.KirinukiDes14,
-          katoPoint4_final:this.state.katoPoint14,
-        }));
-      }
-      if(!this.state.Kirinuki15_lose){
-        this.setState(state =>  ({
-          tableR4_final:this.state.tableR3,
-          tableR4_name_final:this.state.tableR3_name,
-          tableR4_st_final:this.state.KirinukiDes15,
-          katoPoint4_final:this.state.katoPoint15,
-        }));
-      }
-      if(!this.state.Kirinuki16_lose){
-        this.setState(state =>  ({
-          tableR4_final:this.state.tableR4,
-          tableR4_name_final:this.state.tableR4_name,
-          tableR4_st_final:this.state.KirinukiDes16,
-          katoPoint4_final:this.state.katoPoint16,
-        }));
-      }
-      
+      }));   
     }
     if(this.state.final){
       if(!r1){
@@ -1626,6 +1489,7 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         resultFlag:true,
       }));
+      this.state.soundPreload.bgm.final = new Audio.Sound;
       this.soundStart(this.state.soundPreload.bgm.final,Sounds.next1,1);
     }
     this.setState(state =>  ({
@@ -1652,7 +1516,147 @@ export default class ChampionshipScreen extends Component {
         }
       },
     }));
-    
+  };
+
+  setFinal =async()=>{
+    // groupA
+    if(!this.state.Kirinuki1_lose){
+      this.setState(state =>  ({
+        tableR1_final:this.state.KirinukiImage1,
+        tableR1_name_final:this.state.KirinukiData1,
+        tableR1_st_final:KirinukiDes1,
+        katoPoint1_final:KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"],
+      }));
+    }else{
+      if(!this.state.Kirinuki2_lose){
+        this.setState(state =>  ({
+          tableR1_final:this.state.KirinukiImage2,
+          tableR1_name_final:this.state.KirinukiData2,
+          tableR1_st_final:KirinukiDes2,
+          katoPoint1_final:KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"],
+        }));
+      }else{
+        if(!this.state.Kirinuki3_lose){
+          this.setState(state =>  ({
+            tableR1_final:this.state.KirinukiImage3,
+            tableR1_name_final:this.state.KirinukiData3,
+            tableR1_st_final:KirinukiDes3,
+            katoPoint1_final:KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"],
+          }));
+        }else{
+            this.setState(state =>  ({
+              tableR1_final:this.state.KirinukiImage4,
+              tableR1_name_final:this.state.KirinukiData4,
+              tableR1_st_final:KirinukiDes4,
+              katoPoint1_final:KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"],
+            }));
+        }
+      }
+    }
+    // groupB
+    if(!this.state.Kirinuki5_lose){
+      this.setState(state =>  ({
+        tableR2_final:this.state.KirinukiImage5,
+        tableR2_name_final:this.state.KirinukiData5,
+        tableR2_st_final:KirinukiDes5,
+        katoPoint2_final:KirinukiDes5["viewCount"] * this.state.KirinukiDes5["videoCount"],
+      }));
+    }else{
+      if(!this.state.Kirinuki6_lose){
+        this.setState(state =>  ({
+          tableR2_final:this.state.KirinukiImage6,
+          tableR2_name_final:this.state.KirinukiData6,
+          tableR2_st_final:KirinukiDes6,
+          katoPoint2_final:KirinukiDes6["viewCount"] * this.state.KirinukiDes6["videoCount"],
+        }));
+      }else{
+        if(!this.state.Kirinuki7_lose){
+          this.setState(state =>  ({
+            tableR2_final:this.state.KirinukiImage7,
+            tableR2_name_final:this.state.KirinukiData7,
+            tableR2_st_final:KirinukiDes7,
+            katoPoint2_final:KirinukiDes7["viewCount"] * this.state.KirinukiDes7["videoCount"],
+          }));
+        }else{
+            this.setState(state =>  ({
+              tableR2_final:this.state.KirinukiImage8,
+              tableR2_name_final:this.state.KirinukiData8,
+              tableR2_st_final:KirinukiDes8,
+              katoPoint2_final:KirinukiDes8["viewCount"] * this.state.KirinukiDes8["videoCount"],
+            }));
+        }
+      }
+    }
+
+    // groupC
+    if(!this.state.Kirinuki9_lose){
+      this.setState(state =>  ({
+        tableR3_final:this.state.KirinukiImage9,
+        tableR3_name_final:this.state.KirinukiData9,
+        tableR3_st_final:KirinukiDes9,
+        katoPoint3_final:KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"],
+      }));
+    }else{
+      if(!this.state.Kirinuki10_lose){
+        this.setState(state =>  ({
+          tableR3_final:this.state.KirinukiImage10,
+          tableR3_name_final:this.state.KirinukiData10,
+          tableR3_st_final:KirinukiDes10,
+          katoPoint3_final:KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"],
+        }));
+      }else{
+        if(!this.state.Kirinuki11_lose){
+          this.setState(state =>  ({
+            tableR3_final:this.state.KirinukiImage11,
+            tableR3_name_final:this.state.KirinukiData11,
+            tableR3_st_final:KirinukiDes11,
+            katoPoint3_final:KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"],
+          }));
+        }else{
+            this.setState(state =>  ({
+              tableR3_final:this.state.KirinukiImage12,
+              tableR3_name_final:this.state.KirinukiData12,
+              tableR3_st_final:KirinukiDes12,
+              katoPoint3_final:KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"],
+            }));
+        }
+      }
+    }
+
+    // groupD
+    if(!this.state.Kirinuki13_lose){
+      this.setState(state =>  ({
+        tableR4_final:this.state.KirinukiImage13,
+        tableR4_name_final:this.state.KirinukiData13,
+        tableR4_st_final:KirinukiDes13,
+        katoPoint4_final:KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"],
+      }));
+    }else{
+      if(!this.state.Kirinuki14_lose){
+        this.setState(state =>  ({
+          tableR4_final:this.state.KirinukiImage14,
+          tableR4_name_final:this.state.KirinukiData14,
+          tableR4_st_final:KirinukiDes14,
+          katoPoint4_final:KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"],
+        }));
+      }else{
+        if(!this.state.Kirinuki15_lose){
+          this.setState(state =>  ({
+            tableR4_final:this.state.KirinukiImage15,
+            tableR4_name_final:this.state.KirinukiData15,
+            tableR4_st_final:KirinukiDes15,
+            katoPoint4_final:KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"],
+          }));
+        }else{
+            this.setState(state =>  ({
+              tableR4_final:this.state.KirinukiImage16,
+              tableR4_name_final:this.state.KirinukiData16,
+              tableR4_st_final:KirinukiDes16,
+              katoPoint4_final:KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"],
+            }));
+        }
+      }
+    }
   };
 
   // 再戦
@@ -2044,7 +2048,7 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
-                  {/* {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {this.state.endA && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2054,7 +2058,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )} */}
+                  )}
                   {!this.state.endB && (
                     <TouchableOpacity 
                       style={styles.button}
@@ -2066,7 +2070,7 @@ export default class ChampionshipScreen extends Component {
                       </Text>
                     </TouchableOpacity>
                   )}
-                  {/* {this.state.endB && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {this.state.endB && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2076,7 +2080,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )} */}
+                  )}
                 </View>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
                   {!this.state.endC && (
@@ -2090,7 +2094,7 @@ export default class ChampionshipScreen extends Component {
                     </Text>
                     </TouchableOpacity>
                   )}
-                  {/* {this.state.endC && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {this.state.endC && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2100,7 +2104,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )} */}
+                  )}
                   {!this.state.endD && (
                     <TouchableOpacity 
                     style={styles.button}
@@ -2112,7 +2116,7 @@ export default class ChampionshipScreen extends Component {
                     </Text>
                     </TouchableOpacity>
                   )}
-                  {/* {this.state.endD && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
+                  {this.state.endD && !(this.state.endA && this.state.endB && this.state.endC && this.state.endD) &&  (
                     <TouchableOpacity 
                       style={styles.button}
                       onPress={() => 
@@ -2122,7 +2126,7 @@ export default class ChampionshipScreen extends Component {
                         1つスキップする
                       </Text>
                     </TouchableOpacity>
-                  )} */}
+                  )}
                 </View>
                 <View style={{alignItems:"center",flexDirection:"row"}}>
                   {this.state.endA && this.state.endB && this.state.endC && this.state.endD && (

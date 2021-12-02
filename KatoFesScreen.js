@@ -134,15 +134,17 @@ export default class FesScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.setStatusAsync({ shouldPlay: false,positionMillis: 0 });
+    await state.stopAsync();
   };
 
   // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
-    await state.loadAsync(select);
-    await state.setStatusAsync({ volume:inputVol});//音量
-    await state.playAsync();//スタート
-};
+    // bgm
+      await state.loadAsync(select);//ファイルロード
+      // console.log(state );
+      await state.setVolumeAsync(inputVol);//音量
+      await state.playAsync();//スタート
+  };
 
   // BGMの切り替え
   bgmChange = (target,select) =>{
@@ -829,8 +831,8 @@ export default class FesScreen extends Component {
                 right:0,
               }}>
           </View>
-          <Text style={{ height: 30 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, left: this.state.width/6, position:'absolute',fontSize:24,backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p1HP)} ({Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%)</Text>  
-          <Text style={{ height: 30 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, right: this.state.width/6, position:'absolute',fontSize:24,backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p2HP)} ({Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%)</Text>  
+          <Text style={{ height: Math.round(Constants.MAX_WIDTH/25)+5 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, left: this.state.width/6, position:'absolute',fontSize:Math.round(Constants.MAX_WIDTH/25),backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p1HP)} ({Math.round(this.state.p1HP/this.state.p1HPmax * 100)}%)</Text>  
+          <Text style={{ height: Math.round(Constants.MAX_WIDTH/25)+5 ,top:Constants.MAX_WIDTH * 250/400/10 +80+30, right: this.state.width/6, position:'absolute',fontSize:Math.round(Constants.MAX_WIDTH/25),backgroundColor:"#eee",textAlign:"center"}}>HP:{Math.round(this.state.p2HP)} ({Math.round(this.state.p2HP/this.state.p2HPmax * 100)}%)</Text>  
           {/* Player1 */}
            <Image
               source={this.state.katomonImage}
