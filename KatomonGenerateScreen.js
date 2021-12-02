@@ -24,17 +24,17 @@ import KatomonMoveList from "./battle/KatomonMoveList";
 // 制限がかかった際に切り替える
 const YOUTUBE_API_KEY = {
  1:"AIzaSyDWNDiS0XB1tcrkUHzOdhc4uAoGNQh6V5w",
- 2:"AIzaSyCeN9u9jcXSHJoLWUrek0m4igqKAvbZjGs",
- 3:"AIzaSyBM-Gz05cxeA0HU6VXC79ZOUeH5Y_51pG8",
- 4:"AIzaSyCcmePnsCkF8-W5mfwRyKULUvqdQW4UeuA",
- 5:"AIzaSyCSI-e5B5H8G93XR2DrJSypqbaFGexvim8",
- 6:"AIzaSyBuWDI-BPp8lNaUjtLW-hOGjC2QscJcZdg",
- 7:"AIzaSyBfXndA5kNEV8V-Ka1VfQbjrYvZwr5tKac",
- 8:"AIzaSyC50BVEl6KvNPdGCupaw7X5CW0Joylp1_A",
- 9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
+ 2:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 3:"",
+ 4:"",
+ 5:"",
+ 6:"",
+ 7:"",
+ 8:"",
+ 9:"",
  };
  // 使用するキー
- var useApiNum = 5 ;
+ var useApiNum = 2 ;
 
  // 効果音の再生に使う
 function playEffectSound(sound,vol) {
@@ -469,7 +469,7 @@ export default class KatomonGenerateScreen extends Component {
                       onPress={() =>this.changeAPI()}
                     >
                       <Text>
-                        APIの制限の可能性もあります。使用するAPIキーを切り替える場合はこちらをTapしてください。
+                        何度も失敗する場合は、こちらをTapした後にお試しください。
                       </Text>
                     </TouchableOpacity>
                   </View>
