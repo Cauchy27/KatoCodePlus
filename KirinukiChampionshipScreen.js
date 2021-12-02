@@ -259,6 +259,9 @@ export default class ChampionshipScreen extends Component {
       p2MOVE_1:ChampMoveList.rightStraight,
       p2MOVE_2:ChampMoveList.gaia,
 
+      p1Personality:1.2,
+      p2Personality:1.2,
+
       table1Count:0,
       table2Count:0,
       table3Count:0,

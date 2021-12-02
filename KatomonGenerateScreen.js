@@ -34,7 +34,7 @@ const YOUTUBE_API_KEY = {
  9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
  };
  // 使用するキー
- var useApiNum = 4 ;
+ var useApiNum = 5 ;
 
  
 
@@ -453,7 +453,7 @@ export default class KatomonGenerateScreen extends Component {
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity 
-                  onPress={() => {this.generateKatomon}}
+                  onPress={() => {this.generateKatomon()}}
                   style={{
                     borderRadius:20,
                     flex:2,
