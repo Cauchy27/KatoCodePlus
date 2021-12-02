@@ -36,6 +36,22 @@ const YOUTUBE_API_KEY = {
  // 使用するキー
  var useApiNum = 5 ;
 
+ // 効果音の再生に使う
+function playEffectSound(sound,vol) {
+  // console.log('Playing ' + name);
+  Audio.Sound.createAsync(
+     sound, {
+        shouldPlay: true,
+        volume: vol
+     }
+  ).then((res) => {
+     res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return;
+        // console.log('Unloading ' + name);
+        res.sound.unloadAsync().catch(() => {});
+     });
+  }).catch((error) => {});
+}
  
 
 // 最初に開くところ
@@ -152,7 +168,7 @@ export default class KatomonGenerateScreen extends Component {
           this.setState({
             duration_memo:duration,
           });
-          this.soundStart(this.state.sound.effect1,Sounds.generate1,0.05);
+          playEffectSound(Sounds.generate1,0.05);
           this.state.sound.effect1 = new Audio.Sound;
       })
       .catch(() => {
@@ -295,7 +311,7 @@ export default class KatomonGenerateScreen extends Component {
        // 守り
        katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+10,
     });
-    this.soundStart(this.state.sound.effect2,Sounds.katomonGenerate,1);
+    playEffectSound(Sounds.katomonGenerate,1);
   }
 
   goto = async(destination) => {
@@ -303,7 +319,7 @@ export default class KatomonGenerateScreen extends Component {
     // destinationごとに音声を変えておく
       switch(destination){
         case "カトフェス":
-          this.soundStart(this.state.sound.change,Sounds.yaruo,1);
+          playEffectSound(Sounds.yaruo,1);
           break;
       }
       this.stopBgm(this.state.sound.bmg);
@@ -351,9 +367,6 @@ export default class KatomonGenerateScreen extends Component {
   componentWillUnmount(){
     this.stopBgm(this.state.sound.bmg);
     this.stopBgm(this.state.sound.effect1);
-    // if(!this.state.generate){
-    //   this.soundStart(Sounds.bgm1,0.03);
-    // }
   }
 
 

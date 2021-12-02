@@ -25,7 +25,22 @@ import KatoFesP2Data from './battle/KatoFesP2Data';
 import { Audio } from 'expo-av';
 import { AdMobInterstitial} from 'expo-ads-admob';
 
-
+// 効果音の再生に使う
+function playEffectSound(sound,vol) {
+  // console.log('Playing ' + name);
+  Audio.Sound.createAsync(
+     sound, {
+        shouldPlay: true,
+        volume: vol
+     }
+  ).then((res) => {
+     res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return;
+        // console.log('Unloading ' + name);
+        res.sound.unloadAsync().catch(() => {});
+     });
+  }).catch((error) => {});
+}
 
 // 最初に開くところ
 export default class FesScreen extends Component {
@@ -131,19 +146,47 @@ export default class FesScreen extends Component {
     clearInterval(this.intervalId);
     this.stopBgm(this.state.soundPreload.bgm.battle1);
     this.stopBgm(this.state.soundPreload.bgm.change);
+    this.stopBgm(this.state.soundPreload.bgm.breaking);
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync();
+    await state.stopAsync()
+    .then((res) => {
+      res.sound.setOnPlaybackStatusUpdate((status) => {
+         if (!status.didJustFinish) return;
+         console.log('Unstop ' + state);
+         res.sound.unloadAsync().catch(() => {});
+      });
+   }).catch((error) => {});
   };
 
   // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
     // bgm
-      await state.loadAsync(select);//ファイルロード
-      // console.log(state );
-      await state.setVolumeAsync(inputVol);//音量
-      await state.playAsync();//スタート
+      await state.loadAsync(select)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('Unloading ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});
+      await state.setVolumeAsync(inputVol)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnVol ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//音量
+      await state.playAsync()
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnPlay ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//スタート
   };
 
   // BGMの切り替え
@@ -277,7 +320,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_1.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r1.move1,this.state.p1MOVE_1.sound,1);
+          return playEffectSound(this.state.p1MOVE_1.sound,1);
         }
         break;
       case "2":
@@ -301,7 +344,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_2.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r1.move2,this.state.p1MOVE_2.sound,1);
+          return playEffectSound(this.state.p1MOVE_2.sound,1);
         }
         break;
       case "3":
@@ -325,7 +368,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_3.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r1.move3,this.state.p1MOVE_3.sound,1);
+          return playEffectSound(this.state.p1MOVE_3.sound,1);
         }
         break;
     }
@@ -355,7 +398,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_1.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r2.move1,this.state.p2MOVE_1.sound,1);
+          return playEffectSound(this.state.p2MOVE_1.sound,1);
         }
         break;
       case "2":
@@ -379,7 +422,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_2.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r2.move2,this.state.p2MOVE_2.sound,1);
+          return playEffectSound(this.state.p2MOVE_2.sound,1);
         }
         break;
       case "3":
@@ -403,7 +446,7 @@ export default class FesScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_3.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r2.move3,this.state.p2MOVE_3.sound,1);
+          return playEffectSound(this.state.p2MOVE_3.sound,1);
         }
         break;
     }
@@ -653,7 +696,7 @@ export default class FesScreen extends Component {
       switch(destination){
         case "ホーム":
           await this.stopBgm(this.state.soundPreload.bgm.breaking);
-          this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.5);
+          playEffectSound(Sounds.generate1,0.5);
           break;
       }
       this.setState({
@@ -684,10 +727,10 @@ export default class FesScreen extends Component {
         if(random < 0.3){
           this.Interstitial();
         }
-        this.soundStart(Sounds.gameOver,0.03);
+        playEffectSound(Sounds.gameOver,0.03);
       }
       else{
-        this.soundStart(Sounds.next1,1);
+        playEffectSound(Sounds.next1,1);
         if(this.state.roundCount>=5){
           this.state.endFlag = true;
           this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
@@ -715,7 +758,7 @@ export default class FesScreen extends Component {
     if(this.state.p2HP <= 0){
       clearInterval(this.intervalId);
       this.stopBgm(this.state.soundPreload.bgm.battle1);
-        this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,1);
+        playEffectSound(Sounds.next1,1);
         if(this.state.roundCount>=5){
           this.state.endFlag = true;
           this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);

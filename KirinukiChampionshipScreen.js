@@ -22,6 +22,43 @@ import KatomonMoveList from './battle/KatomonMoveList';
 import KatoFesP2MoveList from './battle/KatoFesP2MoveList';
 import ChampMoveList from "./battle/ChampMoveList";
 
+// import {
+//   Audio
+// } from 'expo';
+
+// 効果音の再生に使う
+function playEffectSound(sound,vol) {
+  // console.log('Playing ' + name);
+  Audio.Sound.createAsync(
+     sound, {
+        shouldPlay: true,
+        volume: vol
+     }
+  ).then((res) => {
+     res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return;
+        // console.log('Unloading ' + name);
+        res.sound.unloadAsync().catch(() => {});
+     });
+  }).catch((error) => {});
+}
+
+// function stopSound(taeget,name, sound) {
+//   console.log('Stop ' + name);
+//   target.setStatusAsync(
+//      sound, {
+//         shouldPlay: false,
+//         positionMillis: 0
+//      }
+//   ).then((res) => {
+//      res.sound.setOnPlaybackStatusUpdate((status) => {
+//         if (!status.didJustFinish) return;
+//         console.log('Unloading ' + name);
+//         res.sound.unloadAsync().catch(() => {});
+//      });
+//   }).catch((error) => {});
+// }
+
 
 // 制限がかかった際に切り替える
 const YOUTUBE_API_KEY = {
@@ -227,7 +264,7 @@ export default class ChampionshipScreen extends Component {
 
 
       // 戦闘関係
-      timer:20,
+      timer:15,
       width: Constants.MAX_WIDTH, 
       height: Constants.MAX_WIDTH * 250/400,
       position1X: Constants.MAX_WIDTH * 250/400/10,
@@ -307,6 +344,9 @@ export default class ChampionshipScreen extends Component {
 
     this.state.soundPreload.bgm.title = new Audio.Sound;
     this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+
+    
+    // playEffectSound(this.state.soundPreload.bgm.title,"bgm1",Sounds.bgm1);
     // セリフをBGMが邪魔しないように音量調整
 
     // 切り抜き情報取得
@@ -318,7 +358,9 @@ export default class ChampionshipScreen extends Component {
   componentWillUnmount =async()=>{
     this.stopBgm(this.state.soundPreload.bgm.title);
     this.stopBgm(this.state.soundPreload.bgm.battle1);
-    this.stopBgm(this.state.soundPreload.bgm.final);
+    // this.stopBgm(this.state.soundPreload.bgm.final);
+    // stopSound(this.state.soundPreload.bgm.title,"bgm1",Sounds.bgm1);
+    // this.state.soundPreload.bgm.title=null,
     clearInterval(this.intervalId);
   };
 
@@ -489,16 +531,43 @@ export default class ChampionshipScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync();
+    await state.stopAsync()
+    .then((res) => {
+      res.sound.setOnPlaybackStatusUpdate((status) => {
+         if (!status.didJustFinish) return;
+         console.log('Unstop ' + state);
+         res.sound.unloadAsync().catch(() => {});
+      });
+   }).catch((error) => {});
   };
 
   // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
     // bgm
-      await state.loadAsync(select);//ファイルロード
-      // console.log(state );
-      await state.setVolumeAsync(inputVol);//音量
-      await state.playAsync();//スタート
+      await state.loadAsync(select)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('Unloading ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});
+      await state.setVolumeAsync(inputVol)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnVol ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//音量
+      await state.playAsync()
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnPlay ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//スタート
   };
 
   // シーンを変更して、チャンネル情報を表に渡す
@@ -507,8 +576,11 @@ export default class ChampionshipScreen extends Component {
       this.state.expFlag = true;
       this.state.firstFlag = false;
     }
-    this.state.soundPreload.bgm.change = new Audio.Sound;
-    await this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.03);
+    console.log(select);
+    // this.state.soundPreload.bgm.change = new Audio.Sound;
+    // await this.soundStart(this.state.soundPreload.bgm.change,Sounds.generate1,0.03);
+
+    playEffectSound(Sounds.generate1,0.07);
 
     this.setState(state =>  ({
       tableData:{
@@ -665,40 +737,55 @@ export default class ChampionshipScreen extends Component {
 
       // 後で設定
       case "final":
-        this.setFinal();
-        this.setState(state =>  ({
-          memberListFlag:false,
-          final:true,
-
-          groupA :false,
-          groupB :false,
-          groupC :false,
-          groupD :false,
-
-          tableR1:this.state.tableR1_final,
-          tableR2:this.state.tableR2_final,
-          tableR3:this.state.tableR3_final,
-          tableR4:this.state.tableR4_final,
-
-          tableR1_name:this.state.tableR1_name_final,
-          tableR2_name:this.state.tableR2_name_final,
-          tableR3_name:this.state.tableR3_name_final,
-          tableR4_name:this.state.tableR4_name_final,
-
-          tableR1_st:this.state.tableR1_st_final,
-          tableR2_st:this.state.tableR2_st_final,
-          tableR3_st:this.state.tableR3_st_final,
-          tableR4_st:this.state.tableR4_st_final,
-
-          katoPoint1:this.state.katoPoint1_final,
-          katoPoint2:this.state.katoPoint2_final,
-          katoPoint3:this.state.katoPoint3_final,
-          katoPoint4:this.state.katoPoint4_final,
-
-        }));
-      break;
-
-      
+        console.log("final_1");
+        this.setFinal().then(()=>{
+          // console.log(this.state.tableR1_final);
+          // console.log(this.state.tableR2_final);
+          // console.log(this.state.tableR3_final);
+          // console.log(this.state.tableR4_final);
+          // console.log("=====1====");
+          this.setState(state =>  ({
+            memberListFlag:false,
+            final:true,
+  
+            groupA :false,
+            groupB :false,
+            groupC :false,
+            groupD :false,
+  
+            tableR1:this.state.tableR1_final,
+            tableR2:this.state.tableR2_final,
+            tableR3:this.state.tableR3_final,
+            tableR4:this.state.tableR4_final,
+  
+            tableR1_name:this.state.tableR1_name_final,
+            tableR2_name:this.state.tableR2_name_final,
+            tableR3_name:this.state.tableR3_name_final,
+            tableR4_name:this.state.tableR4_name_final,
+  
+            tableR1_st:this.state.tableR1_st_final,
+            tableR2_st:this.state.tableR2_st_final,
+            tableR3_st:this.state.tableR3_st_final,
+            tableR4_st:this.state.tableR4_st_final,
+  
+            katoPoint1:this.state.katoPoint1_final,
+            katoPoint2:this.state.katoPoint2_final,
+            katoPoint3:this.state.katoPoint3_final,
+            katoPoint4:this.state.katoPoint4_final,
+  
+          }));
+          console.log(this.state.tableR1_final);
+          console.log(this.state.tableR2_final);
+          console.log(this.state.tableR3_final);
+          console.log(this.state.tableR4_final);
+          console.log("=====2====");
+          console.log(this.state.tableR1);
+          console.log(this.state.tableR2);
+          console.log(this.state.tableR3);
+          console.log(this.state.tableR4);
+          console.log("------------2------------");
+        });
+        break;
     }
   };
 
@@ -877,11 +964,13 @@ export default class ChampionshipScreen extends Component {
         }
       }
     }
+    console.log("skip");
   };
 
   setBattle = async(col1,col2) =>{
     try{
       console.log("stop");
+
     }
     catch(error){
       console.log("no stop");
@@ -1092,7 +1181,6 @@ export default class ChampionshipScreen extends Component {
     
     switch(select){
       case "1":
-        this.state.soundPreload.r1.move1 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
@@ -1112,7 +1200,7 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_1.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r1.move1,this.state.p1MOVE_1.sound,1);
+          return playEffectSound(this.state.p1MOVE_1.sound,1);
         }
         break;
       case "2"://通常攻撃
@@ -1136,7 +1224,7 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p1Personality : this.state.p1MOVE_2.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r1.move2,this.state.p1MOVE_2.sound,1);
+          return playEffectSound(this.state.p1MOVE_2.sound,1);
         }
         break;
     }
@@ -1166,7 +1254,7 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_1.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r2.move1,this.state.p2MOVE_1.sound,1);
+          return playEffectSound(this.state.p2MOVE_1.sound,1);
         }
         break;
       case "2"://通常攻撃
@@ -1190,7 +1278,7 @@ export default class ChampionshipScreen extends Component {
           // 移動の傾向変更
           this.setState(state =>  ({p2Personality : this.state.p2MOVE_2.personality}));
           // 音声
-          return this.soundStart(this.state.soundPreload.r2.move2,this.state.p2MOVE_2.sound,1);
+          return playEffectSound(this.state.p2MOVE_2.sound,1);
         }
         break;
 
@@ -1244,7 +1332,7 @@ export default class ChampionshipScreen extends Component {
     this.intervalId = setInterval(()=>{
       this.setState({
         now: Date.now(),
-        timer: 20 + this.state.startTime / 1000 - this.state.now / 1000 
+        timer: 15 + this.state.startTime / 1000 - this.state.now / 1000 
       });
 
       var p1Rand = Math.random();
@@ -1494,8 +1582,7 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         resultFlag:true,
       }));
-      this.state.soundPreload.bgm.final = new Audio.Sound;
-      this.soundStart(this.state.soundPreload.bgm.final,Sounds.next1,1);
+      playEffectSound( Sounds.next1,1);
     }
     this.setState(state =>  ({
       tableData:{
@@ -1691,7 +1778,7 @@ export default class ChampionshipScreen extends Component {
       position1X: 0,
       position2X: Constants.MAX_WIDTH - 90-20,
 
-      timer:20,
+      timer:15,
 
       p1HP:1000,
       p2HP:1000,
@@ -1716,10 +1803,9 @@ export default class ChampionshipScreen extends Component {
   goto = async(destination) => {
     try {
     // destinationごとに音声を変えておく
-      this.state.soundPreload.bgm.change = new Audio.Sound();
       switch(destination){
         case "ホーム":
-          this.soundStart(this.state.soundPreload.bgm.change,Sounds.katou8,1);
+          playEffectSound(Sounds.katou8,1);
           return this.props.navigation.navigate(destination);
       }
     } 
@@ -1729,6 +1815,17 @@ export default class ChampionshipScreen extends Component {
   };
 
   render(){
+    // if(this.state.final){
+    //   console.log(this.state.tableR1_final,":",this.state.tableR1_name_final);
+    //   console.log(this.state.tableR2_final,":",this.state.tableR2_name_final);
+    //   console.log(this.state.tableR3_final,":",this.state.tableR3_name_final);
+    //   console.log(this.state.tableR4_final,":",this.state.tableR4_name_final);
+    //   console.log(this.state.tableR1,":",this.state.tableR1_name);
+    //   console.log(this.state.tableR2,":",this.state.tableR2_name);
+    //   console.log(this.state.tableR3,":",this.state.tableR1_name);
+    //   console.log(this.state.tableR4,":",this.state.tableR2_name);
+    //   console.log("----------render----------")
+    // }
     if(this.state.battleFlag){
       // 対戦の終了判定
       if(Math.round(
@@ -2426,16 +2523,34 @@ export default class ChampionshipScreen extends Component {
                 paddingBottom:"1%",
                 paddingTop:"1%",
               }}>
-                <Image style ={styles.image}
+                <Image
                     source={{ uri: `${this.state.champ_image}` }}
-                    style={{ width: 90, height: 90 }}
+                    style={{ width: Constants.MAX_WIDTH/3, height: Constants.MAX_WIDTH/3 ,
+                    flex:1,
+                    resizeMode:"contain"}}
                 />
-                 <Text  style={styles.hello}>{this.state.champ_name}</Text>
-                  <Text style={styles.description}>総視聴数：{this.state.champ_st["viewCount"]}回</Text>
-                  <Text style={styles.description}>登録者数：{this.state.champ_st["subscriberCount"]}人</Text>
-                  <Text style={styles.description}>投稿本数：{this.state.champ_st["videoCount"]}本</Text>
-                  <Text style={styles.description}>切り抜き戦闘力：{Math.round(this.state.champ_katoPoint/1000)}</Text>
-              </View>
+                <View style={{flex:1,backgroundColor:"#ffffe0"}}>
+
+                 <Text  style={{
+                    fontSize: 18,
+                    fontWeight: 'bold',
+                    textAlign:"center",
+                  }}>{this.state.champ_name}</Text>
+                  <Text style={
+                    styles.description
+                    }>総視聴数：{this.state.champ_st["viewCount"]}回</Text>
+                  <Text style={
+                    styles.description
+                    }>登録者数：{this.state.champ_st["subscriberCount"]}人</Text>
+                  <Text style={
+                    styles.description
+                    }>投稿本数：{this.state.champ_st["videoCount"]}本</Text>
+                  <Text style={
+                    styles.description
+                    }>切り抜き戦闘力：{Math.round(this.state.champ_katoPoint/1000)}
+                    </Text>
+                </View>
+              </View> 
             </View>
           </TouchableOpacity>
         )}

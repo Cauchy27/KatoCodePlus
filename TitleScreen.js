@@ -20,6 +20,23 @@ import Sounds from './assets/Sounds';
 
 import { AdMobBanner } from 'expo-ads-admob';
 
+// 効果音の再生に使う
+async　function playEffectSound(sound,vol) {
+  // console.log('Playing ' + name);
+  Audio.Sound.createAsync(
+     sound, {
+        shouldPlay: true,
+        volume: vol
+     }
+  ).then((res) => {
+     res.sound.setOnPlaybackStatusUpdate((status) => {
+        if (!status.didJustFinish) return;
+        // console.log('Unloading ' + name);
+        res.sound.unloadAsync().catch(() => {});
+     });
+  }).catch((error) => {});
+}
+
 // 最初に開くところ
 export default class TitleScreen extends Component {
 
@@ -81,10 +98,7 @@ export default class TitleScreen extends Component {
 
   goto = async(destination) => {
     try {
-      console.log("1");
     // destinationごとに音声を変えておく
-      this.stopBgm(this.state.bgm.title);
-      this.state.bgm.change = new Audio.Sound;
       switch(destination){
         // case "フリー対戦":
         //   selector = Sounds.yaruo;
@@ -93,11 +107,17 @@ export default class TitleScreen extends Component {
         //   selector = Sounds.yaruo;
         //   break;
         case "切り抜きチャンピオンシップ":
-          this.soundStart(this.state.bgm.change,Sounds.katou7,0.5);
+          playEffectSound(Sounds.katou7,0.5)
+          .then(()=>{
+            // 
+          });
           this.stopBgm(this.state.bgm.title);
-          return this.props.navigation.navigate(destination);
+          return this.props.navigation.navigate(destination);    
         case "カトモン生成":
-          this.soundStart(this.state.bgm.change,Sounds.katou8,1);
+          playEffectSound(Sounds.katou8,1)
+          .then(()=>{
+            // 
+          });
           this.stopBgm(this.state.bgm.title);
           return this.props.navigation.navigate(destination);
       }
