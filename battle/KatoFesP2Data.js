@@ -70,8 +70,8 @@ export default KatoFesP2Data = {
   golden_naoko:{
     name:"金な◯こ",
     status:{
-      HP:3000,
-      Guts:100,
+      HP:5000,
+      Guts:300,
       ATK:500,
       DEF:500,
     },

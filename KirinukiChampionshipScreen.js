@@ -301,6 +301,9 @@ export default class ChampionshipScreen extends Component {
       p1Personality:1.2,
       p2Personality:1.2,
 
+      p1PoissonFlag:false,
+      p2PoissonFlag:false,
+
       table1Count:0,
       table2Count:0,
       table3Count:0,
@@ -1163,6 +1166,7 @@ export default class ChampionshipScreen extends Component {
   };
 
   // 技の追加効果の反映
+  // 技の追加効果の反映
   paramChange = (param,change) =>{
     switch(param){
       case "position1x":
@@ -1173,6 +1177,34 @@ export default class ChampionshipScreen extends Component {
         this.setState(state =>  ({position2X : this.state.position2X + change}));
         break;
 
+      case "p1HP":
+        this.setState(state =>  ({p1HP : this.state.p1HP + change}));
+        break;
+
+      case "p2HP":
+        this.setState(state =>  ({p2HP : this.state.p2HP + change}));
+        break;
+      
+      case "p1Poisson":
+        this.setState(state =>  ({p1PoissonFlag : true}));
+        break;
+
+      case "p2Poisson":
+        this.setState(state =>  ({p2PoissonFlag : true}));
+        break;
+
+        case "p1ATK":
+          this.setState(state =>  ({p1ATK : this.state.p1ATK+ change}));
+        break;
+        case "p2ATK":
+          this.setState(state =>  ({p2ATK : this.state.p2ATK+ change}));
+        break;
+        case "p1DEF":
+          this.setState(state =>  ({p1DEF : this.state.p1DEF+ change}));
+        break;
+        case "p2DEF":
+          this.setState(state =>  ({p2DEF : this.state.p2DEF+ change}));
+        break;
     }
   };
 
@@ -1338,8 +1370,25 @@ export default class ChampionshipScreen extends Component {
       var p1Rand = Math.random();
       var p2Rand = Math.random();
 
-      this.state.p1Guts = this.state.p1Guts + 10;
-      this.state.p2Guts = this.state.p2Guts + 10;
+      // this.state.p1Guts = this.state.p1Guts + 10;
+      // this.state.p2Guts = this.state.p2Guts + 10;
+
+      this.setState(state =>  ({
+        p1Guts:this.state.p1Guts + 15,
+        p2Guts:this.state.p2Guts + 15,
+      })); 
+
+      if(this.state.p1PoissonFlag){
+        this.setState(state =>  ({
+          p1HP:this.state.p1HP - 50,
+        })); 
+      }
+
+      if(this.state.p2PoissonFlag){
+        this.setState(state =>  ({
+          p2HP:this.state.p2HP - 50,
+        })); 
+      }
 
       // player1の移動ロジック
       if(p1Rand > 0.4){
@@ -1782,6 +1831,9 @@ export default class ChampionshipScreen extends Component {
 
       p1HP:1000,
       p2HP:1000,
+
+      p1PoissonFlag:false,
+      p2PoissonFlag:false,
 
       p1Guts:0,
       p2Guts:0,

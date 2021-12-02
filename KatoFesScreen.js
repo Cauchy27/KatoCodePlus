@@ -80,6 +80,9 @@ export default class FesScreen extends Component {
       p1HPmax:this.props.route.params.katomonPower,
       p2HPmax:KatoFesP2Data.hiroyuki.status.HP,
 
+      p1PoissonFlag:false,
+      p2PoissonFlag:false,
+
       // p2の技選択の強さ
       p2Level:1,
 
@@ -255,47 +258,29 @@ export default class FesScreen extends Component {
       case "p2HP":
         this.setState(state =>  ({p2HP : this.state.p2HP + change}));
         break;
-
-      case "p1MOVE":
-        this.setState(state =>  ({
-          p1MOVE_1: {
-            power:this.state.p1MOVE_1.power + p2ATK - p1DEF
-          } ,
-          p1MOVE_2: {
-            power:this.state.p1MOVE_2.power + p2ATK - p1DEF
-          } ,
-          p1MOVE_3: {
-            power:this.state.p1MOVE_3.power + p2ATK - p1DEF
-          } 
-        }));
+      
+      case "p1Poisson":
+        this.setState(state =>  ({p1PoissonFlag : true}));
         break;
 
-        case "p2MOVE":
-        this.setState(state =>  ({
-          p2MOVE_1: {
-            power:this.state.p2MOVE_1.power + p1ATK - p2DEF
-          } ,
-          p2MOVE_2: {
-            power:this.state.p2MOVE_2.power + p1ATK - p1DEF
-          } ,
-          p2MOVE_3: {
-            power:this.state.p2MOVE_3.power + p2ATK - p1DEF
-          } ,
-        }));
+      case "p2Poisson":
+        this.setState(state =>  ({p2PoissonFlag : true}));
         break;
-        case "p1ATK":
+
+      case "p1ATK":
           this.setState(state =>  ({p1ATK : this.state.p1ATK+ change}));
         break;
-        case "p2ATK":
+      case "p2ATK":
           this.setState(state =>  ({p2ATK : this.state.p2ATK+ change}));
         break;
-        case "p1DEF":
+      case "p1DEF":
           this.setState(state =>  ({p1DEF : this.state.p1DEF+ change}));
         break;
-        case "p2DEF":
+      case "p2DEF":
           this.setState(state =>  ({p2DEF : this.state.p2DEF+ change}));
         break;
     }
+    // console.log("param:",param);
   };
 
   // p1技発動
@@ -378,6 +363,7 @@ export default class FesScreen extends Component {
 
   // p2技発動
   p2move = async(select) =>{
+    // console.log("p2HP:",this.state.p2HP);
     switch(select){
       case "1":
         this.state.soundPreload.r2.move1 = new Audio.Sound();
@@ -452,6 +438,7 @@ export default class FesScreen extends Component {
         }
         break;
     }
+    // console.log("p2HP:",this.state.p2HP);
   };
 
   // 応援ボタン
@@ -510,8 +497,27 @@ export default class FesScreen extends Component {
       var p1Rand = Math.random();
       var p2Rand = Math.random();
 
-      this.state.p1Guts = this.state.p1Guts + 2;
-      this.state.p2Guts = this.state.p2Guts + 5;
+      // this.state.p1Guts = this.state.p1Guts + 2;
+      // this.state.p2Guts = this.state.p2Guts + 5;
+
+      this.setState(state =>  ({
+        p1Guts:this.state.p1Guts + 2,
+        p2Guts:this.state.p2Guts + 5,
+      })); 
+
+      if(this.state.p1PoissonFlag){
+        this.setState(state =>  ({
+          p1HP:this.state.p1HP - 3,
+        })); 
+      }
+      console.log("p1",this.state.p1PoissonFlag);
+
+      if(this.state.p2PoissonFlag){
+        this.setState(state =>  ({
+          p2HP:this.state.p2HP - 5,
+        })); 
+      }
+      console.log("p2",this.state.p2PoissonFlag);
 
       // player1の移動ロジック
       if(p1Rand  * this.state.p1Personality > 0.5){
@@ -672,7 +678,7 @@ export default class FesScreen extends Component {
       }
   
       //ゲーム再スタートのための初期化
-      this.setState({
+      this.setState(state =>  ({
         running:true,
         winning:false,
         now: Date.now(),
@@ -680,6 +686,9 @@ export default class FesScreen extends Component {
   
         position1X: 50,
         position2X: Constants.MAX_WIDTH - 150,
+
+        p2PoissonFlag:false,
+        p1PoissonFlag:false,
   
         timer:55,
   
@@ -689,7 +698,7 @@ export default class FesScreen extends Component {
         p1Guts:0,
         p1ATK:this.props.route.params.katomonikioi,
         p1DEF:this.props.route.params.katomonMamori,
-      });
+      }));     
       
       this.intervalId = this.system();
   
@@ -726,10 +735,11 @@ export default class FesScreen extends Component {
       // 対戦の終了判定
       if(Math.round(
       this.state.timer) <= 0){
-        this.state.running = false;
+        // this.state.running = false;
         clearInterval(this.intervalId);
         this.stopBgm(this.state.soundPreload.bgm.battle1);
         if(this.state.p1HP/this.state.p1HPmax <= this.state.p2HP/this.state.p2HPmax){
+          this.state.running = false;
           // 負け広告
           var random = Math.random();
           if(random < 0.2){
@@ -749,19 +759,19 @@ export default class FesScreen extends Component {
         }
         // this.state.timer = 55;
       }else{
-        this.state.running = false;
+        // this.state.running = false;
         if(this.state.p1HP <= 0){
             clearInterval(this.intervalId);
             this.stopBgm(this.state.soundPreload.bgm.battle1);
             if(this.state.p1HP <= this.state.p2HP){
-              // this.state.running = false;
+              this.state.running = false;
               // 負け広告
               var random = Math.random();
             if(random < 0.2){
               this.Interstitial()
             }
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
-              // this.state.running = false
+              this.state.running = false
             }
             // this.state.timer = 55;
           }
