@@ -352,17 +352,45 @@ export default class KatomonGenerateScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync();
+    await state.stopAsync()
+    .then((res) => {
+      res.sound.setOnPlaybackStatusUpdate((status) => {
+         if (!status.didJustFinish) return;
+         console.log('Unstop ' + state);
+         res.sound.unloadAsync().catch(() => {});
+      });
+   }).catch((error) => {});
   };
 
   // BGM再生用（音量なども調整）
   soundStart =async(state,select,inputVol) =>{
     // bgm
-      await state.loadAsync(select);//ファイルロード
-      // console.log(state );
-      await state.setVolumeAsync(inputVol);//音量
-      await state.playAsync();//スタート
+      await state.loadAsync(select)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('Unloading ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});
+      await state.setVolumeAsync(inputVol)
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnVol ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//音量
+      await state.playAsync()
+      .then((res) => {
+        res.sound.setOnPlaybackStatusUpdate((status) => {
+           if (!status.didJustFinish) return;
+           console.log('UnPlay ' + state);
+           res.sound.unloadAsync().catch(() => {});
+        });
+     }).catch((error) => {});//スタート
   };
+
 
   componentWillUnmount(){
     this.stopBgm(this.state.sound.bmg);
@@ -464,7 +492,7 @@ export default class KatomonGenerateScreen extends Component {
                         textAlign:"center",
                         paddingLeft:"5%",
                         paddingRight:"5%",
-                        fontSize:20,
+                        fontSize:Math.round(Constants.MAX_WIDTH/20),
                       }}>リセット</Text>
                     </View>
                   </TouchableOpacity>
@@ -488,7 +516,7 @@ export default class KatomonGenerateScreen extends Component {
                         textAlign:"center",
                         paddingLeft:"5%",
                         paddingRight:"5%",
-                        fontSize:24,
+                        fontSize:Math.round(Constants.MAX_WIDTH/18),
                       }}>カトモン生成</Text>
                     </View>
                   </TouchableOpacity>
