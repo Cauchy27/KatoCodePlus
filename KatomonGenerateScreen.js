@@ -320,23 +320,27 @@ export default class KatomonGenerateScreen extends Component {
       switch(destination){
         case "カトフェス":
           playEffectSound(Sounds.yaruo,1);
+          this.stopBgm(this.state.sound.bmg);
+          // this.stopBgm(this.state.sound.effect2);
+          this.setState(state =>  ({generate : true}));
+          
+          var sendKatomonData={
+            katomonName:this.state.katomon.name,
+            katomonDescription:this.state.katomon.description,
+            katomonPower:this.state.katoPower,
+            katomonikioi:this.state.katoIkioi,
+            katomonMamori:this.state.katoIkioi,
+            katomonMove:this.state.katomon.move,
+            
+            katomonImage:this.state.katomon.image,
+          }
+          break;
+        case "ホーム":
+          
+          playEffectSound(Sounds.generate1,0.05);
           break;
       }
-      this.stopBgm(this.state.sound.bmg);
-      // this.stopBgm(this.state.sound.effect2);
-      this.setState(state =>  ({generate : true}));
-
-      var sendKatomonData={
-        katomonName:this.state.katomon.name,
-        katomonDescription:this.state.katomon.description,
-        katomonPower:this.state.katoPower,
-        katomonikioi:this.state.katoIkioi,
-        katomonMamori:this.state.katoIkioi,
-        katomonMove:this.state.katomon.move,
-        
-        katomonImage:this.state.katomon.image,
-      }
-
+          
       this.props.navigation.navigate(destination,sendKatomonData);
     } 
     catch (error) {
@@ -492,7 +496,7 @@ export default class KatomonGenerateScreen extends Component {
                         textAlign:"center",
                         paddingLeft:"5%",
                         paddingRight:"5%",
-                        fontSize:Math.round(Constants.MAX_WIDTH/20),
+                        fontSize:Math.round(Constants.MAX_WIDTH/30),
                       }}>リセット</Text>
                     </View>
                   </TouchableOpacity>
@@ -714,9 +718,29 @@ export default class KatomonGenerateScreen extends Component {
                   this.goto('カトフェス')}
                 >
                   <Text style={{
-                    fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7),
+                    fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7/2),
                     textAlign:"center",margin:"3%",flex:1}}>
                     戦場へ向かう...
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity 
+                style={{
+                  backgroundColor:"#fff",
+                    borderRadius:20,
+                    flex:1,
+                    marginLeft:"5%",
+                    marginRight:"5%",
+                    marginTop:"5%",
+                    paddingTop:"10%",
+                    paddingBottom:"10%",
+                }}
+                onPress={() =>
+                  this.goto('ホーム')}
+                >
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7/2),
+                    textAlign:"center",margin:"3%",flex:1}}>
+                    別のカトモンにする
                   </Text>
                 </TouchableOpacity>
               </Animated.View>
