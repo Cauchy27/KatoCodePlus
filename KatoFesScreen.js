@@ -1006,7 +1006,7 @@ export default class FesScreen extends Component {
             </View>
           </TouchableOpacity>
         )}
-        {this.state.winning && this.state.roundCount >4 && (
+        {this.state.winning && this.state.roundCount >=4 && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>最終決戦へ...!!</Text>
