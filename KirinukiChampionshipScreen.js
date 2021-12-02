@@ -2255,8 +2255,8 @@ export default class ChampionshipScreen extends Component {
               <Text style={{ width:100, height: 15 ,top:this.state.position2Y-40, left: this.state.position2X, position:'absolute',textAlign:"center",borderRadius:10}}>{Math.round(this.state.p2HP/1000*100)}%</Text>   */}
 
 
-              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{this.state.p1KatoPoint}</Text>  
-              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, right:0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{this.state.p2KatoPoint}</Text>  
+              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, left: 0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{Math.round(this.state.p1KatoPoint/1000)}</Text>  
+              <Text style={{ width:this.state.width/2,height: 30,top:Constants.MAX_WIDTH * 250/400 - 35, right:0, position:'absolute',backgroundColor:"#eee",textAlign:"center",borderRadius:10,fontSize:20}}>戦闘力:{Math.round(this.state.p2KatoPoint/1000)}</Text>  
             </View>
             {/* 対戦表 */}
             <View style={{flex:1,position:"absolute",bottom:0}}>
