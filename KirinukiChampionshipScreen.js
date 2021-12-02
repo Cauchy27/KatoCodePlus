@@ -1089,13 +1089,14 @@ export default class ChampionshipScreen extends Component {
 
   // p1技発動
   p1move = async(select) =>{
+    
     switch(select){
       case "1":
         this.state.soundPreload.r1.move1 = new Audio.Sound;
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10)}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()*30}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -1119,7 +1120,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10)}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()*10}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -1149,7 +1150,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()*30}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -1173,7 +1174,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()*10}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts}));
           // 追加効果(3つまで判定？)
@@ -1459,34 +1460,34 @@ export default class ChampionshipScreen extends Component {
     if(this.state.final){
       if(!r1){
         this.setState(state =>  ({
-          champ_image:this.state.tableR1_final,
-          champ_name:this.state.tableR1_name_final,
-          champ_st:this.state.tableR1_st_final,
-          champ_katoPoint:this.state.katoPoint1_final,
+          champ_image:this.state.tableR1,
+          champ_name:this.state.tableR1_name,
+          champ_st:this.state.tableR1_st,
+          champ_katoPoint:this.state.katoPoint1,
         }));
       }
       if(!r2){
         this.setState(state =>  ({
-          champ_image:this.state.tableR2_final,
-          champ_name:this.state.tableR2_name_final,
-          champ_st:this.state.tableR2_st_final,
-          champ_katoPoint:this.state.katoPoint2_final
+          champ_image:this.state.tableR2,
+          champ_name:this.state.tableR2_name,
+          champ_st:this.state.tableR2_st,
+          champ_katoPoint:this.state.katoPoint2
         }));
       }
       if(!r3){
         this.setState(state =>  ({
-          champ_image:this.state.tableR3_final,
-          champ_name:this.state.tableR3_name_final,
-          champ_st:this.state.tableR3_st_final,
-          champ_katoPoint:this.state.katoPoint3_final
+          champ_image:this.state.tableR3,
+          champ_name:this.state.tableR3_name,
+          champ_st:this.state.tableR3_st,
+          champ_katoPoint:this.state.katoPoint3
         }));
       }
       if(!r4){
         this.setState(state =>  ({
-          champ_image:this.state.tableR4_final,
-          champ_name:this.state.tableR4_name_final,
-          champ_st:this.state.tableR4_st_final,
-          champ_katoPoint:this.state.katoPoint4_final
+          champ_image:this.state.tableR4,
+          champ_name:this.state.tableR4_name,
+          champ_st:this.state.tableR4_st,
+          champ_katoPoint:this.state.katoPoint4
         }));
       }
 
@@ -1718,9 +1719,7 @@ export default class ChampionshipScreen extends Component {
       this.state.soundPreload.bgm.change = new Audio.Sound();
       switch(destination){
         case "ホーム":
-          this.soundStart(this.state.bgm.change,Sounds.katou7,0.5);
-          this.stopBgm(this.state.soundPreload.bgm.title);
-          this.stopBgm(this.state.soundPreload.bgm.final);
+          this.soundStart(this.state.soundPreload.bgm.change,Sounds.katou8,1);
           return this.props.navigation.navigate(destination);
       }
     } 
@@ -2135,7 +2134,7 @@ export default class ChampionshipScreen extends Component {
                         this.skipGroup()}
                     >
                       <Text style={{textAlign:"center",fontSize: 14,fontWeight: 'bold',}}>
-                        1つスキップする
+                        1つスキップ(2回くらいTap)
                       </Text>
                     </TouchableOpacity>
                   )}
@@ -2418,18 +2417,24 @@ export default class ChampionshipScreen extends Component {
             <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("ホーム")}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>切り抜きチャンピオンシップ、今回の優勝は...</Text>
-              <View style ={styles.channels}>
+              <View style={{
+                // backgroundColor:"#eee",
+                flexDirection: 'row',
+                position: 'relative',
+                marginLeft:"1%",
+                marginRight:"1%",
+                paddingBottom:"1%",
+                paddingTop:"1%",
+              }}>
                 <Image style ={styles.image}
-                  source={{ uri: `${this.state.champ_image}` }}
-                  style={{ width: 90, height: 90 }}
+                    source={{ uri: `${this.state.champ_image}` }}
+                    style={{ width: 90, height: 90 }}
                 />
-                <View>
-                  <Text  style={styles.hello}>{this.state.champ_name}</Text>
+                 <Text  style={styles.hello}>{this.state.champ_name}</Text>
                   <Text style={styles.description}>総視聴数：{this.state.champ_st["viewCount"]}回</Text>
                   <Text style={styles.description}>登録者数：{this.state.champ_st["subscriberCount"]}人</Text>
                   <Text style={styles.description}>投稿本数：{this.state.champ_st["videoCount"]}本</Text>
-                  <Text style={styles.description}>切り抜き戦闘力：{this.state.champ_katoPoint}本</Text>
-                </View>
+                  <Text style={styles.description}>切り抜き戦闘力：{Math.round(this.state.champ_katoPoint/1000)}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -2448,15 +2453,6 @@ export default class ChampionshipScreen extends Component {
             </View>
           </TouchableOpacity>
         )}
-        {/* {!this.state.apiSuccess &&(
-          <View>
-            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.changeAPI}>
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>YouTube情報の取得に失敗しました。画面をTapして使用するAPIキーを切り替えてください。</Text>
-            </View>
-          </TouchableOpacity>
-          </View>
-        )} */}
       </SafeAreaView>
     );
   }
@@ -2487,7 +2483,7 @@ const styles = StyleSheet.create({
   },
   gameOverText: {
     color: 'white',
-    fontSize: 48,
+    fontSize: 30,
     // fontFamily: '04b_19',
   },
   gameOverSubText: {
