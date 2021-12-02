@@ -227,7 +227,7 @@ export default class ChampionshipScreen extends Component {
 
 
       // 戦闘関係
-      timer:30,
+      timer:20,
       width: Constants.MAX_WIDTH, 
       height: Constants.MAX_WIDTH * 250/400,
       position1X: Constants.MAX_WIDTH * 250/400/10,
@@ -1243,7 +1243,7 @@ export default class ChampionshipScreen extends Component {
     this.intervalId = setInterval(()=>{
       this.setState({
         now: Date.now(),
-        timer: 30 + this.state.startTime / 1000 - this.state.now / 1000 
+        timer: 20 + this.state.startTime / 1000 - this.state.now / 1000 
       });
 
       var p1Rand = Math.random();
@@ -1416,6 +1416,7 @@ export default class ChampionshipScreen extends Component {
 
         memberListFlag:true,
         endA:true,
+        groupA:false,
       }));
     }
     if(this.state.groupB){
@@ -1427,6 +1428,7 @@ export default class ChampionshipScreen extends Component {
 
         memberListFlag:true,
         endB:true,
+        groupB:false,
       }));
     
     }
@@ -1439,6 +1441,7 @@ export default class ChampionshipScreen extends Component {
 
         memberListFlag:true,
         endC:true,
+        groupC:false,
       }));
     }
     if(this.state.groupD){
@@ -1450,6 +1453,7 @@ export default class ChampionshipScreen extends Component {
 
         memberListFlag:true,
         endD:true,
+        groupD:false,
       }));   
     }
     if(this.state.final){
@@ -1524,32 +1528,34 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         tableR1_final:this.state.KirinukiImage1,
         tableR1_name_final:this.state.KirinukiData1,
-        tableR1_st_final:KirinukiDes1,
-        katoPoint1_final:KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"],
+        tableR1_st_final:this.state.KirinukiDes1,
+        katoPoint1_final:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"],
       }));
     }else{
       if(!this.state.Kirinuki2_lose){
         this.setState(state =>  ({
           tableR1_final:this.state.KirinukiImage2,
           tableR1_name_final:this.state.KirinukiData2,
-          tableR1_st_final:KirinukiDes2,
-          katoPoint1_final:KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"],
+          tableR1_st_final:this.state.KirinukiDes2,
+          katoPoint1_final:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"],
         }));
       }else{
         if(!this.state.Kirinuki3_lose){
           this.setState(state =>  ({
             tableR1_final:this.state.KirinukiImage3,
             tableR1_name_final:this.state.KirinukiData3,
-            tableR1_st_final:KirinukiDes3,
-            katoPoint1_final:KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"],
+            tableR1_st_final:this.state.KirinukiDes3,
+            katoPoint1_final:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"],
           }));
         }else{
+          if(!this.state.Kirinuki4_lose){
             this.setState(state =>  ({
               tableR1_final:this.state.KirinukiImage4,
               tableR1_name_final:this.state.KirinukiData4,
-              tableR1_st_final:KirinukiDes4,
-              katoPoint1_final:KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"],
+              tableR1_st_final:this.state.KirinukiDes4,
+              katoPoint1_final:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"],
             }));
+          }
         }
       }
     }
@@ -1558,32 +1564,34 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         tableR2_final:this.state.KirinukiImage5,
         tableR2_name_final:this.state.KirinukiData5,
-        tableR2_st_final:KirinukiDes5,
-        katoPoint2_final:KirinukiDes5["viewCount"] * this.state.KirinukiDes5["videoCount"],
+        tableR2_st_final:this.state.KirinukiDes5,
+        katoPoint2_final:this.state.KirinukiDes5["viewCount"] * this.state.KirinukiDes5["videoCount"],
       }));
     }else{
       if(!this.state.Kirinuki6_lose){
         this.setState(state =>  ({
           tableR2_final:this.state.KirinukiImage6,
           tableR2_name_final:this.state.KirinukiData6,
-          tableR2_st_final:KirinukiDes6,
-          katoPoint2_final:KirinukiDes6["viewCount"] * this.state.KirinukiDes6["videoCount"],
+          tableR2_st_final:this.state.KirinukiDes6,
+          katoPoint2_final:this.state.KirinukiDes6["viewCount"] * this.state.KirinukiDes6["videoCount"],
         }));
       }else{
         if(!this.state.Kirinuki7_lose){
           this.setState(state =>  ({
             tableR2_final:this.state.KirinukiImage7,
             tableR2_name_final:this.state.KirinukiData7,
-            tableR2_st_final:KirinukiDes7,
-            katoPoint2_final:KirinukiDes7["viewCount"] * this.state.KirinukiDes7["videoCount"],
+            tableR2_st_final:this.state.KirinukiDes7,
+            katoPoint2_final:this.state.KirinukiDes7["viewCount"] * this.state.KirinukiDes7["videoCount"],
           }));
         }else{
+          if(!this.state.Kirinuki8_lose){
             this.setState(state =>  ({
               tableR2_final:this.state.KirinukiImage8,
               tableR2_name_final:this.state.KirinukiData8,
-              tableR2_st_final:KirinukiDes8,
-              katoPoint2_final:KirinukiDes8["viewCount"] * this.state.KirinukiDes8["videoCount"],
+              tableR2_st_final:this.state.KirinukiDes8,
+              katoPoint2_final:this.state.KirinukiDes8["viewCount"] * this.state.KirinukiDes8["videoCount"],
             }));
+          }
         }
       }
     }
@@ -1593,32 +1601,34 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         tableR3_final:this.state.KirinukiImage9,
         tableR3_name_final:this.state.KirinukiData9,
-        tableR3_st_final:KirinukiDes9,
-        katoPoint3_final:KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"],
+        tableR3_st_final:this.state.KirinukiDes9,
+        katoPoint3_final:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"],
       }));
     }else{
       if(!this.state.Kirinuki10_lose){
         this.setState(state =>  ({
           tableR3_final:this.state.KirinukiImage10,
           tableR3_name_final:this.state.KirinukiData10,
-          tableR3_st_final:KirinukiDes10,
-          katoPoint3_final:KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"],
+          tableR3_st_final:this.state.KirinukiDes10,
+          katoPoint3_final:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"],
         }));
       }else{
         if(!this.state.Kirinuki11_lose){
           this.setState(state =>  ({
             tableR3_final:this.state.KirinukiImage11,
             tableR3_name_final:this.state.KirinukiData11,
-            tableR3_st_final:KirinukiDes11,
-            katoPoint3_final:KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"],
+            tableR3_st_final:this.state.KirinukiDes11,
+            katoPoint3_final:this.state.KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"],
           }));
         }else{
+          if(!this.state.Kirinuki12_lose){
             this.setState(state =>  ({
               tableR3_final:this.state.KirinukiImage12,
               tableR3_name_final:this.state.KirinukiData12,
-              tableR3_st_final:KirinukiDes12,
-              katoPoint3_final:KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"],
+              tableR3_st_final:this.state.KirinukiDes12,
+              katoPoint3_final:this.state.KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"],
             }));
+          }
         }
       }
     }
@@ -1628,32 +1638,34 @@ export default class ChampionshipScreen extends Component {
       this.setState(state =>  ({
         tableR4_final:this.state.KirinukiImage13,
         tableR4_name_final:this.state.KirinukiData13,
-        tableR4_st_final:KirinukiDes13,
-        katoPoint4_final:KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"],
+        tableR4_st_final:this.state.KirinukiDes13,
+        katoPoint4_final:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"],
       }));
     }else{
       if(!this.state.Kirinuki14_lose){
         this.setState(state =>  ({
           tableR4_final:this.state.KirinukiImage14,
           tableR4_name_final:this.state.KirinukiData14,
-          tableR4_st_final:KirinukiDes14,
-          katoPoint4_final:KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"],
+          tableR4_st_final:this.state.KirinukiDes14,
+          katoPoint4_final:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"],
         }));
       }else{
         if(!this.state.Kirinuki15_lose){
           this.setState(state =>  ({
             tableR4_final:this.state.KirinukiImage15,
             tableR4_name_final:this.state.KirinukiData15,
-            tableR4_st_final:KirinukiDes15,
-            katoPoint4_final:KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"],
+            tableR4_st_final:this.state.KirinukiDes15,
+            katoPoint4_final:this.state.KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"],
           }));
         }else{
+          if(!this.state.Kirinuki16_lose){
             this.setState(state =>  ({
               tableR4_final:this.state.KirinukiImage16,
               tableR4_name_final:this.state.KirinukiData16,
-              tableR4_st_final:KirinukiDes16,
-              katoPoint4_final:KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"],
+              tableR4_st_final:this.state.KirinukiDes16,
+              katoPoint4_final:this.state.KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"],
             }));
+          }
         }
       }
     }
@@ -1678,7 +1690,7 @@ export default class ChampionshipScreen extends Component {
       position1X: 0,
       position2X: Constants.MAX_WIDTH - 90-20,
 
-      timer:30,
+      timer:20,
 
       p1HP:1000,
       p2HP:1000,
@@ -2403,7 +2415,6 @@ export default class ChampionshipScreen extends Component {
           </View>
         )}
         {this.state.resultFlag &&(
-          <View>
             <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("ホーム")}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>切り抜きチャンピオンシップ、今回の優勝は...</Text>
@@ -2422,7 +2433,6 @@ export default class ChampionshipScreen extends Component {
               </View>
             </View>
           </TouchableOpacity>
-          </View>
         )}
         {this.state.expFlag &&(
           <TouchableOpacity 
