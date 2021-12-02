@@ -1115,7 +1115,7 @@ export default class ChampionshipScreen extends Component {
           return KatoFesP2MoveList.isogashi;
         }
         else{
-          return KatoFesP2MoveList.ronpa;
+          return KatoFesP2MoveList.watch;
         }
     }
   };

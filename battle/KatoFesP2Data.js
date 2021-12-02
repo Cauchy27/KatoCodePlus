@@ -6,9 +6,9 @@ export default KatoFesP2Data = {
     name:"ひ◯ゆき",
     status:{
       HP:500,
-      Guts:50,
-      ATK:30,
-      DEF:40,
+      Guts:0,
+      ATK:20,
+      DEF:20,
     },
     personality:1,
     image:Images.hiroyuki,
@@ -23,7 +23,7 @@ export default KatoFesP2Data = {
     status:{
       HP:1250,
       Guts:50,
-      ATK:80,
+      ATK:50,
       DEF:30,
     },
     personality:0.9,
@@ -71,7 +71,7 @@ export default KatoFesP2Data = {
     name:"金な◯こ",
     status:{
       HP:3000,
-      Guts:0,
+      Guts:100,
       ATK:500,
       DEF:500,
     },

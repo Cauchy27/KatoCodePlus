@@ -26,7 +26,7 @@ import { Audio } from 'expo-av';
 import { AdMobInterstitial} from 'expo-ads-admob';
 
 // 効果音の再生に使う
-function playEffectSound(sound,vol) {
+async function playEffectSound(sound,vol) {
   // console.log('Playing ' + name);
   Audio.Sound.createAsync(
      sound, {
@@ -721,13 +721,16 @@ export default class FesScreen extends Component {
       clearInterval(this.intervalId);
       this.stopBgm(this.state.soundPreload.bgm.battle1);
       if(this.state.p1HP/this.state.p1HPmax <= this.state.p2HP/this.state.p2HPmax){
-        this.state.running = false;
         // 負け広告
         var random = Math.random();
         if(random < 0.3){
-          this.Interstitial();
+          this.Interstitial()
+          .then(()=>this.state.running = false);
         }
-        playEffectSound(Sounds.gameOver,0.03);
+        else{
+          this.state.running = false;
+        }
+        this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
       }
       else{
         playEffectSound(Sounds.next1,1);
@@ -745,13 +748,14 @@ export default class FesScreen extends Component {
         clearInterval(this.intervalId);
         this.stopBgm(this.state.soundPreload.bgm.battle1);
         if(this.state.p1HP <= this.state.p2HP){
-          this.state.running = false;
           // 負け広告
           var random = Math.random();
         if(random < 0.3){
-          this.Interstitial();
+          this.Interstitial()
+          .then(()=>this.state.running = false);
         }
           this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
+          this.state.running = false
         }
         // this.state.timer = 55;
       }
@@ -974,7 +978,7 @@ export default class FesScreen extends Component {
             </View>
         {/* ポップアップ */}
         {!this.state.running && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount)}>
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>playEffectSound(Sounds.yaruo,1).then(()=>{this.reStart(this.state.roundCount)})}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>敗戦...</Text>
               <Text style={styles.gameOverSubText}>立ち上がる☜</Text>
@@ -982,7 +986,7 @@ export default class FesScreen extends Component {
           </TouchableOpacity>
         )}
         {this.state.winning && this.state.roundCount <=3 && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>playEffectSound(Sounds.yaruo,1).then(()=>{this.reStart(this.state.roundCoun+1)})}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>次の相手へ!!</Text>
               <Text style={styles.gameOverSubText}>{this.state.roundCount+1}戦目へ</Text>
@@ -990,7 +994,7 @@ export default class FesScreen extends Component {
           </TouchableOpacity>
         )}
         {this.state.winning && this.state.roundCount >4 && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>playEffectSound(Sounds.yatteru,1).then(()=>{this.reStart(this.state.roundCount+1)})}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>最終決戦へ...!!</Text>
               <Text style={styles.gameOverSubText}>準備はいいですか...？</Text>

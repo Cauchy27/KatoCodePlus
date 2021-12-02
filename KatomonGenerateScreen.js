@@ -678,17 +678,20 @@ export default class KatomonGenerateScreen extends Component {
                         <View>
                           < Text style={styles.move}>1.{this.state.katomon.move.move1.name}</Text>
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move1.consumption_Guts}</Text>
-                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move1.range} 威力：{this.state.katomon.move.move1.power}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move1.range}</Text>
+                          <Text style={styles.moveSub}> 威力：{this.state.katomon.move.move1.power}</Text>
                         </View>
                         <View>
                           < Text style={styles.move}>2.{this.state.katomon.move.move2.name}</Text>
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move2.consumption_Guts}</Text>
-                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move2.range} 威力：{this.state.katomon.move.move2.power}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move2.range}</Text>
+                          <Text style={styles.moveSub}> 威力：{this.state.katomon.move.move2.power}</Text>
                         </View>
                         <View>
                           < Text style={styles.move}>3.{this.state.katomon.move.move3.name}</Text>
                           <Text style={styles.moveSub}> 必要ガッツ：{this.state.katomon.move.move3.consumption_Guts}</Text>
-                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move3.range} 威力：{this.state.katomon.move.move3.power}</Text>
+                          <Text style={styles.moveSub}> 射程：{this.state.katomon.move.move3.range}</Text>
+                          <Text style={styles.moveSub}> 威力：{this.state.katomon.move.move3.power}</Text>
                         </View>
                   </View>
                 </View>       
