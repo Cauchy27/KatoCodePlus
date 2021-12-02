@@ -62,15 +62,15 @@ function playEffectSound(sound,vol) {
 
 // 制限がかかった際に切り替える
 const YOUTUBE_API_KEY = {
- 1:"AIzaSyAkVeqOZhJ8fwr8k_bNy2poO4UYNyikzWM",
- 2:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
- 3:"AIzaSyBM-Gz05cxeA0HU6VXC79ZOUeH5Y_51pG8",
- 4:"AIzaSyCcmePnsCkF8-W5mfwRyKULUvqdQW4UeuA",
- 5:"AIzaSyCSI-e5B5H8G93XR2DrJSypqbaFGexvim8",
- 6:"AIzaSyBuWDI-BPp8lNaUjtLW-hOGjC2QscJcZdg",
- 7:"AIzaSyAlU9qILWC3EJUN0DhXdcrZo7uHtrZFbDo",
- 8:"AIzaSyC50BVEl6KvNPdGCupaw7X5CW0Joylp1_A",
- 9:"AIzaSyBS7ZLIW4cMmuoZQfsap-B1mC3u2oT3rcw",
+ 1:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 2:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 3:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 4:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 5:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 6:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 7:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 8:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+ 9:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
 };
 // 使用するキー
 var useApiNum = 9 ;

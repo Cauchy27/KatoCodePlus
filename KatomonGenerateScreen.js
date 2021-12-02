@@ -23,15 +23,15 @@ import KatomonMoveList from "./battle/KatomonMoveList";
 
 // 制限がかかった際に切り替える
 const YOUTUBE_API_KEY = {
- 1:"AIzaSyDWNDiS0XB1tcrkUHzOdhc4uAoGNQh6V5w",
- 2:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
- 3:"",
- 4:"",
- 5:"",
- 6:"",
- 7:"",
- 8:"",
- 9:"",
+  1:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  2:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  3:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  4:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  5:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  6:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  7:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  8:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
+  9:"AIzaSyBpowKN3ngEqlSGT-r-9jeBVUce0CulPC8",
  };
  // 使用するキー
  var useApiNum = 2 ;
