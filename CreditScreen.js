@@ -159,9 +159,9 @@ export default class CreditScreen extends Component {
         case "ホーム":
           
           playEffectSound(Sounds.generate1,0.05);
+          return this.props.navigation.navigate(destination);
           break;
       }
-      this.props.navigation.navigate(destination,sendKatomonData);
     } 
     catch (error) {
       console.log('error...');
@@ -169,17 +169,113 @@ export default class CreditScreen extends Component {
   };
 
   render(){
+
+    this.animate();
     
     return(
       <View style = {styles.container}>
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
-        <Animated.View style={{ opacity: this.state.opacity}}>
-          <View>
-            <Text>
-              test
-            </Text>
-          </View>
-        </Animated.View>
+        <TouchableOpacity
+          onPress={() =>
+            this.goto('ホーム')
+          }
+          style = {{
+            backgroundColor:"#dcdcdc",
+            height:Constants.TITLE_HEIGHT/2,
+            width:Constants.MAX_WIDTH/1.5,
+          }}
+        >
+
+          <Animated.View style={{ opacity: this.state.opacity}}>
+            <View>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                ゲーム全般：こーしー
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                ドット絵協力：こーしー
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                PV：こーしー
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                BGM：魔王魂 様
+              </Text>
+            </View>
+          </Animated.View>
+          <Animated.View style={{ opacity: this.state.opacity}}>
+            <View>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                marginTop:"5%"
+              }}>
+                ~加藤純一の声~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                jun channel
+              </Text>
+            </View>
+          </Animated.View>
+          <Animated.View style={{ opacity: this.state.opacity}}>
+            <View>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                marginTop:"5%"
+              }}>
+                ~原作~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                うんこちゃん
+              </Text>
+            </View>
+          </Animated.View>
+          <Animated.View style={{ opacity: this.state.opacity}}>
+            <View>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                marginTop:"5%"
+              }}>
+                ~スペシャルサンクス~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                加藤純一
+              </Text>
+            </View>
+            <View>
+            <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                marginTop:"5%",
+                textAlign:"center"
+              }}>
+                ...Tap ☜
+              </Text>
+            </View>
+          </Animated.View>
+        </TouchableOpacity>
 
         <BannerAd/>
       </View>
