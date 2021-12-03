@@ -204,7 +204,7 @@ export default class CreditScreen extends Component {
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                ~ゲーム・アプリケーション全般~
+                ~ゲーム・アプリケーション制作~
               </Text>
               <Text style={{
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
@@ -240,7 +240,25 @@ export default class CreditScreen extends Component {
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                BGM：魔王魂 様
+                ~BGM~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                魔王魂
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                ~デバッグ協力~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                酒井 ユウ
               </Text>
             </View>
           </Animated.View>
@@ -291,7 +309,7 @@ export default class CreditScreen extends Component {
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                加藤 純一
+                加藤 純一, 加藤 尚子
               </Text>
             </View>
             <View>
