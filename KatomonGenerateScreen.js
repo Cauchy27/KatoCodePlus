@@ -319,7 +319,7 @@ export default class KatomonGenerateScreen extends Component {
     // destinationごとに音声を変えておく
       switch(destination){
         case "カトフェス":
-          playEffectSound(Sounds.yaruo,1);
+          // playEffectSound(Sounds.yaruo,1);
           this.stopBgm(this.state.sound.bmg);
           // this.stopBgm(this.state.sound.effect2);
           this.setState(state =>  ({generate : true}));
@@ -635,7 +635,7 @@ export default class KatomonGenerateScreen extends Component {
             <Text style={{
               fontSize:Math.round(Constants.MAX_WIDTH/20),
               marginTop:"5%",
-              height:30,
+              height:Math.round(Constants.MAX_WIDTH/20)+5,
             }}>
               今ここに、新たなカトモンが誕生しました。
             </Text>
@@ -711,14 +711,15 @@ export default class KatomonGenerateScreen extends Component {
                     flex:1,
                     marginLeft:"5%",
                     marginRight:"5%",
-                    paddingTop:"10%",
-                    paddingBottom:"10%",
+                    paddingTop:"3%",
+                    paddingBottom:"3%",
                 }}
                 onPress={() =>
                   this.goto('カトフェス')}
                 >
                   <Text style={{
                     fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7/2),
+                    height:Math.round(Constants.TITLE_WIDTH/1.3/7/2 +5),
                     textAlign:"center",margin:"3%",flex:1}}>
                     戦場へ向かう...
                   </Text>
@@ -731,14 +732,15 @@ export default class KatomonGenerateScreen extends Component {
                     marginLeft:"5%",
                     marginRight:"5%",
                     marginTop:"5%",
-                    paddingTop:"10%",
-                    paddingBottom:"10%",
+                    paddingTop:"3%",
+                    paddingBottom:"3%",
                 }}
                 onPress={() =>
                   this.goto('ホーム')}
                 >
                   <Text style={{
                     fontSize:Math.round(Constants.TITLE_WIDTH/1.3/7/2),
+                    height:Math.round(Constants.TITLE_WIDTH/1.3/7/2+5),
                     textAlign:"center",margin:"3%",flex:1}}>
                     別のカトモンにする
                   </Text>

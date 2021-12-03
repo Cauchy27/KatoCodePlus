@@ -15,7 +15,7 @@ export default KatomonList = {
   },
   kyomu:{
     name:"加藤純一",
-    param:1.1,
+    param:0.5,
     image:Images.katoKyomu,
     description:"",
     move:{
@@ -26,7 +26,7 @@ export default KatomonList = {
   },
   suwari:{
     name:"加藤純一",
-    param:1.7,
+    param:0.7,
     image:Images.katoUNKsuwari,
     description:"",
     move:{
@@ -37,7 +37,7 @@ export default KatomonList = {
   },
   okurei:{
     name:"加藤純一",
-    param:2.5,
+    param:2.0,
     image:Images.katoOkurei,
     description:"",
     move:{
@@ -70,7 +70,7 @@ export default KatomonList = {
   },
   hae:{
     name:"加藤純一",
-    param:1.2,
+    param:0.4,
     image:Images.katoHae,
     description:"",
     move:{
@@ -81,7 +81,7 @@ export default KatomonList = {
   },
   dark:{
     name:"加藤純一",
-    param:1.0,
+    param:1.4,
     image:Images.katoDark,
     description:"",
     move:{

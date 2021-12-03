@@ -1856,8 +1856,8 @@ export default class ChampionshipScreen extends Component {
     try {
     // destinationごとに音声を変えておく
       switch(destination){
-        case "ホーム":
-          playEffectSound(Sounds.katou8,1);
+        case "クレジット":
+          playEffectSound(Sounds.arigatone,1);
           return this.props.navigation.navigate(destination);
       }
     } 

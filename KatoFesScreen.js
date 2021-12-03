@@ -27,7 +27,8 @@ import { AdMobInterstitial} from 'expo-ads-admob';
 
 // 効果音の再生に使う
 async function playEffectSound(sound,vol) {
-  // console.log('Playing ' + name);
+
+  console.log('Playing ' + ":"+sound);
   Audio.Sound.createAsync(
      sound, {
         shouldPlay: true,
@@ -57,11 +58,15 @@ export default class FesScreen extends Component {
       startTime: Date.now(),
       timer:55,
       roundCount:1,
-      running:true,
+      running:false,
       winning:false,
       endFlag:false,
 
-      restartFlag:false,
+      changeGuts:false,
+
+      firstFlag:true,
+
+      // restartFlag:false,
 
       // 戦闘のステータス関連
       p1Personality:1,//>１だと前進しやすい
@@ -101,16 +106,6 @@ export default class FesScreen extends Component {
 
       // 音声の管理用
       soundPreload:{
-        r1:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
-          move3:new Audio.Sound,
-        },
-        r2:{
-          move1:new Audio.Sound,
-          move2:new Audio.Sound,
-          move3:new Audio.Sound,
-        },
         bgm:{
           battle1:new Audio.Sound,
           title:new Audio.Sound,
@@ -140,10 +135,10 @@ export default class FesScreen extends Component {
   
   componentDidMount = async() => {
     // 戦闘開始
-    this.intervalId = this.system();
+    // this.intervalId = this.system();
 
-    if(this.state.running){
-      this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle2,0.03);
+    if(!this.state.running){
+      this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.bgm2,0.03);
     }
   };
 
@@ -195,8 +190,10 @@ export default class FesScreen extends Component {
   };
 
   // BGMの切り替え
-  bgmChange = (target,select) =>{
-    // 
+  startBreakingBgm = (sound,vol) =>{
+    setTimeout(() => {
+      playEffectSound(sound,vol);
+    }, 1000);
   };
 
   // p1移動処理
@@ -287,7 +284,6 @@ export default class FesScreen extends Component {
   p1move = async(select) =>{
     switch(select){
       case "1":
-        this.state.soundPreload.r1.move1 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
@@ -311,7 +307,6 @@ export default class FesScreen extends Component {
         }
         break;
       case "2":
-        this.state.soundPreload.r1.move2 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
@@ -335,7 +330,6 @@ export default class FesScreen extends Component {
         }
         break;
       case "3":
-        this.state.soundPreload.r1.move3 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_3.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_3.range){
           // 相手のHP減少
@@ -366,7 +360,6 @@ export default class FesScreen extends Component {
     // console.log("p2HP:",this.state.p2HP);
     switch(select){
       case "1":
-        this.state.soundPreload.r2.move1 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
@@ -390,7 +383,6 @@ export default class FesScreen extends Component {
         }
         break;
       case "2":
-        this.state.soundPreload.r2.move2 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
@@ -414,7 +406,6 @@ export default class FesScreen extends Component {
         }
         break;
       case "3":
-        this.state.soundPreload.r2.move3 = new Audio.Sound();
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_3.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_3.range){
           // 相手のHP減少
@@ -443,8 +434,17 @@ export default class FesScreen extends Component {
 
   // 応援ボタン
   addGuts = async() =>{
-    await this.setState(state =>  ({p1Guts : this.state.p1Guts + 3}));
-  }
+    this.setState(state =>  ({p1Guts : this.state.p1Guts + 3}));
+  };
+
+  changeGuts =async()=>{
+    if(this.state.changeGuts){
+      this.setState(state =>  ({changeGuts : false}));
+    }
+    else{
+      this.setState(state =>  ({changeGuts : true}));
+    }
+  };
 
   //cpuの技選択ロジック
   autoSelectMove = (player) =>{
@@ -507,17 +507,17 @@ export default class FesScreen extends Component {
 
       if(this.state.p1PoissonFlag){
         this.setState(state =>  ({
-          p1HP:this.state.p1HP - 3,
+          p1HP:this.state.p1HP - 2,
         })); 
       }
-      console.log("p1",this.state.p1PoissonFlag);
+      // console.log("p1",this.state.p1PoissonFlag);
 
       if(this.state.p2PoissonFlag){
         this.setState(state =>  ({
           p2HP:this.state.p2HP - 5,
         })); 
       }
-      console.log("p2",this.state.p2PoissonFlag);
+      // console.log("p2",this.state.p2PoissonFlag);
 
       // player1の移動ロジック
       if(p1Rand  * this.state.p1Personality > 0.5){
@@ -551,7 +551,20 @@ export default class FesScreen extends Component {
 
       // オートでの技選択
       this.autoSelectMove("p2");
-      this.autoSelectMove("p1");
+      if(!this.state.changeGuts){
+        this.autoSelectMove("p1");
+      }
+
+      if(this.state.p1HP<0){
+        this.setState(state =>  ({
+          p1HP:0,
+        })); 
+      }
+      if(this.state.p2HP<0){
+        this.setState(state =>  ({
+          p2HP:0,
+        })); 
+      }
 
     }, 500);
 
@@ -563,7 +576,12 @@ export default class FesScreen extends Component {
     if(this.state.runnning){
       return
     }
-    this.state.res
+    if(this.state.firstFlag){
+      this.setState(state =>  ({
+        firstFlag:false,
+      }));
+    }
+
     playEffectSound(Sounds.yaruo,1);
 
       this.stopBgm(this.state.soundPreload.bgm.breaking);
@@ -689,6 +707,8 @@ export default class FesScreen extends Component {
 
         p2PoissonFlag:false,
         p1PoissonFlag:false,
+
+        changeGuts:false,
   
         timer:55,
   
@@ -699,6 +719,9 @@ export default class FesScreen extends Component {
         p1ATK:this.props.route.params.katomonikioi,
         p1DEF:this.props.route.params.katomonMamori,
       }));     
+
+      console.log(this.state.p1Name.length);
+      console.log(this.state.p2Name.length);
       
       this.intervalId = this.system();
   
@@ -709,9 +732,9 @@ export default class FesScreen extends Component {
     try {
     // destinationごとに音声を変えておく
       switch(destination){
-        case "ホーム":
+        case "クレジット":
           await this.stopBgm(this.state.soundPreload.bgm.breaking);
-          playEffectSound(Sounds.generate1,0.5);
+          playEffectSound(Sounds.arigatone,1);
           break;
       }
       this.setState({
@@ -748,7 +771,16 @@ export default class FesScreen extends Component {
           this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
         }
         else{
-          this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
+          var random_win = Math.random();
+          if(random_win < 0.33){
+            this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.6);
+          }else{
+            if(random_win < 0.66){
+              this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.kenia,0.5);
+            }else{
+              this.startBreakingBgm(Sounds.say,3);
+            }
+          }
           if(this.state.roundCount>=5){
             this.state.endFlag = true;
             this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
@@ -778,7 +810,16 @@ export default class FesScreen extends Component {
         if(this.state.p2HP <= 0){
           clearInterval(this.intervalId);
           this.stopBgm(this.state.soundPreload.bgm.battle1);
-          this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
+          var random_win = Math.random();
+          if(random_win < 0.33){
+            this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
+          }else{
+            if(random_win < 0.66){
+              this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.kenia,0.5);
+            }else{
+              this.startBreakingBgm(Sounds.say,3);
+            }
+          }
             if(this.state.roundCount>=5){
               // this.state.running = false;
               this.state.endFlag = true;
@@ -829,35 +870,49 @@ export default class FesScreen extends Component {
               </Text>
             )}
           <View style = {styles.name}>
-            <Text style = {styles.name_r}>
+            <Text style = {{
+              fontSize: Math.round(Constants.MAX_WIDTH/3/10),
+              fontWeight: 'bold',
+              // fontFamily: 'DotGothic16_400Regular',
+              textAlign:'center',
+              height:Math.round(Constants.MAX_WIDTH/3/10 +5),
+              flex:1,
+            }}>
               {this.state.p1Name}
             </Text>
             <Text style = {{
             textAlign:'center',
-            fontSize: 18,
+            fontSize:  Math.round(Constants.MAX_WIDTH/3/5),
             fontWeight: 'bold',
             // fontFamily: 'DotGothic16_400Regular',
             backgroundColor:"#fff",
-            height:24,
+            height:Math.round(Constants.MAX_WIDTH/3/5 +5),
             flex:0.3,
             }}>
               {Math.round(this.state.timer)}
             </Text>
-            <Text style = {styles.name_l}>
+            <Text style = {{
+              fontSize:Math.round(Constants.MAX_WIDTH/3/10),
+              fontWeight: 'bold',
+              // fontFamily: 'DotGothic16_400Regular',
+              textAlign:'center',
+              height:Math.round(Constants.MAX_WIDTH/3/10 +5),
+              flex:1,
+            }}>
               {this.state.p2Name}
             </Text>
           </View>
           <View style = {styles.names}>
-            <Text style = {{fontSize: 16,
+            <Text style = {{fontSize: Math.round(Constants.MAX_WIDTH/3/10),
               textAlign:'center',
-              height:18,
+              height:Math.round(Constants.MAX_WIDTH/3/10)+5,
               flex:0.5,}}
             >
               ガッツ：{this.state.p1Guts}
             </Text>
-            <Text style = {{fontSize: 16,
+            <Text style = {{fontSize: Math.round(Constants.MAX_WIDTH/3/10),
               textAlign:'center',
-              height:18,
+              height:Math.round(Constants.MAX_WIDTH/3/10)+5,
               flex:0.5,}}
             >
               ガッツ：{this.state.p2Guts}
@@ -977,19 +1032,104 @@ export default class FesScreen extends Component {
             </ScrollView>
           )}
         </View>
-        {/* 応援ボタン */}
+        {/* ボタン */}
         {this.state.running && (
-          <View style = {{
+          <View style={{flexDirection:"row",position: 'absolute',bottom:0}}>
+            {!this.state.changeGuts &&(
+              <View style = {{
+                      position: 'absolute',
+                      paddingLeft:"3%",
+                      paddingRight:"3%",
+                      alignItems:"center",
+                      bottom:0,
+                      height:Constants.MAX_HEIGHT/10,
+                      opacity:0.5,
+                      left:0,
+                      width:Constants.MAX_WIDTH/2
+      
+                  }}>
+                  <TouchableOpacity 
+                    style ={{
+                      position: 'relative',
+                      marginTop: "3%",
+                      marginBottom: "3%",
+                      marginRight: "5%",
+                      marginRight:"5%",
+                      paddingLeft:"10%",
+                      paddingRight:"10%",
+                      paddingTop:"5%",
+                      paddingBottom:"5%",
+                      borderRadius:50,
+                      backgroundColor: "#ff4500",
+                    }}
+                    onPress={this.changeGuts}
+                  >
+                    <Text style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color:"eee",
+                      textAlign:'center',
+                    }}>
+                      ガッツ温存しろ！
+                    </Text>
+                  </TouchableOpacity>
+              </View>
+            )}
+            {this.state.changeGuts &&(
+              <View style = {{
+                      position: 'absolute',
+                      paddingLeft:"3%",
+                      paddingRight:"3%",
+                      alignItems:"center",
+                      bottom:0,
+                      height:Constants.MAX_HEIGHT/10,
+                      opacity:0.5,
+                      left:0,
+                      width:Constants.MAX_WIDTH/2
+      
+                  }}>
+                  <TouchableOpacity 
+                    style ={{
+                      position: 'relative',
+                      marginTop: "3%",
+                      marginBottom: "3%",
+                      marginRight: "5%",
+                      marginRight:"5%",
+                      paddingLeft:"10%",
+                      paddingRight:"10%",
+                      paddingTop:"5%",
+                      paddingBottom:"5%",
+                      borderRadius:50,
+                      backgroundColor: "#7cfc00",
+                    }}
+                    onPress={this.changeGuts}
+                  >
+                    <Text style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      // fontFamily: 'DotGothic16_400Regular',
+                      textAlign:'center',
+                    }}>
+                      ガッツ使え！
+                    </Text>
+                  </TouchableOpacity>
+              </View>
+            )}
+            <View style = {{
                   position: 'absolute',
                   paddingLeft:"3%",
                   paddingRight:"3%",
                   alignItems:"center",
-                  bottom:0
+                  bottom:0,
+                  height:Constants.MAX_HEIGHT/10,
+                  opacity:0.5,
+                  right:0,
+                  width:Constants.MAX_WIDTH/2
   
               }}>
                   <TouchableOpacity 
                     style ={styles.button}
-                    onPress={() => {this.addGuts()}}
+                    onPress={this.addGuts}
                   >
                     <Text style={{
                       fontSize: 20,
@@ -1001,9 +1141,10 @@ export default class FesScreen extends Component {
                     </Text>
                   </TouchableOpacity>
             </View>
+          </View>
         )}
         {/* ポップアップ */}
-        {!this.state.running && !this.state.winning && (
+        {!this.state.running && !this.state.winning && !this.state.firstFlag && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount)}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>敗戦...</Text>
@@ -1014,8 +1155,8 @@ export default class FesScreen extends Component {
         {this.state.winning && this.state.roundCount <=3 && (
           <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
             <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>次の相手へ!!</Text>
-              <Text style={styles.gameOverSubText}>{this.state.roundCount+1}戦目へ</Text>
+              <Text style={styles.gameOverText}>大勝利!!</Text>
+              <Text style={styles.gameOverText}>{this.state.roundCount+1}戦目へ ☜</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -1028,11 +1169,25 @@ export default class FesScreen extends Component {
           </TouchableOpacity>
         )}
         {this.state.endFlag && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("ホーム")}>
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("クレジット")}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>おめでとうございます!!</Text>
-              <Text style={styles.gameOverText}>遊んでいただきありがとうございました！！</Text>
-              <Text style={styles.gameOverSubText}>Tap</Text>
+              <Text style={styles.gameOveSubrText}>遊んでいただきありがとうございました！！</Text>
+              <Text style={styles.gameOverSubText}> TAP☜</Text>
+            </View>
+          </TouchableOpacity>
+        )}
+        {this.state.firstFlag && !this.state.running && (
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(1)}>
+            <View style={styles.fullScreen}>
+              <Text style={styles.gameOverText}>戦闘開始！</Text>
+              <Text style={styles.gameOverSubText}>----------------------------------------</Text>
+              <Text style={styles.gameOverSubText}>【Tips】</Text>
+              <Text style={styles.gameOverSubText}>応援すると、ガッツが多く貯まります</Text>
+              <Text style={styles.gameOverSubText}>自動で技は使われますが、自分で選択することも可能です</Text>
+              <Text style={styles.gameOverSubText}>技には、隠されたパラメータ変化効果などもあります</Text>
+              <Text style={styles.gameOverSubText}>----------------------------------------</Text>
+              <Text style={styles.gameOverText}>  START ☜</Text>
             </View>
           </TouchableOpacity>
         )}
@@ -1056,14 +1211,14 @@ const styles = StyleSheet.create({
   },
   gameOverText: {
     color: 'white',
-    fontSize: 48,
+    fontSize: Math.round(Constants.MAX_WIDTH/8),
     marginBottom:"10%",
     // fontFamily: '04b_19',
   },
   gameOverSubText: {
     color: 'white',
-    fontSize: 24,
-    // fontFamily: '04b_19',
+    fontSize: Math.round(Constants.MAX_WIDTH/20),
+    margin:"3%",
   },
   gameArea:{
     height: Constants.TITLE_HEIGHT,
@@ -1138,7 +1293,7 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
   },
   name_r:{
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',
@@ -1146,7 +1301,7 @@ const styles = StyleSheet.create({
     flex:1,
   },
   name_l:{
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 'bold',
     // fontFamily: 'DotGothic16_400Regular',
     textAlign:'center',

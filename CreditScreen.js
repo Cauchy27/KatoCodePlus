@@ -10,6 +10,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Animated,
 } from 'react-native';
 import { Audio } from 'expo-av';
 import Images from './assets/Images';
@@ -21,9 +22,8 @@ import Sounds from './assets/Sounds';
 import { AdMobBanner } from 'expo-ads-admob';
 
 // 効果音の再生に使う
-async function playEffectSound(sound,vol) {
-
-  console.log('Playing ' + ":"+sound);
+async　function playEffectSound(sound,vol) {
+  // console.log('Playing ' + name);
   Audio.Sound.createAsync(
      sound, {
         shouldPlay: true,
@@ -39,23 +39,29 @@ async function playEffectSound(sound,vol) {
 }
 
 // 最初に開くところ
-export default class TitleScreen extends Component {
+export default class CreditScreen extends Component {
 
   constructor(props) {
     super(props);
     this.state = { 
+      opacity: new Animated.Value(0),
       bgm:{
-        title:null,
-        change:null,
+        title:new Audio.Sound,
+        change:new Audio.Sound,
       }
     };
+  }
+  animate() {
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 600*8,
+      useNativeDriver:true,
+    }).start();
   }
 
   componentDidMount = async() => {
     this.state.bgm.title = new Audio.Sound;
     this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03);
-    // playEffectSound(Sounds.bgm1,0.03,this.state.bgm.title);
-    // console.log(this.state.bgm.title);
   };
 
   stopBgm =async(state)=>{
@@ -136,26 +142,26 @@ export default class TitleScreen extends Component {
         // case "カトフェス":
         //   selector = Sounds.yaruo;
         //   break;
-        case "切り抜きチャンピオンシップ":
-          playEffectSound(Sounds.katou7,0.5)
-          .then(()=>{
-            // 
-          });
-          this.stopBgm(this.state.bgm.title);
-          return this.props.navigation.navigate(destination);    
-
-        case "カトモン生成":
-          playEffectSound(Sounds.katou8,1)
-          .then(()=>{
-            // 
-          });
-          this.stopBgm(this.state.bgm.title);
-          return this.props.navigation.navigate(destination);
-        
-         case "クレジット":
-          this.stopBgm(this.state.bgm.title);
-          return this.props.navigation.navigate(destination);
+        // case "切り抜きチャンピオンシップ":
+        //   playEffectSound(Sounds.katou7,0.5)
+        //   .then(()=>{
+        //     // 
+        //   });
+        //   this.stopBgm(this.state.bgm.title);
+        //   return this.props.navigation.navigate(destination);    
+        // case "カトモン生成":
+        //   playEffectSound(Sounds.katou8,1)
+        //   .then(()=>{
+        //     // 
+        //   });
+        //   this.stopBgm(this.state.bgm.title);
+        //   return this.props.navigation.navigate(destination);
+        case "ホーム":
+          
+          playEffectSound(Sounds.generate1,0.05);
+          break;
       }
+      this.props.navigation.navigate(destination,sendKatomonData);
     } 
     catch (error) {
       console.log('error...');
@@ -167,64 +173,13 @@ export default class TitleScreen extends Component {
     return(
       <View style = {styles.container}>
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
-        <View style = {styles.title}>
-          <View style={{flex:1}}>
-            <Text style = {styles.hello}>
-              カトコードの世界へ
+        <Animated.View style={{ opacity: this.state.opacity}}>
+          <View>
+            <Text>
+              test
             </Text>
-            <Text style = {styles.hello}>ようこそ</Text>
           </View>
-          <View style = {styles.menu}>
-            <TouchableOpacity 
-              onPress={() =>
-                this.goto('切り抜きチャンピオンシップ')
-                // ↑第二引数で、遷移先に渡す変数を
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#ffff00",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20),
-              height:Math.round(Constants.MAX_WIDTH/1.3/20+5),
-            }}>
-                切り抜きチャンピオンシップ
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.goto('カトモン生成')
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
-            }}>
-                カトモン生成/カトフェス
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.goto('クレジット')
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
-            }}>
-                クレジット
-              </Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() =>
-                this.restartSound(this.state.bgm.title)
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center"}}>
-                BGM再再生
-              </Text>
-            </TouchableOpacity> */}
-          </View>
-        </View>
+        </Animated.View>
 
         <BannerAd/>
       </View>
@@ -276,7 +231,6 @@ const styles = StyleSheet.create({
     flex:1.5,
     flexDirection:"column",
     justifyContent:"center",
-    height:Math.round(Constants.MAX_WIDTH/1.3/20+5),
   },
   bottun:{
     marginTop:"5%",

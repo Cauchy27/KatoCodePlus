@@ -7,8 +7,8 @@ export default KatoFesP2Data = {
     status:{
       HP:500,
       Guts:0,
-      ATK:20,
-      DEF:20,
+      ATK:10,
+      DEF:10,
     },
     personality:1,
     image:Images.hiroyuki,

@@ -9,6 +9,7 @@ export default Sounds = {
   yaruo:require('./sound/yaruo.mp3'),
 
   bgm1:require('./sound/bgm/cryagain.mp3'),
+  bgm2:require('./sound/bgm/kirinukiChamp-member.mp3'),
   bgmGeneMenu:require('./sound/bgm/KatomonGenerateSlow.mp3'),
 
   battle1:require('./sound/bgm/battle1.mp3'),
@@ -45,4 +46,7 @@ export default Sounds = {
   katomonGenerate:require('./sound/tetuya2.mp3'),
   generate1:require('./sound/generate1.mp3'),
 
+  kenia:require('./sound/kenia.mp3'),
+  say:require('./sound/say.mp3'),
+  arigatone:require('./sound/arigatone.mp3'),
 }

@@ -22,6 +22,7 @@ import TitleScreen from './TitleScreen';
 import ChampionshipScreen from './KirinukiChampionshipScreen';
 import FesScreen from './KatoFesScreen';
 import KatomonGenerateScreen from './KatomonGenerateScreen';
+import CreditScreen from './CreditScreen';
 
 import { Audio } from 'expo-av';
 import Sounds from './assets/Sounds';
@@ -63,6 +64,10 @@ function App(){
         <Stack.Screen
             name="カトモン生成"
             component={KatomonGenerateScreen}
+          />
+        <Stack.Screen
+            name="クレジット"
+            component={CreditScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

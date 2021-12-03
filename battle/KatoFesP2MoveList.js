@@ -7,10 +7,14 @@ export default KatoFesP2MoveList = {
       power:70,
       consumption_Guts:50,
       add_Guts:0,
-      range:200,
+      range:400,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
         change:-50,//変化量
+      },
+      additional1:{
+        param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
+        change:10,//変化量
       },
       personality:0.7,//移動に影響する性格の設定
     },
@@ -18,12 +22,16 @@ export default KatoFesP2MoveList = {
       name:"論破",
       sound:Sounds.hiroyuki2,//音声ファイルのディレクトリ指定
       power:70,
-      consumption_Guts:60,
+      consumption_Guts:50,
       add_Guts:0,
       range:400,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
         change:-50,//変化量
+      },
+      additional1:{
+        param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)
+        change:10,//変化量
       },
       personality:1.3,//移動に影響する性格の設定
     },
@@ -118,8 +126,8 @@ export default KatoFesP2MoveList = {
       add_Guts:0,
       range:500,
       additional1:{
-        param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-30,//変化量
+        param:"p2Poisson",//変化するパラメータ(position/HP/ATK,,,)
+        change:5,//変化量
       },
       additional2:{
         param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
