@@ -2,7 +2,7 @@ export default Images = {
     backgroundTitle: require('./img/background1.png'),
     background: require('./img/background.png'),
     battleField:require('./img/battleField.png'),
-    pizaField:require('./img/piza.png'),
+    pizaField:require('./img/pizza_stage.png'),
 
     katoSmile: require('./img/jun_smile.png'),
     katoBlack: require('./img/jun_black.png'),
