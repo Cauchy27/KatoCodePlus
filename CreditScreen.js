@@ -188,23 +188,53 @@ export default class CreditScreen extends Component {
 
           <Animated.View style={{ opacity: this.state.opacity}}>
             <View>
-              <Text style={{
+            <Text style={{
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                ゲーム全般：こーしー
+                ~企画・ゲームデザイン~
               </Text>
               <Text style={{
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                ドット絵協力：こーしー
+                こーしー
               </Text>
               <Text style={{
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                PV：こーしー
+                ~ゲーム・アプリケーション全般~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                こーしー
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                ~ドット絵協力~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                酒井 ユウ
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                ~PV協力~
+              </Text>
+              <Text style={{
+                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+              }}>
+                美枸淵
               </Text>
               <Text style={{
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
@@ -261,7 +291,7 @@ export default class CreditScreen extends Component {
                 fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
                 height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
               }}>
-                加藤純一
+                加藤 純一
               </Text>
             </View>
             <View>
