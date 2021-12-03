@@ -201,7 +201,7 @@ export default class TitleScreen extends Component {
                 カトモン生成/カトフェス
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() =>
                 this.goto('クレジット')
               }
@@ -212,7 +212,7 @@ export default class TitleScreen extends Component {
             }}>
                 クレジット
               </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {/* <TouchableOpacity
               onPress={() =>
                 this.restartSound(this.state.bgm.title)
