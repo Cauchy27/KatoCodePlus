@@ -1273,10 +1273,10 @@ export default class FesScreen extends Component {
             <View style={styles.fullScreenButton} >
               <View style={styles.fullScreen}>
                 <Text style={styles.gameOverText}>おめでとうございます!!</Text>
-                <Text style={styles.gameOveSubrText}>遊んでいただきありがとうございました！！</Text>
+                <Text style={styles.gameOverSubText}>遊んでいただきありがとうございました！！</Text>
                 <Text style={styles.gameOverSubText}>----------------------------------------</Text>
                 <TouchableOpacity 
-                  style={{height:Math.round(Constants.MAX_WIDTH/20)+5,backgroundColor:"#eee"}}
+                  style={{height:Math.round(Constants.MAX_WIDTH/20)+5,}}
                   onPress={() =>this.goto("クレジット")}
                 >
                   <Text style={styles.gameOverText}> クレジットへ ☜</Text>
