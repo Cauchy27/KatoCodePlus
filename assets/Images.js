@@ -27,4 +27,9 @@ export default Images = {
 
     naranton:require('./img/Naranton.png'),
 
+    item1:require('./img/owari.png'),
+    item2:require('./img/pizza.png'),
+    item3:require('./img/waku.png'),
+    item4:require('./img/waku.png'),
+
 }

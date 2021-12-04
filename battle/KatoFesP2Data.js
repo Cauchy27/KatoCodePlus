@@ -21,10 +21,10 @@ export default KatoFesP2Data = {
   gear:{
     name:"ギア",
     status:{
-      HP:1250,
+      HP:1000,
       Guts:100,
       ATK:50,
-      DEF:30,
+      DEF:20,
     },
     personality:0.9,
     image:Images.gear,

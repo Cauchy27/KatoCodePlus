@@ -305,11 +305,11 @@ export default class KatomonGenerateScreen extends Component {
 
     this.setState({
       // パワー
-      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+100,
+      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+200,
       // 勢い
-      katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000)+10,
+      katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000)+20,
        // 守り
-       katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+10,
+       katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+20,
     });
     playEffectSound(Sounds.katomonGenerate,1);
   }

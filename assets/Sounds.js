@@ -17,6 +17,7 @@ export default Sounds = {
   battle3:require('./sound/bgm/battle3.mp3'),
   battle4:require('./sound/bgm/champ2.mp3'),
   battle5:require('./sound/bgm/casino.mp3'),
+  battle6:require('./sound/bgm/battle6.mp3'),
 
   gameOver:require('./sound/bgm/gameOver.mp3'),
   next1:require('./sound/fujinami2.mp3'),

@@ -72,7 +72,7 @@ export default KatoFesP2MoveList = {
     craver:{
       name:"クレーバー",
       sound:Sounds.gear1,//音声ファイルのディレクトリ指定
-      power:200,
+      power:150,
       consumption_Guts:110,
       add_Guts:0,
       range:600,
@@ -85,8 +85,8 @@ export default KatoFesP2MoveList = {
         change:50,//変化量
       },
       additional3:{
-        param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
-        change:100,//変化量
+        param:"p2Poisson",//変化するパラメータ(position/HP/ATK,,,)
+        change:3,//変化量
       },
       personality:0.7,//移動に影響する性格の設定
     },

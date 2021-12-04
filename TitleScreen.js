@@ -117,7 +117,7 @@ export default class TitleScreen extends Component {
            res.sound.unloadAsync().catch(() => {console.log("error4")});
         });
      }).catch((error) => {console.log("error5")});//スタート
-     console.log(state);
+    //  console.log(state);
   };
 
   componentWillUnmount(){
