@@ -49,4 +49,5 @@ export default Sounds = {
   kenia:require('./sound/kenia.mp3'),
   say:require('./sound/say.mp3'),
   arigatone:require('./sound/arigatone.mp3'),
+  thanks:require('./sound/thank_you_so_much.mp3'),
 }

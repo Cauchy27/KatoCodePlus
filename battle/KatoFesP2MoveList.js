@@ -155,17 +155,17 @@ export default KatoFesP2MoveList = {
     isogashi:{
       name:"いそがしい",
       sound:Sounds.katou3,//音声ファイルのディレクトリ指定
-      power:10,
+      power:30,
       consumption_Guts:70,
       add_Guts:10,
       range:400,
       additional1:{
-        param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-30,//変化量
+        param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
+        change:50,//変化量
       },
       additional1:{
         param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
-        change:50,//変化量
+        change:100,//変化量
       },
       additional1:{
         param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)

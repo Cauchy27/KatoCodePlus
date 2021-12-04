@@ -45,6 +45,7 @@ export default class CreditScreen extends Component {
     super(props);
     this.state = { 
       opacity: new Animated.Value(0),
+      flagCount:1,
       bgm:{
         title:new Audio.Sound,
         change:new Audio.Sound,
@@ -60,12 +61,13 @@ export default class CreditScreen extends Component {
   }
 
   componentDidMount = async() => {
-    this.state.bgm.title = new Audio.Sound;
+    // this.state.bgm.title = new Audio.Sound;
     this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03);
+    playEffectSound(Sounds.thanks,1);
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync()
+    await state.unloadAsync()
     .then((res) => {
       res.sound.setOnPlaybackStatusUpdate((status) => {
          if (!status.didJustFinish) return;
@@ -167,8 +169,24 @@ export default class CreditScreen extends Component {
       console.log('error...');
     }
   };
+  next =async(select)=>{
+    switch(select){
+      case 4:
+        return this.goto('ホーム');
+  }
+    this.setState(state =>  ({
+      opacity:new Animated.Value(0),
+      flagCount:this.state.flagCount+1,
+    }));
+    switch(select){
+        case 5:
+          return setTimeout(()=>{ this.goto('ホーム')},1000);
+    }
+    this.animate();
+  };
 
   render(){
+    console.log(this.state.opacity);
 
     this.animate();
     
@@ -177,7 +195,7 @@ export default class CreditScreen extends Component {
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
         <TouchableOpacity
           onPress={() =>
-            this.goto('ホーム')
+            this.next(this.state.flagCount)
           }
           style = {{
             backgroundColor:"#dcdcdc",
@@ -186,144 +204,190 @@ export default class CreditScreen extends Component {
           }}
         >
 
-          <Animated.View style={{ opacity: this.state.opacity}}>
-            <View>
-            <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~企画・ゲームデザイン~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                こーしー
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~ゲーム・アプリケーション制作~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                こーしー
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~ドット絵協力~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                酒井 ユウ
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~PV協力~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                美枸淵
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~BGM~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                魔王魂
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                ~デバッグ協力~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                酒井 ユウ
-              </Text>
-            </View>
+          <Animated.View style={{ opacity: this.state.opacity,justifyContent:"center",flexDirection:"column"}}>
+            {/* タッチするたびに画面が切り替わるように変更する */}
+            {this.state.flagCount==1 &&(
+              <View style={{justifyContent:"center",flexDirection:"column",alignItems:"center",marginTop:"20%"}}>
+                <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                    height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                    marginTop:"5%",
+                    textAlign:"center",
+                  }}>
+                    ~企画・ゲームデザイン~
+                  </Text>
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                    height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                    textAlign:"center"
+                  }}>
+                    こーしー
+                  </Text>
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                    height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                    marginTop:"5%",
+                    textAlign:"center"
+                  }}>
+                    ~ゲーム・アプリケーション制作~
+                  </Text>
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                    height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                    textAlign:"center"
+                  }}>
+                    こーしー
+                  </Text>
+                  <Text style={{
+                    fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                    height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                    marginTop:"5%",
+                    textAlign:"center"
+                  }}>
+                  ~ドット絵協力~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  酒井 ユウ
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center"
+                }}>
+                  ~PV協力~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  美枸淵
+                </Text>
+              </View>
+            )}
+            {this.state.flagCount==2 &&(
+              <View style={{}}>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center",
+                  marginTop:"40%"
+                }}>
+                  ~BGM~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  魔王魂
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center"
+                }}>
+                  ~デバッグ協力~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  酒井 ユウ
+                </Text>
+              </View>
+            )}
           </Animated.View>
           <Animated.View style={{ opacity: this.state.opacity}}>
-            <View>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-                marginTop:"5%"
-              }}>
-                ~加藤純一の声~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                jun channel
-              </Text>
-            </View>
+            {this.state.flagCount==3 &&(
+              <View>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center",
+                  marginTop:"40%"
+                }}>
+                  ~加藤純一の声~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  jun channel
+                </Text>
+              </View>
+            )}
+            {this.state.flagCount==3 &&(
+              <View>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center"
+                }}>
+                  ~原作~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  うんこちゃん
+                </Text>
+              </View>
+            )}
           </Animated.View>
           <Animated.View style={{ opacity: this.state.opacity}}>
-            <View>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-                marginTop:"5%"
-              }}>
-                ~原作~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                うんこちゃん
-              </Text>
-            </View>
+            
           </Animated.View>
           <Animated.View style={{ opacity: this.state.opacity}}>
-            <View>
+            {this.state.flagCount==4&&(
+              <View>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"5%",
+                  textAlign:"center",
+                  marginTop:"30%"
+                }}>
+                  ~スペシャルサンクス~
+                </Text>
+                <Text style={{
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  textAlign:"center"
+                }}>
+                  加藤 純一, 加藤 尚子
+                </Text>
+              </View>
+            )}
+            {this.state.flagCount==4 &&(
+              <View>
               <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-                marginTop:"5%"
-              }}>
-                ~スペシャルサンクス~
-              </Text>
-              <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-              }}>
-                加藤 純一, 加藤 尚子
-              </Text>
-            </View>
-            <View>
-            <Text style={{
-                fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
-                height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
-                marginTop:"5%",
-                textAlign:"center"
-              }}>
-                ...Tap ☜
-              </Text>
-            </View>
+                  fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
+                  height:Math.round(Constants.TITLE_WIDTH/2/10)+5,
+                  marginTop:"20%",
+                  textAlign:"center"
+                }}>
+                  ...thank you so much!!! 
+                </Text>
+              </View> 
+            )}
           </Animated.View>
         </TouchableOpacity>
+        <View style={{backgroundColor:"#eee"}}>
+          <Text>↑枠内をタップして次へ...</Text>
+        </View>
 
         <BannerAd/>
       </View>

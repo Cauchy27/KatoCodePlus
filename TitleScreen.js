@@ -20,8 +20,10 @@ import Sounds from './assets/Sounds';
 
 import { AdMobBanner } from 'expo-ads-admob';
 
+// const soundObject = new Audio.Sound;
+
 // 効果音の再生に使う
-async function playEffectSound(sound,vol) {
+function playEffectSound(sound,vol) {
 
   console.log('Playing ' + ":"+sound);
   Audio.Sound.createAsync(
@@ -36,7 +38,20 @@ async function playEffectSound(sound,vol) {
         res.sound.unloadAsync().catch(() => {});
      });
   }).catch((error) => {});
-}
+};
+// function stopEffectSound(sound,vol) {
+
+//   console.log('Stop ' + ":"+sound);
+//   soundObject.stopAsync()
+//   .then((res) => {
+//      res.sound.setOnPlaybackStatusUpdate((status) => {
+//         if (!status.didJustFinish) return;
+//         console.log('Unstoping ' + name);
+//         res.sound.unloadAsync().catch(() => {});
+//      });
+//   }).catch((error) => {});
+// };
+
 
 // 最初に開くところ
 export default class TitleScreen extends Component {
@@ -45,28 +60,34 @@ export default class TitleScreen extends Component {
     super(props);
     this.state = { 
       bgm:{
-        title:null,
-        change:null,
+        title:new Audio.Sound(),
+        change:new Audio.Sound(),
       }
     };
   }
+  
 
   componentDidMount = async() => {
-    this.state.bgm.title = new Audio.Sound;
+    // this.state.bgm.title = new Audio.Sound;
     this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03);
-    // playEffectSound(Sounds.bgm1,0.03,this.state.bgm.title);
+
+    // this.soundStart(soundObject,Sounds.bgm1, 0.03);
+
+    // playEffectSound(Sounds.bgm1,0.03);
     // console.log(this.state.bgm.title);
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync()
+    await state.unloadAsync()
     .then((res) => {
+      // console.log(state);
       res.sound.setOnPlaybackStatusUpdate((status) => {
          if (!status.didJustFinish) return;
          console.log('Unstop ' + state);
-         res.sound.unloadAsync().catch(() => {});
+         res.sound.unloadAsync().catch(() => {console.log("error100")});
       });
-   }).catch((error) => {});
+   }).catch((error) => {console.log("error200")});
+   console.log(state);
   };
 
   // BGM再生用（音量なども調整）
@@ -77,29 +98,34 @@ export default class TitleScreen extends Component {
         res.sound.setOnPlaybackStatusUpdate((status) => {
            if (!status.didJustFinish) return;
            console.log('Unloading ' + state);
-           res.sound.unloadAsync().catch(() => {});
+           res.sound.unloadAsync().catch(() => {console.log("error777")});
         });
-     }).catch((error) => {});
+     }).catch((error) => {console.log("error1")});
       await state.setVolumeAsync(inputVol)
       .then((res) => {
         res.sound.setOnPlaybackStatusUpdate((status) => {
            if (!status.didJustFinish) return;
            console.log('UnVol ' + state);
-           res.sound.unloadAsync().catch(() => {});
+           res.sound.unloadAsync().catch(() => {console.log("error2")});
         });
-     }).catch((error) => {});//音量
+     }).catch((error) => {console.log("error3")});//音量
       await state.playAsync()
       .then((res) => {
         res.sound.setOnPlaybackStatusUpdate((status) => {
            if (!status.didJustFinish) return;
            console.log('UnPlay ' + state);
-           res.sound.unloadAsync().catch(() => {});
+           res.sound.unloadAsync().catch(() => {console.log("error4")});
         });
-     }).catch((error) => {});//スタート
+     }).catch((error) => {console.log("error5")});//スタート
+     console.log(state);
   };
 
   componentWillUnmount(){
     this.stopBgm(this.state.bgm.title);
+    this.stopBgm(this.state.bgm.change);
+
+    // this.stopBgm(soundObject);
+    // stopEffectSound();
   }
 
   // restartSound = async(state) =>{
@@ -138,17 +164,11 @@ export default class TitleScreen extends Component {
         //   break;
         case "切り抜きチャンピオンシップ":
           playEffectSound(Sounds.katou7,0.5)
-          .then(()=>{
-            // 
-          });
           this.stopBgm(this.state.bgm.title);
           return this.props.navigation.navigate(destination);    
 
         case "カトモン生成":
           playEffectSound(Sounds.katou8,1)
-          .then(()=>{
-            // 
-          });
           this.stopBgm(this.state.bgm.title);
           return this.props.navigation.navigate(destination);
         
@@ -203,30 +223,59 @@ export default class TitleScreen extends Component {
             </TouchableOpacity>
             {/* <TouchableOpacity
               onPress={() =>
-                this.goto('クレジット')
+                this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03)
               }
               style = {styles.bottun}
             >
               <Text style={{color : "#00ffff",textAlign:"center",
               fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
             }}>
-                クレジット
+                サウンド再生テスト
               </Text>
-            </TouchableOpacity> */}
-            {/* <TouchableOpacity
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() =>
-                this.restartSound(this.state.bgm.title)
+                this.soundStart(this.state.bgm.title,Sounds.battle4, 0.03)
               }
               style = {styles.bottun}
             >
-              <Text style={{color : "#00ffff",textAlign:"center"}}>
-                BGM再再生
+              <Text style={{color : "#00ffff",textAlign:"center",
+              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
+            }}>
+                サウンド再生テスト2
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() =>
+                this.stopBgm(this.state.bgm.title)
+              }
+              style = {styles.bottun}
+            >
+              <Text style={{color : "#00ffff",textAlign:"center",
+              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
+            }}>
+                サウンド停止テスト
               </Text>
             </TouchableOpacity> */}
+            
           </View>
         </View>
 
         <BannerAd/>
+        <View style={{position:"absolute",bottom:0,right:0}}>
+        <TouchableOpacity
+              onPress={() =>
+                this.goto('クレジット')
+              }
+              style = {{width:Math.round(Constants.MAX_WIDTH/3)}}
+            >
+              <Text style={{color : "#696969",textAlign:"center",
+              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
+            }}>
+                クレジット
+              </Text>
+            </TouchableOpacity>
+        </View>
       </View>
     );
   }

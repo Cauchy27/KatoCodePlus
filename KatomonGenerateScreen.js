@@ -305,7 +305,7 @@ export default class KatomonGenerateScreen extends Component {
 
     this.setState({
       // パワー
-      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+50,
+      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+100,
       // 勢い
       katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000)+10,
        // 守り
@@ -356,7 +356,7 @@ export default class KatomonGenerateScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync()
+    await state.unloadAsync()
     .then((res) => {
       res.sound.setOnPlaybackStatusUpdate((status) => {
          if (!status.didJustFinish) return;

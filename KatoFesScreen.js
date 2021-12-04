@@ -12,6 +12,7 @@ import {
   Text,
   ScrollView,
   Platform,
+  Animated,
 } from 'react-native';
 import Constants from './Constants';
 import Images from './assets/Images';
@@ -62,11 +63,15 @@ export default class FesScreen extends Component {
       winning:false,
       endFlag:false,
 
+      opacity: new Animated.Value(0),
+      animatedFlag:false,
+
       changeGuts:false,
 
       firstFlag:true,
 
-      // restartFlag:false,
+      startFlag:false,
+      count:2,
 
       // 戦闘のステータス関連
       p1Personality:1,//>１だと前進しやすい
@@ -116,6 +121,14 @@ export default class FesScreen extends Component {
     };
   }
 
+  animate() {
+    // console.log("run");
+    Animated.timing(this.state.opacity, {
+      toValue: 1,
+      duration: 600*3,
+      useNativeDriver:true,
+    }).start();
+  }
 
   // 広告
   Interstitial =async()=>{
@@ -150,7 +163,7 @@ export default class FesScreen extends Component {
   };
 
   stopBgm =async(state)=>{
-    await state.stopAsync()
+    await state.unloadAsync()
     .then((res) => {
       res.sound.setOnPlaybackStatusUpdate((status) => {
          if (!status.didJustFinish) return;
@@ -572,160 +585,180 @@ export default class FesScreen extends Component {
   }
 
   // 再戦
-  reStart = async(count) =>{
+  start = async(count) =>{
+    // 連打で間違って入っても二重にsystemを起動しないため
     if(this.state.runnning){
+      console.log("running");
+      return;
+    }
+    // 二重スタート防止
+    if(this.state.startFlag){
       return
     }
-    if(this.state.firstFlag){
-      this.setState(state =>  ({
-        firstFlag:false,
-      }));
-    }
+    this.setState(state =>  ({
+      startFlag:true,
+    })); 
 
-    playEffectSound(Sounds.yaruo,1);
+    // 戦闘の余韻を残すための遅延
+    setTimeout(()=>{
 
-      this.stopBgm(this.state.soundPreload.bgm.breaking);
-      this.state.roundCount = count;
-      this.state.soundPreload.bgm.breaking = new Audio.Sound;
-      this.state.soundPreload.bgm.battle1 = new Audio.Sound;
-      // ラウンド判定
-      switch(this.state.roundCount){
-        case 1:
-          console.log("1");
-          this.setState(state =>  ({
-            p2MOVE_1:KatoFesP2Data.hiroyuki.move.move1,
-            p2MOVE_2:KatoFesP2Data.hiroyuki.move.move2,
-            p2MOVE_3:KatoFesP2Data.hiroyuki.move.move3,
-            p2Katomon:KatoFesP2Data.hiroyuki.image,
-  
-            p2Personality:KatoFesP2Data.hiroyuki.personality,
-            p2Name:KatoFesP2Data.hiroyuki.name,
-            p2HP:KatoFesP2Data.hiroyuki.status.HP,
-            p2Guts:KatoFesP2Data.hiroyuki.status.Guts,
-            p2ATK:KatoFesP2Data.hiroyuki.status.ATK,
-            p2DEF:KatoFesP2Data.hiroyuki.status.DEF,
-  
-            p2HPmax:KatoFesP2Data.hiroyuki.status.HP,
-          })); 
-          this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle2,0.03);
-          break;
-  
-          case 2:
-            console.log("2");
-            this.setState(state =>  ({
-              p2MOVE_1:KatoFesP2Data.gear.move.move1,
-              p2MOVE_2:KatoFesP2Data.gear.move.move2,
-              p2MOVE_3:KatoFesP2Data.gear.move.move3,
-              p2Katomon:KatoFesP2Data.gear.image,
-    
-              p2Personality:KatoFesP2Data.gear.personality,
-              p2Name:KatoFesP2Data.gear.name,
-              p2HP:KatoFesP2Data.gear.status.HP,
-              p2Guts:KatoFesP2Data.gear.status.Guts,
-              p2ATK:KatoFesP2Data.gear.status.ATK,
-              p2DEF:KatoFesP2Data.gear.status.DEF,
-    
-              p2HPmax:KatoFesP2Data.gear.status.HP,
-            }));     
-            this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle5,0.03);
-            break;
-  
-            case 3:
-              console.log("3");
-              this.setState(state =>  ({
-                p2MOVE_1:KatoFesP2Data.nise.move.move1,
-                p2MOVE_2:KatoFesP2Data.nise.move.move2,
-                p2MOVE_3:KatoFesP2Data.nise.move.move3,
-                p2Katomon:KatoFesP2Data.nise.image,
-      
-                p2Personality:KatoFesP2Data.nise.personality,
-                p2Name:KatoFesP2Data.nise.name,
-                p2HP:KatoFesP2Data.nise.status.HP,
-                p2Guts:KatoFesP2Data.nise.status.Guts,
-                p2ATK:KatoFesP2Data.nise.status.ATK,
-                p2DEF:KatoFesP2Data.nise.status.DEF,
-      
-                p2HPmax:KatoFesP2Data.nise.status.HP,
-              }));     
-              this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle3,0.03);
-              break;
-  
-              case 4:
-                console.log("4");
-                this.setState(state =>  ({
-                  p2MOVE_1:KatoFesP2Data.naranton.move.move1,
-                  p2MOVE_2:KatoFesP2Data.naranton.move.move2,
-                  p2MOVE_3:KatoFesP2Data.naranton.move.move3,
-                  p2Katomon:KatoFesP2Data.naranton.image,
-        
-                  p2Personality:KatoFesP2Data.naranton.personality,
-                  p2Name:KatoFesP2Data.naranton.name,
-                  p2HP:KatoFesP2Data.naranton.status.HP,
-                  p2Guts:KatoFesP2Data.naranton.status.Guts,
-                  p2ATK:KatoFesP2Data.naranton.status.ATK,
-                  p2DEF:KatoFesP2Data.naranton.status.DEF,
-        
-                  p2HPmax:KatoFesP2Data.naranton.status.HP,
-                }));     
-                this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle1,0.03);
-                break;
-  
-              case 5:
-                console.log("5");
-                this.setState(state =>  ({
-                  p2MOVE_1:KatoFesP2Data.golden_naoko.move.move1,
-                  p2MOVE_2:KatoFesP2Data.golden_naoko.move.move2,
-                  p2MOVE_3:KatoFesP2Data.golden_naoko.move.move3,
-                  p2Katomon:KatoFesP2Data.golden_naoko.image,
-  
-                  p2Personality:KatoFesP2Data.golden_naoko.personality,
-                  p2Name:KatoFesP2Data.golden_naoko.name,
-                  p2HP:KatoFesP2Data.golden_naoko.status.HP,
-                  p2Guts:KatoFesP2Data.golden_naoko.status.Guts,
-                  p2ATK:KatoFesP2Data.golden_naoko.status.ATK,
-                  p2DEF:KatoFesP2Data.golden_naoko.status.DEF,
-  
-                  p2HPmax:KatoFesP2Data.golden_naoko.status.HP,
-                }));     
-                this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle4,0.03);
-                break;
-  
-                case 6:
-                  return 0;
-  
+      if(this.state.firstFlag){
+        this.setState(state =>  ({
+          firstFlag:false,
+        }));
       }
   
-      //ゲーム再スタートのための初期化
-      this.setState(state =>  ({
-        running:true,
-        winning:false,
-        now: Date.now(),
-        startTime: Date.now(),
+          playEffectSound(Sounds.yaruo,1);
   
-        position1X: 50,
-        position2X: Constants.MAX_WIDTH - 150,
-
-        p2PoissonFlag:false,
-        p1PoissonFlag:false,
-
-        changeGuts:false,
-  
-        timer:55,
-  
-        // 戦闘のステータス関連
-        p1Personality:1,
-        p1HP:this.props.route.params.katomonPower,
-        p1Guts:0,
-        p1ATK:this.props.route.params.katomonikioi,
-        p1DEF:this.props.route.params.katomonMamori,
-      }));     
-
-      console.log(this.state.p1Name.length);
-      console.log(this.state.p2Name.length);
+        this.stopBgm(this.state.soundPreload.bgm.breaking);
+        this.state.roundCount = count;
+        // this.state.soundPreload.bgm.breaking = new Audio.Sound;
+        // this.state.soundPreload.bgm.battle1 = new Audio.Sound;
+        // ラウンド判定
+        switch(this.state.roundCount){
+          case 1:
+            console.log("1");
+            this.setState(state =>  ({
+              p2MOVE_1:KatoFesP2Data.hiroyuki.move.move1,
+              p2MOVE_2:KatoFesP2Data.hiroyuki.move.move2,
+              p2MOVE_3:KatoFesP2Data.hiroyuki.move.move3,
+              p2Katomon:KatoFesP2Data.hiroyuki.image,
+    
+              p2Personality:KatoFesP2Data.hiroyuki.personality,
+              p2Name:KatoFesP2Data.hiroyuki.name,
+              p2HP:KatoFesP2Data.hiroyuki.status.HP,
+              p2Guts:KatoFesP2Data.hiroyuki.status.Guts,
+              p2ATK:KatoFesP2Data.hiroyuki.status.ATK,
+              p2DEF:KatoFesP2Data.hiroyuki.status.DEF,
+    
+              p2HPmax:KatoFesP2Data.hiroyuki.status.HP,
+            })); 
+            this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle2,0.03);
+            break;
+    
+            case 2:
+              console.log("2");
+              this.setState(state =>  ({
+                p2MOVE_1:KatoFesP2Data.gear.move.move1,
+                p2MOVE_2:KatoFesP2Data.gear.move.move2,
+                p2MOVE_3:KatoFesP2Data.gear.move.move3,
+                p2Katomon:KatoFesP2Data.gear.image,
       
-      this.intervalId = this.system();
+                p2Personality:KatoFesP2Data.gear.personality,
+                p2Name:KatoFesP2Data.gear.name,
+                p2HP:KatoFesP2Data.gear.status.HP,
+                p2Guts:KatoFesP2Data.gear.status.Guts,
+                p2ATK:KatoFesP2Data.gear.status.ATK,
+                p2DEF:KatoFesP2Data.gear.status.DEF,
+      
+                p2HPmax:KatoFesP2Data.gear.status.HP,
+              }));     
+              this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle5,0.03);
+              break;
+    
+              case 3:
+                console.log("3");
+                this.setState(state =>  ({
+                  p2MOVE_1:KatoFesP2Data.nise.move.move1,
+                  p2MOVE_2:KatoFesP2Data.nise.move.move2,
+                  p2MOVE_3:KatoFesP2Data.nise.move.move3,
+                  p2Katomon:KatoFesP2Data.nise.image,
+        
+                  p2Personality:KatoFesP2Data.nise.personality,
+                  p2Name:KatoFesP2Data.nise.name,
+                  p2HP:KatoFesP2Data.nise.status.HP,
+                  p2Guts:KatoFesP2Data.nise.status.Guts,
+                  p2ATK:KatoFesP2Data.nise.status.ATK,
+                  p2DEF:KatoFesP2Data.nise.status.DEF,
+        
+                  p2HPmax:KatoFesP2Data.nise.status.HP,
+                }));     
+                this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle3,0.03);
+                break;
+    
+                case 4:
+                  console.log("4");
+                  this.setState(state =>  ({
+                    p2MOVE_1:KatoFesP2Data.naranton.move.move1,
+                    p2MOVE_2:KatoFesP2Data.naranton.move.move2,
+                    p2MOVE_3:KatoFesP2Data.naranton.move.move3,
+                    p2Katomon:KatoFesP2Data.naranton.image,
+          
+                    p2Personality:KatoFesP2Data.naranton.personality,
+                    p2Name:KatoFesP2Data.naranton.name,
+                    p2HP:KatoFesP2Data.naranton.status.HP,
+                    p2Guts:KatoFesP2Data.naranton.status.Guts,
+                    p2ATK:KatoFesP2Data.naranton.status.ATK,
+                    p2DEF:KatoFesP2Data.naranton.status.DEF,
+          
+                    p2HPmax:KatoFesP2Data.naranton.status.HP,
+                  }));     
+                  this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle1,0.03);
+                  break;
+    
+                case 5:
+                  console.log("5");
+                  this.setState(state =>  ({
+                    p2MOVE_1:KatoFesP2Data.golden_naoko.move.move1,
+                    p2MOVE_2:KatoFesP2Data.golden_naoko.move.move2,
+                    p2MOVE_3:KatoFesP2Data.golden_naoko.move.move3,
+                    p2Katomon:KatoFesP2Data.golden_naoko.image,
+    
+                    p2Personality:KatoFesP2Data.golden_naoko.personality,
+                    p2Name:KatoFesP2Data.golden_naoko.name,
+                    p2HP:KatoFesP2Data.golden_naoko.status.HP,
+                    p2Guts:KatoFesP2Data.golden_naoko.status.Guts,
+                    p2ATK:KatoFesP2Data.golden_naoko.status.ATK,
+                    p2DEF:KatoFesP2Data.golden_naoko.status.DEF,
+    
+                    p2HPmax:KatoFesP2Data.golden_naoko.status.HP,
+                  }));     
+                  this.soundStart(this.state.soundPreload.bgm.battle1,Sounds.battle4,0.03);
+                  break;
+    
+                  case 6:
+                    return 0;
+    
+        }
+    
+        //ゲーム再スタートのための初期化
+        this.setState(state =>  ({
+          running:true,
+          winning:false,
+          now: Date.now(),
+          startTime: Date.now(),
+    
+          position1X: 50,
+          position2X: Constants.MAX_WIDTH - 150,
   
-      return this.intervalId;
+          p2PoissonFlag:false,
+          p1PoissonFlag:false,
+  
+          opacity: new Animated.Value(0),
+          animatedFlag:false,
+
+          startFlag:false,
+  
+          changeGuts:false,
+    
+          timer:55,
+    
+          // 戦闘のステータス関連
+          p1Personality:1,
+          p1HP:this.props.route.params.katomonPower,
+          p1Guts:0,
+          p1ATK:this.props.route.params.katomonikioi,
+          p1DEF:this.props.route.params.katomonMamori,
+        }));     
+  
+        // console.log(this.state.p1Name.length);
+        // console.log(this.state.p2Name.length);
+        
+        this.intervalId = this.system();
+    
+        return this.intervalId;
+    },1000*this.state.count);
+
   }
 
   goto = async(destination) => {
@@ -734,17 +767,16 @@ export default class FesScreen extends Component {
       switch(destination){
         case "クレジット":
           await this.stopBgm(this.state.soundPreload.bgm.breaking);
-          playEffectSound(Sounds.arigatone,1);
+          setTimeout(()=>playEffectSound(Sounds.arigatone,1),1000);
           break;
       }
       this.setState({
-        roundCount:1,
-        running:true,
-        winning:false,
-        endFlag:false,
+        // roundCount:1,
+        // running:true,
+        // winning:false,
+        // endFlag:false,
       });
-
-      this.props.navigation.navigate(destination)
+      setTimeout(()=>this.props.navigation.navigate(destination),2000);
     } 
     catch (error) {
       console.log('error...');
@@ -752,6 +784,9 @@ export default class FesScreen extends Component {
   }
   
   render(){
+    if(this.state.firstFlag){
+      this.animate();
+    }
 
     if(this.state.running){
 
@@ -763,6 +798,7 @@ export default class FesScreen extends Component {
         this.stopBgm(this.state.soundPreload.bgm.battle1);
         if(this.state.p1HP/this.state.p1HPmax <= this.state.p2HP/this.state.p2HPmax){
           this.state.running = false;
+
           // 負け広告
           var random = Math.random();
           if(random < 0.2){
@@ -787,8 +823,10 @@ export default class FesScreen extends Component {
           }
           else{
             this.state.winning = true;
+            this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
           }
         }
+        this.animate();
         // this.state.timer = 55;
       }else{
         // this.state.running = false;
@@ -799,11 +837,12 @@ export default class FesScreen extends Component {
               this.state.running = false;
               // 負け広告
               var random = Math.random();
-            if(random < 0.2){
-              this.Interstitial()
-            }
+              if(random < 0.2){
+                this.Interstitial()
+              }
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.gameOver,0.03);
               this.state.running = false
+              this.animate();
             }
             // this.state.timer = 55;
           }
@@ -813,26 +852,30 @@ export default class FesScreen extends Component {
           var random_win = Math.random();
           if(random_win < 0.33){
             this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
+            this.animate();
           }else{
             if(random_win < 0.66){
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.kenia,0.5);
+              this.animate();
             }else{
               this.startBreakingBgm(Sounds.say,3);
+              this.animate();
             }
           }
             if(this.state.roundCount>=5){
               // this.state.running = false;
               this.state.endFlag = true;
               this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.battle4,0.03);
+              this.animate();
             }
             else{
               // this.state.running = false;
               this.state.winning = true;
+              this.soundStart(this.state.soundPreload.bgm.breaking,Sounds.next1,0.5);
+              this.animate();
             }
-        }
-    }
-
-      // this.state.timer = 55;
+        } 
+      }
      }
 
     return(
@@ -1055,8 +1098,8 @@ export default class FesScreen extends Component {
                       marginBottom: "3%",
                       marginRight: "5%",
                       marginRight:"5%",
-                      paddingLeft:"10%",
-                      paddingRight:"10%",
+                      paddingLeft:"5%",
+                      paddingRight:"5%",
                       paddingTop:"5%",
                       paddingBottom:"5%",
                       borderRadius:50,
@@ -1065,12 +1108,22 @@ export default class FesScreen extends Component {
                     onPress={this.changeGuts}
                   >
                     <Text style={{
-                      fontSize: 20,
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
                       fontWeight: 'bold',
-                      color:"eee",
+                      color:"#eee",
                       textAlign:'center',
                     }}>
-                      ガッツ温存しろ！
+                      ガッツ温存！
+                    </Text>
+                    <Text style={{
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
+                      fontWeight: 'bold',
+                      color:"#eee",
+                      textAlign:'center',
+                    }}>
+                      に変更
                     </Text>
                   </TouchableOpacity>
               </View>
@@ -1095,8 +1148,8 @@ export default class FesScreen extends Component {
                       marginBottom: "3%",
                       marginRight: "5%",
                       marginRight:"5%",
-                      paddingLeft:"10%",
-                      paddingRight:"10%",
+                      paddingLeft:"5%",
+                      paddingRight:"5%",
                       paddingTop:"5%",
                       paddingBottom:"5%",
                       borderRadius:50,
@@ -1105,12 +1158,22 @@ export default class FesScreen extends Component {
                     onPress={this.changeGuts}
                   >
                     <Text style={{
-                      fontSize: 20,
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
                       fontWeight: 'bold',
                       // fontFamily: 'DotGothic16_400Regular',
                       textAlign:'center',
                     }}>
                       ガッツ使え！
+                    </Text>
+                    <Text style={{
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
+                      fontWeight: 'bold',
+                      // fontFamily: 'DotGothic16_400Regular',
+                      textAlign:'center',
+                    }}>
+                      に変更
                     </Text>
                   </TouchableOpacity>
               </View>
@@ -1132,53 +1195,105 @@ export default class FesScreen extends Component {
                     onPress={this.addGuts}
                   >
                     <Text style={{
-                      fontSize: 20,
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
                       fontWeight: 'bold',
                       // fontFamily: 'DotGothic16_400Regular',
                       textAlign:'center',
                     }}>
-                      応援:ガッツ増加
+                      応援
+                    </Text>
+                    <Text style={{
+                      fontSize: Math.round(Constants.MAX_WIDTH/15),
+                      height:Math.round(Constants.MAX_WIDTH/15+5),
+                      fontWeight: 'bold',
+                      // fontFamily: 'DotGothic16_400Regular',
+                      textAlign:'center',
+                    }}>
+                      (ガッツ増加)
                     </Text>
                   </TouchableOpacity>
             </View>
           </View>
         )}
+      
         {/* ポップアップ */}
         {!this.state.running && !this.state.winning && !this.state.firstFlag && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount)}>
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>敗戦...</Text>
-              <Text style={styles.gameOverSubText}>立ち上がる☜</Text>
-            </View>
-          </TouchableOpacity>
+          <Animated.View style={{ opacity: this.state.opacity,position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flex: 1,}}>
+            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.start(this.state.roundCount)}>
+              <View style={styles.fullScreen}>
+                <Text style={styles.gameOverText}>敗戦...</Text>
+                <Text style={styles.gameOverSubText}>立ち上がる☜</Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
         )}
         {this.state.winning && this.state.roundCount <=3 && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>大勝利!!</Text>
-              <Text style={styles.gameOverText}>{this.state.roundCount+1}戦目へ ☜</Text>
-            </View>
-          </TouchableOpacity>
+          <Animated.View style={{ opacity: this.state.opacity,position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flex: 1,}}>
+            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.start(this.state.roundCount+1)}>
+              <View style={styles.fullScreen}>
+                <Text style={styles.gameOverText}>大勝利!!</Text>
+                <Text style={styles.gameOverText}>{this.state.roundCount+1}戦目へ ☜</Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
         )}
         {this.state.winning && this.state.roundCount >=4 && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(this.state.roundCount+1)}>
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>最終決戦へ...!!</Text>
-              <Text style={styles.gameOverSubText}>準備はいいですか...？</Text>
-            </View>
-          </TouchableOpacity>
+          <Animated.View style={{ opacity: this.state.opacity,position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flex: 1,}}>
+            <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.start(this.state.roundCount+1)}>
+              <View style={styles.fullScreen}>
+                <Text style={styles.gameOverText}>最終決戦へ...!!</Text>
+                <Text style={styles.gameOverSubText}>準備はいいですか...？</Text>
+              </View>
+            </TouchableOpacity>
+          </Animated.View>
         )}
         {this.state.endFlag && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.goto("クレジット")}>
-            <View style={styles.fullScreen}>
-              <Text style={styles.gameOverText}>おめでとうございます!!</Text>
-              <Text style={styles.gameOveSubrText}>遊んでいただきありがとうございました！！</Text>
-              <Text style={styles.gameOverSubText}> TAP☜</Text>
+          <Animated.View style={{ opacity: this.state.opacity,position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flex: 1,}}>
+            <View style={styles.fullScreenButton} >
+              <View style={styles.fullScreen}>
+                <Text style={styles.gameOverText}>おめでとうございます!!</Text>
+                <Text style={styles.gameOveSubrText}>遊んでいただきありがとうございました！！</Text>
+                <Text style={styles.gameOverSubText}>----------------------------------------</Text>
+                <TouchableOpacity 
+                  style={{height:Math.round(Constants.MAX_WIDTH/20)+5,backgroundColor:"#eee"}}
+                  onPress={() =>this.goto("クレジット")}
+                >
+                  <Text style={styles.gameOverText}> クレジットへ ☜</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
+          </Animated.View>
         )}
         {this.state.firstFlag && !this.state.running && (
-          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.reStart(1)}>
+          <Animated.View style={{ opacity: this.state.opacity,position: 'absolute',
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          flex: 1,}}>
+      
+          <TouchableOpacity style={styles.fullScreenButton} onPress={() =>this.start(1)}>
             <View style={styles.fullScreen}>
               <Text style={styles.gameOverText}>戦闘開始！</Text>
               <Text style={styles.gameOverSubText}>----------------------------------------</Text>
@@ -1190,6 +1305,7 @@ export default class FesScreen extends Component {
               <Text style={styles.gameOverText}>  START ☜</Text>
             </View>
           </TouchableOpacity>
+              </Animated.View>
         )}
       </SafeAreaView>
     );
@@ -1241,8 +1357,8 @@ const styles = StyleSheet.create({
     marginBottom: "3%",
     marginRight: "5%",
     marginRight:"5%",
-    paddingLeft:"10%",
-    paddingRight:"10%",
+    paddingLeft:"5%",
+    paddingRight:"5%",
     paddingTop:"5%",
     paddingBottom:"5%",
     borderRadius:50,
