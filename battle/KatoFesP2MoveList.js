@@ -12,7 +12,7 @@ export default KatoFesP2MoveList = {
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
         change:-50,//変化量
       },
-      additional1:{
+      additional2:{
         param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
         change:10,//変化量
       },
@@ -29,7 +29,7 @@ export default KatoFesP2MoveList = {
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
         change:-50,//変化量
       },
-      additional1:{
+      additional2:{
         param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)
         change:10,//変化量
       },
@@ -53,7 +53,7 @@ export default KatoFesP2MoveList = {
       sound:Sounds.gear2,//音声ファイルのディレクトリ指定
       power:35,
       consumption_Guts:100,
-      add_Guts:150,
+      add_Guts:50,
       range:200,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
@@ -63,18 +63,30 @@ export default KatoFesP2MoveList = {
         param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
         change:100,//変化量
       },
+      additional3:{
+        param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)
+        change:100,//変化量
+      },
       personality:1.1,//移動に影響する性格の設定
     },
     craver:{
       name:"クレーバー",
       sound:Sounds.gear1,//音声ファイルのディレクトリ指定
       power:200,
-      consumption_Guts:120,
+      consumption_Guts:110,
       add_Guts:0,
       range:600,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-50,//変化量
+        change:-100,//変化量
+      },
+      additional2:{
+        param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)
+        change:50,//変化量
+      },
+      additional3:{
+        param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
+        change:100,//変化量
       },
       personality:0.7,//移動に影響する性格の設定
     },
@@ -82,8 +94,8 @@ export default KatoFesP2MoveList = {
     watch:{
       name:"放送を見る",
       sound:Sounds.yatteru,//音声ファイルのディレクトリ指定
-      power:20,
-      consumption_Guts:50,
+      power:70,
+      consumption_Guts:70,
       add_Guts:0,
       range:1000,
       additional1:{
@@ -105,7 +117,7 @@ export default KatoFesP2MoveList = {
       name:"どくどく",
       sound:Sounds.sepia,//音声ファイルのディレクトリ指定
       power:20,
-      consumption_Guts:50,
+      consumption_Guts:90,
       add_Guts:10,
       range:500,
       additional1:{
@@ -122,8 +134,8 @@ export default KatoFesP2MoveList = {
       name:"龍のような舞",
       sound:Sounds.katou2,//音声ファイルのディレクトリ指定
       power:20,
-      consumption_Guts:70,
-      add_Guts:200,
+      consumption_Guts:90,
+      add_Guts:50,
       range:500,
       additional1:{
         param:"p2Poisson",//変化するパラメータ(position/HP/ATK,,,)
@@ -148,7 +160,11 @@ export default KatoFesP2MoveList = {
       range:200,
       additional1:{
         param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-        change:-50,//変化量
+        change:-150,//変化量
+      },
+      additional2:{
+        param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
+        change:100,//変化量
       },
       personality:1.1,//移動に影響する性格の設定
     },
@@ -156,18 +172,18 @@ export default KatoFesP2MoveList = {
       name:"いそがしい",
       sound:Sounds.katou3,//音声ファイルのディレクトリ指定
       power:30,
-      consumption_Guts:70,
-      add_Guts:10,
+      consumption_Guts:90,
+      add_Guts:30,
       range:400,
       additional1:{
         param:"p2HP",//変化するパラメータ(position/HP/ATK,,,)
         change:100,//変化量
       },
-      additional1:{
+      additional2:{
         param:"p2ATK",//変化するパラメータ(position/HP/ATK,,,)
         change:100,//変化量
       },
-      additional1:{
+      additional3:{
         param:"p2DEF",//変化するパラメータ(position/HP/ATK,,,)
         change:100,//変化量
       },

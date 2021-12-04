@@ -302,7 +302,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1ATK/this.state.p2DEF }));
           // Guts消費
-          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts}));
+          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts+this.state.p1MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p1MOVE_1.additional1){
             this.paramChange(this.state.p1MOVE_1.additional1.param,this.state.p1MOVE_1.additional1.change);
@@ -325,7 +325,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1ATK/this.state.p2DEF }));
           // Guts消費
-          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts}));
+          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts+this.state.p1MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p1MOVE_2.additional1){
             this.paramChange(this.state.p1MOVE_2.additional1.param,this.state.p1MOVE_2.additional1.change);
@@ -348,7 +348,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_3.power  * this.state.p1ATK/this.state.p2DEF }));
           // Guts消費
-          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_3.consumption_Guts}));
+          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_3.consumption_Guts+this.state.p1MOVE_3.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p1MOVE_3.additional1){
             this.paramChange(this.state.p1MOVE_3.additional1.param,this.state.p1MOVE_3.additional1.change);
@@ -378,7 +378,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power  * this.state.p2ATK/this.state.p1DEF }));
           // Guts消費
-          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts}));
+          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts+this.state.p2MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p2MOVE_1.additional1){
             this.paramChange(this.state.p2MOVE_1.additional1.param,this.state.p2MOVE_1.additional1.change);
@@ -401,7 +401,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2ATK/this.state.p1DEF}));
           // Guts消費
-          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts}));
+          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts+this.state.p2MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p2MOVE_2.additional1){
             this.paramChange(this.state.p2MOVE_2.additional1.param,this.state.p2MOVE_2.additional1.change);
@@ -424,7 +424,7 @@ export default class FesScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_3.power * this.state.p2ATK/this.state.p1DEF}));
           // Guts消費
-          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_3.consumption_Guts}));
+          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_3.consumption_Guts+this.state.p2MOVE_3.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p2MOVE_3.additional1){
             this.paramChange(this.state.p2MOVE_3.additional1.param,this.state.p2MOVE_3.additional1.change);
@@ -767,7 +767,7 @@ export default class FesScreen extends Component {
       switch(destination){
         case "クレジット":
           await this.stopBgm(this.state.soundPreload.bgm.breaking);
-          setTimeout(()=>playEffectSound(Sounds.arigatone,1),1000);
+          setTimeout(()=>playEffectSound(Sounds.arigatone,1),3000);
           break;
       }
       this.setState({
@@ -1270,19 +1270,17 @@ export default class FesScreen extends Component {
           left: 0,
           right: 0,
           flex: 1,}}>
-            <View style={styles.fullScreenButton} >
+            <TouchableOpacity 
+                  style={styles.fullScreenButton}
+                  onPress={() =>this.goto("クレジット")}
+                >
               <View style={styles.fullScreen}>
                 <Text style={styles.gameOverText}>おめでとうございます!!</Text>
                 <Text style={styles.gameOverSubText}>遊んでいただきありがとうございました！！</Text>
                 <Text style={styles.gameOverSubText}>----------------------------------------</Text>
-                <TouchableOpacity 
-                  style={{height:Math.round(Constants.MAX_WIDTH/20)+5,}}
-                  onPress={() =>this.goto("クレジット")}
-                >
-                  <Text style={styles.gameOverText}> クレジットへ ☜</Text>
-                </TouchableOpacity>
+                <Text style={styles.gameOverText}> クレジットへ ☜</Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </Animated.View>
         )}
         {this.state.firstFlag && !this.state.running && (

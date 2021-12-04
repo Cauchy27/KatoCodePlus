@@ -1228,7 +1228,7 @@ export default class ChampionshipScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()*30}));
           // Guts消費
-          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts}));
+          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts + this.state.p1MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p1MOVE_1.additional1){
             this.paramChange(this.state.p1MOVE_1.additional1.param,this.state.p1MOVE_1.additional1.change);
@@ -1251,7 +1251,7 @@ export default class ChampionshipScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()*10}));
           // Guts消費
-          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts}));
+          this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts + this.state.p1MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p1MOVE_2.additional1){
             this.paramChange(this.state.p1MOVE_2.additional1.param,this.state.p1MOVE_2.additional1.change);
@@ -1280,7 +1280,7 @@ export default class ChampionshipScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()*30}));
           // Guts消費
-          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts}));
+          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts + this.state.p2MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p2MOVE_1.additional1){
             this.paramChange(this.state.p2MOVE_1.additional1.param,this.state.p2MOVE_1.additional1.change);
@@ -1303,7 +1303,7 @@ export default class ChampionshipScreen extends Component {
           // 相手のHP減少
           this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()*10}));
           // Guts消費
-          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts}));
+          this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts + this.state.p2MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
           if(this.state.p2MOVE_2.additional1){
             this.paramChange(this.state.p2MOVE_2.additional1.param,this.state.p2MOVE_2.additional1.change);
@@ -1834,7 +1834,7 @@ export default class ChampionshipScreen extends Component {
       position1X: 0,
       position2X: Constants.MAX_WIDTH - 90-20,
 
-      timer:15,
+      timer:20,
 
       p1HP:1000,
       p2HP:1000,

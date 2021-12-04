@@ -6,7 +6,7 @@ export default KatoFesP2Data = {
     name:"ひ◯ゆき",
     status:{
       HP:500,
-      Guts:0,
+      Guts:50,
       ATK:10,
       DEF:10,
     },
@@ -22,7 +22,7 @@ export default KatoFesP2Data = {
     name:"ギア",
     status:{
       HP:1250,
-      Guts:50,
+      Guts:100,
       ATK:50,
       DEF:30,
     },
@@ -38,10 +38,10 @@ export default KatoFesP2Data = {
   nise:{
     name:"糸屯一",
     status:{
-      HP:500,
+      HP:1500,
       Guts:0,
       ATK:60,
-      DEF:10,
+      DEF:60,
     },
     personality:0.7,
     image:Images.nise,
@@ -54,10 +54,10 @@ export default KatoFesP2Data = {
   naranton:{
     name:"ナラントン◯ラグ",
     status:{
-      HP:2500,
-      Guts:0,
+      HP:5000,
+      Guts:150,
       ATK:100,
-      DEF:50,
+      DEF:100,
     },
     personality:1.4,
     image:Images.naranton,
@@ -70,7 +70,7 @@ export default KatoFesP2Data = {
   golden_naoko:{
     name:"金な◯こ",
     status:{
-      HP:5000,
+      HP:10000,
       Guts:300,
       ATK:500,
       DEF:500,

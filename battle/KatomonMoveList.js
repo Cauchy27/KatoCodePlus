@@ -16,6 +16,10 @@ export default KatomonMoveList = {
       param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
       change:50,//変化量
     },
+    additional3:{
+      param:"p1HP",//変化するパラメータ(position/HP/ATK,,,)
+      change:10,//変化量
+    },
     personality:1,//移動に影響する性格の設定
   },
   gaia:{
@@ -84,6 +88,14 @@ export default KatomonMoveList = {
       param:"p1ATK",//変化するパラメータ(position/HP/ATK,,,)
       change:100,//変化量
     },
+    additional2:{
+      param:"p1HP",//変化するパラメータ(position/HP/ATK,,,)
+      change:50,//変化量
+    },
+    additional3:{
+      param:"p1Poisson",//変化するパラメータ(position/HP/ATK,,,)
+      change:50,//変化量
+    },
     personality:1.3,//移動に影響する性格の設定
   },
   kisei:{
@@ -110,6 +122,10 @@ export default KatomonMoveList = {
       param:"position2x",//変化するパラメータ(position/HP/ATK,,,)
       change:30,//変化量
     },
+    additional2:{
+      param:"p1Poisson",//変化するパラメータ(position/HP/ATK,,,)
+      change:2,//変化量
+    },
     personality:1.1,//移動に影響する性格の設定
   },
   fuji:{
@@ -122,6 +138,10 @@ export default KatomonMoveList = {
     additional1:{
       param:"p1DEF",//変化するパラメータ(position/HP/ATK,,,)
       change:50,//変化量
+    },
+    additional2:{
+      param:"p1Poisson",//変化するパラメータ(position/HP/ATK,,,)
+      change:5,//変化量
     },
     personality:1.1,//移動に影響する性格の設定
   },
