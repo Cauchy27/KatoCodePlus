@@ -1780,25 +1780,33 @@ export default class ChampionshipScreen extends Component {
             // 1の勝ち抜け
         if(this.state.table1Count > this.state.table2Count &&　this.state.table1Count > this.state.table3Count && this.state.table1Count > this.state.table4Count){
           this.loseSynser(false,true,true,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 2の勝ち抜け
         if(this.state.table2Count > this.state.table1Count &&　this.state.table2Count > this.state.table3Count && this.state.table2Count > this.state.table4Count){
           this.loseSynser(true,false,true,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 3の勝ち抜け
         if(this.state.table3Count > this.state.table1Count &&　this.state.table3Count > this.state.table2Count && this.state.table3Count > this.state.table4Count){
           this.loseSynser(true,true,false,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 4の勝ち抜け
         if(this.state.table4Count > this.state.table1Count &&　this.state.table4Count > this.state.table2Count && this.state.table4Count > this.state.table3Count){
           this.loseSynser(true,true,true,false).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
     
@@ -1806,25 +1814,33 @@ export default class ChampionshipScreen extends Component {
         // 1の勝ち抜け
         if(this.state.table1Count * this.state.katoPoint1 > this.state.table2Count * this.state.katoPoint2 &&　this.state.table1Count * this.state.katoPoint1 > this.state.table3Count * this.state.katoPoint3 && this.state.table1Count * this.state.katoPoint1 > this.state.table4Count * this.state.katoPoint4){
           this.loseSynser(false,true,true,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 2の勝ち抜け
         if(this.state.table2Count * this.state.katoPoint2 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table2Count * this.state.katoPoint2 > this.state.table3Count * this.state.katoPoint3 && this.state.table2Count * this.state.katoPoint2 > this.state.table4Count * this.state.katoPoint4){
           this.loseSynser(true,false,true,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 3の勝ち抜け
         if(this.state.table3Count * this.state.katoPoint3 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table3Count * this.state.katoPoint3 > this.state.table2Count * this.state.katoPoint2 && this.state.table3Count * this.state.katoPoint3 > this.state.table4Count * this.state.katoPoint4){
           this.loseSynser(true,true,false,true).then(()=>{
-            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            if(!this.state.final){
+              this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+            }
           });
         }
         // 4の勝ち抜け
         if(this.state.table4Count * this.state.katoPoint4 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table4Count * this.state.katoPoint4 > this.state.table2Count * this.state.katoPoint2 && this.state.table4Count * this.state.katoPoint4 > this.state.table3Count * this.state.katoPoint3){
         this.loseSynser(true,true,true,false).then(()=>{
-          this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          if(!this.state.final){
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          }
         });
         }
       }).catch((error) => {console.log("setResult error")});
