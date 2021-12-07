@@ -229,7 +229,7 @@ export default class CreditScreen extends Component {
                     marginTop:"5%",
                     textAlign:"center"
                   }}>
-                    ~ゲーム・アプリケーション制作~
+                    ~アプリ制作~
                   </Text>
                   <Text style={{
                     fontSize:Math.round(Constants.TITLE_WIDTH/2/10),
