@@ -32,6 +32,6 @@ export default Images = {
     item3:require('./img/waku.png'),
     item4:require('./img/waku.png'),
 
-    maruo:equire('./img/maruo.png'),
+    maruo:require('./img/maruo.png'),
 
 }
