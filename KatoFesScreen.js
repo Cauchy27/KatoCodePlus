@@ -278,16 +278,16 @@ export default class FesScreen extends Component {
         break;
 
       case "p1ATK":
-          this.setState(state =>  ({p1ATK : this.state.p1ATK+ change}));
+          this.setState(state =>  ({p1ATK : this.state.p1ATK * 1.3 + change}));
         break;
       case "p2ATK":
-          this.setState(state =>  ({p2ATK : this.state.p2ATK+ change}));
+          this.setState(state =>  ({p2ATK : this.state.p2ATK * 1.3 + change}));
         break;
       case "p1DEF":
-          this.setState(state =>  ({p1DEF : this.state.p1DEF+ change}));
+          this.setState(state =>  ({p1DEF : this.state.p1DEF * 1.3 + change}));
         break;
       case "p2DEF":
-          this.setState(state =>  ({p2DEF : this.state.p2DEF+ change}));
+          this.setState(state =>  ({p2DEF : this.state.p2DEF * 1.3 + change}));
         break;
     }
     // console.log("param:",param);

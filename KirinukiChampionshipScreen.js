@@ -92,6 +92,8 @@ export default class ChampionshipScreen extends Component {
       useAPI:useApiNum,
       changing:false,
 
+      errorCatch:null,
+
       groupA:false,
       // groupA:true,
       groupB:false,
@@ -266,10 +268,17 @@ export default class ChampionshipScreen extends Component {
       KirinukiDes16:"",
       KirinukiImage16:Images.item4,
 
+      // KirinukiData18:"",
+      // KirinukiData19:"",
+      // KirinukiData20:"",
+      // KirinukiData21:"",
+      // KirinukiData22:"",
+      // KirinukiData23:"",
+      // KirinukiData24:"",
 
       // 戦闘関係
-      timer:20,
-      timeMax:20,
+      timer:25,
+      timeMax:25,
       width: Constants.MAX_WIDTH, 
       height: Constants.MAX_WIDTH * 250/400,
       position1X: Constants.MAX_WIDTH * 250/400/10,
@@ -279,14 +288,14 @@ export default class ChampionshipScreen extends Component {
 
       battleFlag:false,
 
-      p1:"",
-      p2:"",
+      p1:null,
+      p2:null,
 
       p1Name:"",
       p2Name:"",
 
-      p1Image:"",
-      p2Image:"",
+      p1Image:Images.item4,
+      p2Image:Images.item4,
 
       p1KatoPoint:0,
       p2KatoPoint:0,
@@ -366,8 +375,8 @@ export default class ChampionshipScreen extends Component {
     // セリフをBGMが邪魔しないように音量調整
 
     // 切り抜き情報取得
-    await this.getList();
-    await this.getJun();
+    this.getList();
+    // this.getJun();
     console.log(this.state.apiSuccess);
 
   };
@@ -397,13 +406,14 @@ export default class ChampionshipScreen extends Component {
       })
       .catch(() => {
         console.log('通信に失敗しました_res');
+        this.state.errorCatch = true;
         this.state.apiSuccess = true;
     });
   };
 
   getList = async() =>{
     // 切り抜きチャンネルの取得
-    const url = `https://www.googleapis.com/youtube/v3/search?type=channel&part=snippet&q=加藤純一&maxResults=20&order=relevance&key=${YOUTUBE_API_KEY[this.state.useAPI]}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?type=channel&part=snippet&q=加藤純一&maxResults=25&order=relevance&key=${YOUTUBE_API_KEY[this.state.useAPI]}`;
 
     // const url =`https://www.googleapis.com/youtube/v3/search?type=video&part=snippet&q=HIKAKIN&key=${YOUTUBE_API_KEY}`
 
@@ -422,6 +432,9 @@ export default class ChampionshipScreen extends Component {
               piza = true;
             }
             pizaCount += 1;
+            if(pizaCount >= 17){
+              piza = true
+            }
             // console.log(pizaCount);
             // console.log(response["data"]["items"][pizaCount]["snippet"]["channelId"]);
           }
@@ -475,11 +488,8 @@ export default class ChampionshipScreen extends Component {
           axios
           .get(url_res)
           .then(response2 => {
-              this.setState({
-                // JunData:response2["data"]["items"][16]["snippet"]["title"],
-                // JunDes:response2["data"]["items"][16]["statistics"],
-                // JunImage:response2["data"]["items"][16]["snippet"]["thumbnails"]["default"]["url"],
 
+              this.setState({
                 // 詳細データ取得
                 KirinukiData1: response2["data"]["items"][0]["snippet"]["title"],
                 KirinukiDes1:response2["data"]["items"][0]["statistics"],
@@ -547,42 +557,82 @@ export default class ChampionshipScreen extends Component {
               });
               this.state.apiSuccess = false;
           })
-          .catch(() => {
+          .catch((error) => {
               console.log('通信に失敗しました_res');
+              console.log(error);
+              this.state.errorCatch = true;
               this.state.apiSuccess = true;
           });
       })
-      .catch(() => {
+      .catch((error) => {
           console.log('通信に失敗しました');
+          console.log(error.message);
+          console.log(error instanceof Error);
+          this.state.errorCatch = true;
           this.state.apiSuccess = true;
+          console.log(this.state.errorCatch);
       });
   };
   
-  changeAPI =() =>{
-    if(this.state.changing){
-      return;
-    }
-    this.setState(state =>  ({
-      changing:true,
-    }));
+  changeAPI =async() =>{
+
     // 初回取得の間の時間でボタンを連打されても反応しないようにエスケープ
-    setTimeout(()=>{
-      if(this.state.apiSuccess){
-        return;
-      }
       this.state.useAPI -=1;
       if(this.state.useAPI <= 0){
         this.state.useAPI = 9;
       }
       console.log(this.state.useAPI);
   
-      this.getList()
-      .then(()=>{
-        this.setState(state =>  ({
-          changing:false,
-        }));
-      });
-    },600*4)
+      this.getList().then(()=>{
+        if(!this.state.KirinukiDes1["subscriberCount"]){
+          this.state.KirinukiDes1["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes2["subscriberCount"]){
+          this.state.KirinukiDes2["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes3["subscriberCount"]){
+          this.state.KirinukiDes3["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes4["subscriberCount"]){
+          this.state.KirinukiDes4["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes5["subscriberCount"]){
+          this.state.KirinukiDes5["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes6["subscriberCount"]){
+          this.state.KirinukiDes6["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes7["subscriberCount"]){
+          this.state.KirinukiDes7["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes8["subscriberCount"]){
+          this.state.KirinukiDes8["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes9["subscriberCount"]){
+          this.state.KirinukiDes9["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes10["subscriberCount"]){
+          this.state.KirinukiDes10["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes11["subscriberCount"]){
+          this.state.KirinukiDes11["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes12["subscriberCount"]){
+          this.state.KirinukiDes12["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes13["subscriberCount"]){
+          this.state.KirinukiDes13["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes14["subscriberCount"]){
+          this.state.KirinukiDes14["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes15["subscriberCount"]){
+          this.state.KirinukiDes15["subscriberCount"]=0;
+        }
+        if(!this.state.KirinukiDes16["subscriberCount"]){
+          this.state.KirinukiDes16["subscriberCount"]=0;
+        }
+      }).catch((error) => {console.log(error.message)});
   };
 
   stopBgm =async(state)=>{
@@ -664,15 +714,19 @@ export default class ChampionshipScreen extends Component {
     switch(select){
       case "A":
         if(!this.state.KirinukiDes1["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes1["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes2["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes2["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes3["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes3["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes4["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes4["subscriberCount"]=0;
         }
         this.setState(state =>  ({
@@ -698,25 +752,29 @@ export default class ChampionshipScreen extends Component {
           tableR3_st:this.state.KirinukiDes3,
           tableR4_st:this.state.KirinukiDes4,
 
-          katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"]+this.state.KirinukiDes1["subscriberCount"]*100,
-          katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"]+this.state.KirinukiDes2["subscriberCount"]*100,
-          katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"]+this.state.KirinukiDes3["subscriberCount"]*100,
-          katoPoint4:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"]+this.state.KirinukiDes4["subscriberCount"]*100,
+          katoPoint1:parseInt(this.state.KirinukiDes1["viewCount"],10) + parseInt(this.state.KirinukiDes1["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes1["subscriberCount"],10)*1000,
+          katoPoint2:parseInt(this.state.KirinukiDes2["viewCount"],10) + parseInt(this.state.KirinukiDes2["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes2["subscriberCount"],10)*1000,
+          katoPoint3:parseInt(this.state.KirinukiDes3["viewCount"],10) + parseInt(this.state.KirinukiDes3["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes3["subscriberCount"],10)*1000,
+          katoPoint4:parseInt(this.state.KirinukiDes4["viewCount"],10) + parseInt(this.state.KirinukiDes4["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes4["subscriberCount"],10)*1000,
 
         }));
       break;
 
       case "B":
         if(!this.state.KirinukiDes5["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes5["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes6["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes6["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes7["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes7["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes8["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes8["subscriberCount"]=0;
         }
         this.setState(state =>  ({
@@ -742,25 +800,29 @@ export default class ChampionshipScreen extends Component {
           tableR3_st:this.state.KirinukiDes7,
           tableR4_st:this.state.KirinukiDes8,
 
-          katoPoint1:this.state.KirinukiDes5["viewCount"] * this.state.KirinukiDes5["videoCount"]+this.state.KirinukiDes5["subscriberCount"]*100,
-          katoPoint2:this.state.KirinukiDes6["viewCount"] * this.state.KirinukiDes6["videoCount"]+this.state.KirinukiDes6["subscriberCount"]*100,
-          katoPoint3:this.state.KirinukiDes7["viewCount"] * this.state.KirinukiDes7["videoCount"]+this.state.KirinukiDes7["subscriberCount"]*100,
-          katoPoint4:this.state.KirinukiDes8["viewCount"] * this.state.KirinukiDes8["videoCount"]+this.state.KirinukiDes8["subscriberCount"]*100,
+          katoPoint1:parseInt(this.state.KirinukiDes5["viewCount"],10) + parseInt(this.state.KirinukiDes5["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes5["subscriberCount"],10)*1000,
+          katoPoint2:parseInt(this.state.KirinukiDes6["viewCount"],10) + parseInt(this.state.KirinukiDes6["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes6["subscriberCount"],10)*1000,
+          katoPoint3:parseInt(this.state.KirinukiDes7["viewCount"],10) + parseInt(this.state.KirinukiDes7["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes7["subscriberCount"],10)*1000,
+          katoPoint4:parseInt(this.state.KirinukiDes8["viewCount"],10) + parseInt(this.state.KirinukiDes8["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes8["subscriberCount"],10)*1000,
 
         }));
       break;
 
       case "C":
         if(!this.state.KirinukiDes9["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes9["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes10["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes10["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes11["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes11["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes12["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes12["subscriberCount"]=0;
         }
         this.setState(state =>  ({
@@ -786,25 +848,29 @@ export default class ChampionshipScreen extends Component {
           tableR3_st:this.state.KirinukiDes11,
           tableR4_st:this.state.KirinukiDes12,
 
-          katoPoint1:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"]+this.state.KirinukiDes9["subscriberCount"]*100,
-          katoPoint2:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"]+this.state.KirinukiDes10["subscriberCount"]*100,
-          katoPoint3:this.state.KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"]+this.state.KirinukiDes11["subscriberCount"]*100,
-          katoPoint4:this.state.KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"]+this.state.KirinukiDes12["subscriberCount"]*100,
+          katoPoint1:parseInt(this.state.KirinukiDes9["viewCount"],10) + parseInt(this.state.KirinukiDes9["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes9["subscriberCount"],10)*1000,
+          katoPoint2:parseInt(this.state.KirinukiDes10["viewCount"],10) + parseInt(this.state.KirinukiDes10["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes10["subscriberCount"],10)*1000,
+          katoPoint3:parseInt(this.state.KirinukiDes11["viewCount"],10) + parseInt(this.state.KirinukiDes11["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes11["subscriberCount"],10)*1000,
+          katoPoint4:parseInt(this.state.KirinukiDes12["viewCount"],10) + parseInt(this.state.KirinukiDes12["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes12["subscriberCount"],10)*1000,
 
         }));
       break;
 
       case "D":
         if(!this.state.KirinukiDes13["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes13["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes14["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes14["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes15["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes15["subscriberCount"]=0;
         }
         if(!this.state.KirinukiDes16["subscriberCount"]){
+          console.log("1s");
           this.state.KirinukiDes16["subscriberCount"]=0;
         }
         this.setState(state =>  ({
@@ -830,10 +896,10 @@ export default class ChampionshipScreen extends Component {
           tableR3_st:this.state.KirinukiDes15,
           tableR4_st:this.state.KirinukiDes16,
 
-          katoPoint1:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"]+this.state.KirinukiDes13["subscriberCount"]*100,
-          katoPoint2:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"]+this.state.KirinukiDes14["subscriberCount"]*100,
-          katoPoint3:this.state.KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"]+this.state.KirinukiDes15["subscriberCount"]*100,
-          katoPoint4:this.state.KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"]+this.state.KirinukiDes16["subscriberCount"]*100,
+          katoPoint1:parseInt(this.state.KirinukiDes13["viewCount"],10) + parseInt(this.state.KirinukiDes13["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes13["subscriberCount"],10)*1000,
+          katoPoint2:parseInt(this.state.KirinukiDes14["viewCount"],10) + parseInt(this.state.KirinukiDes14["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes14["subscriberCount"],10)*1000,
+          katoPoint3:parseInt(this.state.KirinukiDes15["viewCount"],10) + parseInt(this.state.KirinukiDes15["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes15["subscriberCount"],10)*1000,
+          katoPoint4:parseInt(this.state.KirinukiDes16["viewCount"],10) + parseInt(this.state.KirinukiDes16["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes16["subscriberCount"],10)*1000,
 
         }));
       break;
@@ -850,7 +916,7 @@ export default class ChampionshipScreen extends Component {
           this.setState(state =>  ({
             memberListFlag:false,
             final:true,
-            timeMax:40,
+            timeMax:55,
   
             groupA :false,
             groupB :false,
@@ -894,43 +960,107 @@ export default class ChampionshipScreen extends Component {
   };
 
   skipGroup =() =>{
+    if(!this.state.KirinukiDes1["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes1["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes2["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes2["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes3["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes3["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes4["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes4["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes5["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes5["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes6["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes6["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes7["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes7["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes8["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes8["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes9["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes9["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes10["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes10["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes11["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes11["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes12["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes12["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes13["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes13["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes14["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes14["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes15["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes15["subscriberCount"]=0;
+    }
+    if(!this.state.KirinukiDes16["subscriberCount"]){
+      console.log("1s");
+      this.state.KirinukiDes16["subscriberCount"]=0;
+    }
     if(!this.state.endA){
       console.log("skipA");
       this.setState(state =>  ({
 
         groupA:true,
 
-        katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"]+this.state.KirinukiDes1["subscriberCount"]*100,
-        katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"]+this.state.KirinukiDes2["subscriberCount"]*100,
-        katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"]+this.state.KirinukiDes3["subscriberCount"]*100,
-        katoPoint4:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"]+this.state.KirinukiDes4["subscriberCount"]*100,
+        katoPoint1:parseInt(this.state.KirinukiDes1["viewCount"],10) + parseInt(this.state.KirinukiDes1["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes1["subscriberCount"],10)*1000,
+        katoPoint2:parseInt(this.state.KirinukiDes2["viewCount"],10) + parseInt(this.state.KirinukiDes2["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes2["subscriberCount"],10)*1000,
+        katoPoint3:parseInt(this.state.KirinukiDes3["viewCount"],10) + parseInt(this.state.KirinukiDes3["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes3["subscriberCount"],10)*1000,
+        katoPoint4:parseInt(this.state.KirinukiDes4["viewCount"],10) + parseInt(this.state.KirinukiDes4["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes4["subscriberCount"],10)*1000,
 
       }));
       // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        try{return this.loseSynser(false,true,true,true);}
+        try{return this.loseSynser(false,true,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        try{return this.loseSynser(true,false,true,true);}
+        try{return this.loseSynser(true,false,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        try{return this.loseSynser(true,true,false,true);}
+        try{return this.loseSynser(true,true,false,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        try{return this.loseSynser(true,true,true,false);}
+        try{return this.loseSynser(true,true,true,false).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
@@ -947,37 +1077,37 @@ export default class ChampionshipScreen extends Component {
 
           groupB:true,
   
-          katoPoint1:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes5["videoCount"]+this.state.KirinukiDes5["subscriberCount"]*100,
-          katoPoint2:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes6["videoCount"]+this.state.KirinukiDes6["subscriberCount"]*100,
-          katoPoint3:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes7["videoCount"]+this.state.KirinukiDes7["subscriberCount"]*100,
-          katoPoint4:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes8["videoCount"]+this.state.KirinukiDes8["subscriberCount"]*100,
+          katoPoint1:parseInt(this.state.KirinukiDes5["viewCount"],10) + parseInt(this.state.KirinukiDes5["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes5["subscriberCount"],10)*1000,
+          katoPoint2:parseInt(this.state.KirinukiDes6["viewCount"],10) + parseInt(this.state.KirinukiDes6["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes6["subscriberCount"],10)*1000,
+          katoPoint3:parseInt(this.state.KirinukiDes7["viewCount"],10) + parseInt(this.state.KirinukiDes7["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes7["subscriberCount"],10)*1000,
+          katoPoint4:parseInt(this.state.KirinukiDes8["viewCount"],10) + parseInt(this.state.KirinukiDes8["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes8["subscriberCount"],10)*1000,
   
         }));
         // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        try{return this.loseSynser(false,true,true,true);}
+        try{return this.loseSynser(false,true,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        try{return this.loseSynser(true,false,true,true);}
+        try{return this.loseSynser(true,false,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        try{return this.loseSynser(true,true,false,true);}
+        try{return this.loseSynser(true,true,false,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        try{return this.loseSynser(true,true,true,false);}
+        try{return this.loseSynser(true,true,true,false).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
@@ -994,37 +1124,37 @@ export default class ChampionshipScreen extends Component {
 
             groupC:true,
 
-            katoPoint1:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"]+this.state.KirinukiDes9["subscriberCount"]*100,
-            katoPoint2:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"]+this.state.KirinukiDes10["subscriberCount"]*100,
-            katoPoint3:this.state.KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"]+this.state.KirinukiDes11["subscriberCount"]*100,
-            katoPoint4:this.state.KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"]+this.state.KirinukiDes12["subscriberCount"]*100,
+            katoPoint1:parseInt(this.state.KirinukiDes9["viewCount"],10) + parseInt(this.state.KirinukiDes9["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes9["subscriberCount"],10)*1000,
+            katoPoint2:parseInt(this.state.KirinukiDes10["viewCount"],10) + parseInt(this.state.KirinukiDes10["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes10["subscriberCount"],10)*1000,
+            katoPoint3:parseInt(this.state.KirinukiDes11["viewCount"],10) + parseInt(this.state.KirinukiDes11["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes11["subscriberCount"],10)*1000,
+            katoPoint4:parseInt(this.state.KirinukiDes12["viewCount"],10) + parseInt(this.state.KirinukiDes12["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes12["subscriberCount"],10)*1000,
     
           }));
           // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        try{return this.loseSynser(false,true,true,true);}
+        try{return this.loseSynser(false,true,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        try{return this.loseSynser(true,false,true,true);}
+        try{return this.loseSynser(true,false,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        try{return this.loseSynser(true,true,false,true);}
+        try{return this.loseSynser(true,true,false,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        try{return this.loseSynser(true,true,true,false);}
+        try{return this.loseSynser(true,true,true,false).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
@@ -1041,37 +1171,37 @@ export default class ChampionshipScreen extends Component {
 
               groupD:true,
 
-              katoPoint1:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"]+this.state.KirinukiDes13["subscriberCount"]*100,
-              katoPoint2:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"]+this.state.KirinukiDes14["subscriberCount"]*100,
-              katoPoint3:this.state.KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"]+this.state.KirinukiDes15["subscriberCount"]*100,
-              katoPoint4:this.state.KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"]+this.state.KirinukiDes16["subscriberCount"]*100,
+              katoPoint1:parseInt(this.state.KirinukiDes13["viewCount"],10) + parseInt(this.state.KirinukiDes13["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes13["subscriberCount"],10)*1000,
+              katoPoint2:parseInt(this.state.KirinukiDes14["viewCount"],10) + parseInt(this.state.KirinukiDes14["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes14["subscriberCount"],10)*1000,
+              katoPoint3:parseInt(this.state.KirinukiDes15["viewCount"],10) + parseInt(this.state.KirinukiDes15["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes15["subscriberCount"],10)*1000,
+              katoPoint4:parseInt(this.state.KirinukiDes16["viewCount"],10) + parseInt(this.state.KirinukiDes16["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes16["subscriberCount"],10)*1000,
       
             }));
             // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        try{return this.loseSynser(false,true,true,true);}
+        try{return this.loseSynser(false,true,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        try{return this.loseSynser(true,false,true,true);}
+        try{return this.loseSynser(true,false,true,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        try{return this.loseSynser(true,true,false,true);}
+        try{return this.loseSynser(true,true,false,true).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        try{return this.loseSynser(true,true,true,false);}
+        try{return this.loseSynser(true,true,true,false).then(()=>{});}
         catch(error){
           console.log("lose error");
         }
@@ -1177,31 +1307,31 @@ export default class ChampionshipScreen extends Component {
     switch(player){
       case "p1":
         var selectRand = Math.random();
-        if(selectRand <0.1){
+        if(selectRand <0.11){
           return KatomonMoveList.rightStraight;
         }
-        if(selectRand <0.2 && selectRand >= 0.1){
+        if(selectRand <0.22 && selectRand >= 0.11){
           return KatomonMoveList.gaia;
         }
-        if(selectRand <0.3 && selectRand >= 0.2){
+        if(selectRand <0.33 && selectRand >= 0.22){
           return KatomonMoveList.escape;
         }
-        if(selectRand <0.4 && selectRand >= 0.3){
+        if(selectRand <0.44 && selectRand >= 0.33){
           return KatomonMoveList.drill;
         }
-        if(selectRand <0.5 && selectRand >= 0.4){
+        if(selectRand <0.55 && selectRand >= 0.44){
           return KatomonMoveList.mai;
         }
-        if(selectRand <0.6 && selectRand >= 0.5){
+        if(selectRand <0.66 && selectRand >= 0.55){
           return KatomonMoveList.kisei;
         }
-        if(selectRand <0.7 && selectRand >= 0.6){
+        if(selectRand <0.77 && selectRand >= 0.66){
           return KatomonMoveList.moko1;
         }
-        if(selectRand <0.8 && selectRand >= 0.7){
+        if(selectRand <0.88 && selectRand >= 0.77){
           return KatomonMoveList.fuji;
         }
-        if(selectRand <0.9 && selectRand >= 0.8){
+        if(selectRand <0.99 && selectRand >= 0.88){
           return KatomonMoveList.kussinn;
         }
         else{
@@ -1297,11 +1427,11 @@ export default class ChampionshipScreen extends Component {
         break;
 
       case "p1HP":
-        this.setState(state =>  ({p1HP : this.state.p1HP + change }));
+        this.setState(state =>  ({p1HP : this.state.p1HP + change/2 }));
         break;
 
       case "p2HP":
-        this.setState(state =>  ({p2HP : this.state.p2HP + change }));
+        this.setState(state =>  ({p2HP : this.state.p2HP + change/2 }));
         break;
       
       case "p1Poisson":
@@ -1313,16 +1443,20 @@ export default class ChampionshipScreen extends Component {
         break;
 
         case "p1ATK":
-          this.setState(state =>  ({p1KatoPoint:this.state.p1KatoPoint + change*1000}));
+          console.log("p1katopoint:",this.state.p1KatoPoint);
+          this.setState(state =>  ({p1KatoPoint:this.state.p1KatoPoint * 1.5 + change*1000*100}));
         break;
         case "p2ATK":
-          this.setState(state =>  ({p2KatoPoint:this.state.p2KatoPoint + change*1000}));
+          console.log("p2katopoint:",this.state.p2KatoPoint);
+          this.setState(state =>  ({p2KatoPoint:this.state.p2KatoPoint * 1.5  + change*1000*100}));
         break;
         case "p1DEF":
-          this.setState(state =>  ({p1KatoPoint:this.state.p1KatoPoint + change*1000}));
+          console.log("p1katopoint:",this.state.p1KatoPoint);
+          this.setState(state =>  ({p1KatoPoint:this.state.p1KatoPoint * 1.5  + change*1000*100}));
         break;
         case "p2DEF":
-          this.setState(state =>  ({p2KatoPoint:this.state.p2KatoPoint + change*1000}));
+          console.log("p2katopoint:",this.state.p2KatoPoint);
+          this.setState(state =>  ({p2KatoPoint:this.state.p2KatoPoint * 1.5  + change*1000*100}));
         break;
     }
   };
@@ -1335,7 +1469,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()*3}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_1.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()* Math.random()*3}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_1.consumption_Guts + this.state.p1MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
@@ -1358,7 +1492,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p1Guts >= this.state.p1MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p1MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10) * Math.random()}));
+          this.setState(state =>  ({p2HP : this.state.p2HP - this.state.p1MOVE_2.power * this.state.p1KatoPoint/(this.state.p2KatoPoint+10)* Math.random() * Math.random()*3}));
           // Guts消費
           this.setState(state =>  ({p1Guts : this.state.p1Guts - this.state.p1MOVE_2.consumption_Guts + this.state.p1MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
@@ -1387,7 +1521,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_1.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_1.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()*2}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_1.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)* Math.random() * Math.random()*2}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_1.consumption_Guts + this.state.p2MOVE_1.add_Guts}));
           // 追加効果(3つまで判定？)
@@ -1410,7 +1544,7 @@ export default class ChampionshipScreen extends Component {
         // 消費ガッツ判定　＆　レンジ範囲内か判定
         if(this.state.p2Guts >= this.state.p2MOVE_2.consumption_Guts && this.state.position2X - this.state.position1X < this.state.p2MOVE_2.range){
           // 相手のHP減少
-          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10) * Math.random()}));
+          this.setState(state =>  ({p1HP : this.state.p1HP - this.state.p2MOVE_2.power * this.state.p2KatoPoint/(this.state.p1KatoPoint+10)* Math.random() * Math.random()*2}));
           // Guts消費
           this.setState(state =>  ({p2Guts : this.state.p2Guts - this.state.p2MOVE_2.consumption_Guts + this.state.p2MOVE_2.add_Guts}));
           // 追加効果(3つまで判定？)
@@ -1490,19 +1624,19 @@ export default class ChampionshipScreen extends Component {
       // this.state.p2Guts = this.state.p2Guts + 10;
 
       this.setState(state =>  ({
-        p1Guts:this.state.p1Guts + 15,
-        p2Guts:this.state.p2Guts + 15,
+        p1Guts:this.state.p1Guts + 12,
+        p2Guts:this.state.p2Guts + 12,
       })); 
 
       if(this.state.p1PoissonFlag){
         this.setState(state =>  ({
-          p1HP:this.state.p1HP - 40,
+          p1HP:this.state.p1HP - 25,
         })); 
       }
 
       if(this.state.p2PoissonFlag){
         this.setState(state =>  ({
-          p2HP:this.state.p2HP - 40,
+          p2HP:this.state.p2HP - 25,
         })); 
       }
 
@@ -1545,6 +1679,79 @@ export default class ChampionshipScreen extends Component {
     return this.intervalId;
   };
 
+  getResult =async()=>{
+
+    if(this.state.tableData[1][2]=="←勝"){
+
+      this.state.tableData[1][2]=1;
+      this.state.tableData[2][1]=0;
+    }
+    else{
+
+      this.state.tableData[1][2]=0;
+      this.state.tableData[2][1]=1;
+    }
+    if(this.state.tableData[1][3]=="←勝"){
+ 
+      this.state.tableData[1][3]=1;
+      this.state.tableData[3][1]=0;
+    }
+    else{
+ 
+      this.state.tableData[1][3]=0;
+      this.state.tableData[3][1]=1;
+    }
+    if(this.state.tableData[1][4]=="←勝"){
+   
+      this.state.tableData[1][4]=1;
+      this.state.tableData[4][1]=0;
+    }
+    else{
+  
+      this.state.tableData[1][4]=0;
+      this.state.tableData[4][1]=1;
+    }
+    if(this.state.tableData[2][3]=="←勝"){
+   
+      this.state.tableData[2][3]=1;
+      this.state.tableData[3][2]=0;
+    }
+    else{
+      
+      this.state.tableData[2][3]=0;
+      this.state.tableData[3][2]=1;
+    }
+    if(this.state.tableData[2][4]=="←勝"){
+     
+      this.state.tableData[2][4]=1;
+      this.state.tableData[4][2]=0;
+    }
+    else{
+     
+      this.state.tableData[2][4]=0;
+      this.state.tableData[4][2]=1;
+    }
+    if(this.state.tableData[3][4]=="←勝"){
+     
+      this.state.tableData[3][4]=1;
+      this.state.tableData[4][3]=0;
+    }
+    else{
+     
+      this.state.tableData[3][4]=0;
+      this.state.tableData[4][3]=1;
+    }
+  };
+
+  setResult =async()=>{
+    this.setState(state =>  ({
+      table1Count:this.state.tableData[1][2]+ this.state.tableData[1][3] + this.state.tableData[1][4],
+      table2Count:this.state.tableData[2][1]+ this.state.tableData[2][3] + this.state.tableData[2][4],
+      table3Count:this.state.tableData[3][1]+ this.state.tableData[3][2] + this.state.tableData[3][4],
+      table4Count:this.state.tableData[4][1]+ this.state.tableData[4][2] + this.state.tableData[4][3],
+    }));
+  };
+
   // 対戦一巡チェック
   checkTable = () =>{
     // チェック
@@ -1568,99 +1775,64 @@ export default class ChampionshipScreen extends Component {
     }
     
     // 終わっていたら
-    if(this.state.tableData[1][2]=="←勝"){
-      this.state.tableData[1][2]=1;
-      this.state.tableData[2][1]=0;
-    }
-    else{
-      this.state.tableData[1][2]=0;
-      this.state.tableData[2][1]=1;
-    }
-    if(this.state.tableData[1][3]=="←勝"){
-      this.state.tableData[1][3]=1;
-      this.state.tableData[3][1]=0;
-    }
-    else{
-      this.state.tableData[1][3]=0;
-      this.state.tableData[3][1]=1;
-    }
-    if(this.state.tableData[1][4]=="←勝"){
-      this.state.tableData[1][4]=1;
-      this.state.tableData[4][1]=0;
-    }
-    else{
-      this.state.tableData[1][4]=0;
-      this.state.tableData[4][1]=1;
-    }
-    if(this.state.tableData[2][3]=="←勝"){
-      this.state.tableData[2][3]=1;
-      this.state.tableData[3][2]=0;
-    }
-    else{
-      this.state.tableData[2][3]=0;
-      this.state.tableData[3][2]=1;
-    }
-    if(this.state.tableData[2][4]=="←勝"){
-      this.state.tableData[2][4]=1;
-      this.state.tableData[4][2]=0;
-    }
-    else{
-      this.state.tableData[2][4]=0;
-      this.state.tableData[4][2]=1;
-    }
-    if(this.state.tableData[3][4]=="←勝"){
-      this.state.tableData[3][4]=1;
-      this.state.tableData[4][3]=0;
-    }
-    else{
-      this.state.tableData[3][4]=0;
-      this.state.tableData[4][3]=1;
-    }
-
-
-    this.state.table1Count = this.state.tableData[1][2]+ this.state.tableData[1][3] + this.state.tableData[1][4];
-    this.state.table2Count = this.state.tableData[2][1]+ this.state.tableData[2][3] + this.state.tableData[2][4];
-    this.state.table3Count = this.state.tableData[3][1]+ this.state.tableData[3][2] + this.state.tableData[3][4];
-    this.state.table4Count = this.state.tableData[4][1]+ this.state.tableData[4][2] + this.state.tableData[4][3];
-
-    // 1の勝ち抜け
-    if(this.state.table1Count > this.state.table2Count &&　this.state.table1Count > this.state.table3Count && this.state.table1Count > this.state.table4Count){
-     this.loseSynser(false,true,true,true);
-    }
-    // 2の勝ち抜け
-    if(this.state.table2Count > this.state.table1Count &&　this.state.table2Count > this.state.table3Count && this.state.table2Count > this.state.table4Count){
-     this.loseSynser(true,false,true,true);
-    }
-    // 3の勝ち抜け
-    if(this.state.table3Count > this.state.table1Count &&　this.state.table3Count > this.state.table2Count && this.state.table3Count > this.state.table4Count){
-     this.loseSynser(true,true,false,true);
-    }
-    // 4の勝ち抜け
-    if(this.state.table4Count > this.state.table1Count &&　this.state.table4Count > this.state.table2Count && this.state.table4Count > this.state.table3Count){
-     this.loseSynser(true,true,true,false);
-    }
-
-    // 同着がある場合(戦闘力*勝敗で決定)
-    // 1の勝ち抜け
-    if(this.state.table1Count * this.state.katoPoint1 > this.state.table2Count * this.state.katoPoint2 &&　this.state.table1Count * this.state.katoPoint1 > this.state.table3Count * this.state.katoPoint3 && this.state.table1Count * this.state.katoPoint1 > this.state.table4Count * this.state.katoPoint4){
-     this.loseSynser(false,true,true,true);
-    }
-    // 2の勝ち抜け
-    if(this.state.table2Count * this.state.katoPoint2 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table2Count * this.state.katoPoint2 > this.state.table3Count * this.state.katoPoint3 && this.state.table2Count * this.state.katoPoint2 > this.state.table4Count * this.state.katoPoint4){
-     this.loseSynser(true,false,true,true);
-    }
-    // 3の勝ち抜け
-    if(this.state.table3Count * this.state.katoPoint3 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table3Count * this.state.katoPoint3 > this.state.table2Count * this.state.katoPoint2 && this.state.table3Count * this.state.katoPoint3 > this.state.table4Count * this.state.katoPoint4){
-     this.loseSynser(true,true,false,true);
-    }
-    // 4の勝ち抜け
-    if(this.state.table4Count * this.state.katoPoint4 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table4Count * this.state.katoPoint4 > this.state.table2Count * this.state.katoPoint2 && this.state.table4Count * this.state.katoPoint4 > this.state.table3Count * this.state.katoPoint3){
-    this.loseSynser(true,true,true,false);
-    }
-
+    this.getResult().then(()=>{
+      this.setResult().then(()=>{
+            // 1の勝ち抜け
+        if(this.state.table1Count > this.state.table2Count &&　this.state.table1Count > this.state.table3Count && this.state.table1Count > this.state.table4Count){
+          this.loseSynser(false,true,true,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 2の勝ち抜け
+        if(this.state.table2Count > this.state.table1Count &&　this.state.table2Count > this.state.table3Count && this.state.table2Count > this.state.table4Count){
+          this.loseSynser(true,false,true,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 3の勝ち抜け
+        if(this.state.table3Count > this.state.table1Count &&　this.state.table3Count > this.state.table2Count && this.state.table3Count > this.state.table4Count){
+          this.loseSynser(true,true,false,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 4の勝ち抜け
+        if(this.state.table4Count > this.state.table1Count &&　this.state.table4Count > this.state.table2Count && this.state.table4Count > this.state.table3Count){
+          this.loseSynser(true,true,true,false).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+    
+        // 同着がある場合(戦闘力*勝敗で決定)
+        // 1の勝ち抜け
+        if(this.state.table1Count * this.state.katoPoint1 > this.state.table2Count * this.state.katoPoint2 &&　this.state.table1Count * this.state.katoPoint1 > this.state.table3Count * this.state.katoPoint3 && this.state.table1Count * this.state.katoPoint1 > this.state.table4Count * this.state.katoPoint4){
+          this.loseSynser(false,true,true,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 2の勝ち抜け
+        if(this.state.table2Count * this.state.katoPoint2 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table2Count * this.state.katoPoint2 > this.state.table3Count * this.state.katoPoint3 && this.state.table2Count * this.state.katoPoint2 > this.state.table4Count * this.state.katoPoint4){
+          this.loseSynser(true,false,true,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 3の勝ち抜け
+        if(this.state.table3Count * this.state.katoPoint3 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table3Count * this.state.katoPoint3 > this.state.table2Count * this.state.katoPoint2 && this.state.table3Count * this.state.katoPoint3 > this.state.table4Count * this.state.katoPoint4){
+          this.loseSynser(true,true,false,true).then(()=>{
+            this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+          });
+        }
+        // 4の勝ち抜け
+        if(this.state.table4Count * this.state.katoPoint4 > this.state.table1Count * this.state.katoPoint1 &&　this.state.table4Count * this.state.katoPoint4 > this.state.table2Count * this.state.katoPoint2 && this.state.table4Count * this.state.katoPoint4 > this.state.table3Count * this.state.katoPoint3){
+        this.loseSynser(true,true,true,false).then(()=>{
+          this.soundStart(this.state.soundPreload.bgm.title,Sounds.bgm1,0.03);
+        });
+        }
+      }).catch((error) => {console.log("setResult error")});
+    }).catch((error) => {console.log("getResult error")});
+    
   };
 
-  loseSynser = (r1,r2,r3,r4) =>{
+  loseSynser = async(r1,r2,r3,r4) =>{
     if(this.state.groupA){
       console.log("A finished");
       this.setState(state =>  ({
@@ -1777,8 +1949,8 @@ export default class ChampionshipScreen extends Component {
           1:null,
         }
       },
-      p1Image:null,
-      p2Image:null,
+      p1Image:Images.item4,
+      p2Image:Images.item4,
       p1Name:null,
       p2Name:null,
 
@@ -1799,7 +1971,7 @@ export default class ChampionshipScreen extends Component {
         tableR1_final:this.state.KirinukiImage1,
         tableR1_name_final:this.state.KirinukiData1,
         tableR1_st_final:this.state.KirinukiDes1,
-        katoPoint1_final:this.state.KirinukiDes1["viewCount"] * this.state.KirinukiDes1["videoCount"]+this.state.KirinukiDes1["subscriberCount"]*100,
+        katoPoint1_final:parseInt(this.state.KirinukiDes1["viewCount"],10) + parseInt(this.state.KirinukiDes1["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes1["subscriberCount"],10)*1000,
       }));
     }else{
       if(!this.state.Kirinuki2_lose){
@@ -1807,7 +1979,7 @@ export default class ChampionshipScreen extends Component {
           tableR1_final:this.state.KirinukiImage2,
           tableR1_name_final:this.state.KirinukiData2,
           tableR1_st_final:this.state.KirinukiDes2,
-          katoPoint1_final:this.state.KirinukiDes2["viewCount"] * this.state.KirinukiDes2["videoCount"]+this.state.KirinukiDes2["subscriberCount"]*100,
+          katoPoint1_final:parseInt(this.state.KirinukiDes2["viewCount"],10) + parseInt(this.state.KirinukiDes2["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes2["subscriberCount"],10)*1000,
         }));
       }else{
         if(!this.state.Kirinuki3_lose){
@@ -1815,7 +1987,7 @@ export default class ChampionshipScreen extends Component {
             tableR1_final:this.state.KirinukiImage3,
             tableR1_name_final:this.state.KirinukiData3,
             tableR1_st_final:this.state.KirinukiDes3,
-            katoPoint1_final:this.state.KirinukiDes3["viewCount"] * this.state.KirinukiDes3["videoCount"]+this.state.KirinukiDes3["subscriberCount"]*100,
+            katoPoint1_final:parseInt(this.state.KirinukiDes3["viewCount"],10) + parseInt(this.state.KirinukiDes3["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes3["subscriberCount"],10)*1000,
           }));
         }else{
           if(!this.state.Kirinuki4_lose){
@@ -1823,7 +1995,7 @@ export default class ChampionshipScreen extends Component {
               tableR1_final:this.state.KirinukiImage4,
               tableR1_name_final:this.state.KirinukiData4,
               tableR1_st_final:this.state.KirinukiDes4,
-              katoPoint1_final:this.state.KirinukiDes4["viewCount"] * this.state.KirinukiDes4["videoCount"]+this.state.KirinukiDes4["subscriberCount"]*100,
+              katoPoint1_final:parseInt(this.state.KirinukiDes4["viewCount"],10) + parseInt(this.state.KirinukiDes4["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes4["subscriberCount"],10)*1000,
             }));
           }
         }
@@ -1835,7 +2007,7 @@ export default class ChampionshipScreen extends Component {
         tableR2_final:this.state.KirinukiImage5,
         tableR2_name_final:this.state.KirinukiData5,
         tableR2_st_final:this.state.KirinukiDes5,
-        katoPoint2_final:this.state.KirinukiDes5["viewCount"] * this.state.KirinukiDes5["videoCount"]+this.state.KirinukiDes5["subscriberCount"]*100,
+        katoPoint2_final:parseInt(this.state.KirinukiDes5["viewCount"],10) + parseInt(this.state.KirinukiDes5["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes5["subscriberCount"],10)*1000,
       }));
     }else{
       if(!this.state.Kirinuki6_lose){
@@ -1843,7 +2015,7 @@ export default class ChampionshipScreen extends Component {
           tableR2_final:this.state.KirinukiImage6,
           tableR2_name_final:this.state.KirinukiData6,
           tableR2_st_final:this.state.KirinukiDes6,
-          katoPoint2_final:this.state.KirinukiDes6["viewCount"] * this.state.KirinukiDes6["videoCount"]+this.state.KirinukiDes6["subscriberCount"]*100,
+          katoPoint2_final:parseInt(this.state.KirinukiDes6["viewCount"],10) + parseInt(this.state.KirinukiDes6["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes6["subscriberCount"],10)*1000,
         }));
       }else{
         if(!this.state.Kirinuki7_lose){
@@ -1851,7 +2023,7 @@ export default class ChampionshipScreen extends Component {
             tableR2_final:this.state.KirinukiImage7,
             tableR2_name_final:this.state.KirinukiData7,
             tableR2_st_final:this.state.KirinukiDes7,
-            katoPoint2_final:this.state.KirinukiDes7["viewCount"] * this.state.KirinukiDes7["videoCount"]+this.state.KirinukiDes7["subscriberCount"]*100,
+            katoPoint2_final:parseInt(this.state.KirinukiDes7["viewCount"],10) + parseInt(this.state.KirinukiDes7["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes7["subscriberCount"],10)*1000,
           }));
         }else{
           if(!this.state.Kirinuki8_lose){
@@ -1859,7 +2031,7 @@ export default class ChampionshipScreen extends Component {
               tableR2_final:this.state.KirinukiImage8,
               tableR2_name_final:this.state.KirinukiData8,
               tableR2_st_final:this.state.KirinukiDes8,
-              katoPoint2_final:this.state.KirinukiDes8["viewCount"] * this.state.KirinukiDes8["videoCount"]+this.state.KirinukiDes8["subscriberCount"]*100,
+              katoPoint2_final:parseInt(this.state.KirinukiDes8["viewCount"],10) + parseInt(this.state.KirinukiDes8["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes8["subscriberCount"],10)*1000,
             }));
           }
         }
@@ -1872,7 +2044,7 @@ export default class ChampionshipScreen extends Component {
         tableR3_final:this.state.KirinukiImage9,
         tableR3_name_final:this.state.KirinukiData9,
         tableR3_st_final:this.state.KirinukiDes9,
-        katoPoint3_final:this.state.KirinukiDes9["viewCount"] * this.state.KirinukiDes9["videoCount"]+this.state.KirinukiDes9["subscriberCount"]*100,
+        katoPoint3_final:parseInt(this.state.KirinukiDes9["viewCount"],10) + parseInt(this.state.KirinukiDes9["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes9["subscriberCount"],10)*1000,
       }));
     }else{
       if(!this.state.Kirinuki10_lose){
@@ -1880,7 +2052,7 @@ export default class ChampionshipScreen extends Component {
           tableR3_final:this.state.KirinukiImage10,
           tableR3_name_final:this.state.KirinukiData10,
           tableR3_st_final:this.state.KirinukiDes10,
-          katoPoint3_final:this.state.KirinukiDes10["viewCount"] * this.state.KirinukiDes10["videoCount"]+this.state.KirinukiDes10["subscriberCount"]*100,
+          katoPoint3_final:parseInt(this.state.KirinukiDes10["viewCount"],10) + parseInt(this.state.KirinukiDes10["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes10["subscriberCount"],10)*1000,
         }));
       }else{
         if(!this.state.Kirinuki11_lose){
@@ -1888,7 +2060,7 @@ export default class ChampionshipScreen extends Component {
             tableR3_final:this.state.KirinukiImage11,
             tableR3_name_final:this.state.KirinukiData11,
             tableR3_st_final:this.state.KirinukiDes11,
-            katoPoint3_final:this.state.KirinukiDes11["viewCount"] * this.state.KirinukiDes11["videoCount"]+this.state.KirinukiDes11["subscriberCount"]*100,
+            katoPoint3_final:parseInt(this.state.KirinukiDes11["viewCount"],10) + parseInt(this.state.KirinukiDes11["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes11["subscriberCount"],10)*1000,
           }));
         }else{
           if(!this.state.Kirinuki12_lose){
@@ -1896,7 +2068,7 @@ export default class ChampionshipScreen extends Component {
               tableR3_final:this.state.KirinukiImage12,
               tableR3_name_final:this.state.KirinukiData12,
               tableR3_st_final:this.state.KirinukiDes12,
-              katoPoint3_final:this.state.KirinukiDes12["viewCount"] * this.state.KirinukiDes12["videoCount"]+this.state.KirinukiDes12["subscriberCount"]*100,
+              katoPoint3_final:parseInt(this.state.KirinukiDes12["viewCount"],10) + parseInt(this.state.KirinukiDes12["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes12["subscriberCount"],10)*1000,
             }));
           }
         }
@@ -1909,7 +2081,7 @@ export default class ChampionshipScreen extends Component {
         tableR4_final:this.state.KirinukiImage13,
         tableR4_name_final:this.state.KirinukiData13,
         tableR4_st_final:this.state.KirinukiDes13,
-        katoPoint4_final:this.state.KirinukiDes13["viewCount"] * this.state.KirinukiDes13["videoCount"]+this.state.KirinukiDes13["subscriberCount"]*100,
+        katoPoint4_final:parseInt(this.state.KirinukiDes13["viewCount"],10) + parseInt(this.state.KirinukiDes13["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes13["subscriberCount"],10)*1000,
       }));
     }else{
       if(!this.state.Kirinuki14_lose){
@@ -1917,7 +2089,7 @@ export default class ChampionshipScreen extends Component {
           tableR4_final:this.state.KirinukiImage14,
           tableR4_name_final:this.state.KirinukiData14,
           tableR4_st_final:this.state.KirinukiDes14,
-          katoPoint4_final:this.state.KirinukiDes14["viewCount"] * this.state.KirinukiDes14["videoCount"]+this.state.KirinukiDes14["subscriberCount"]*100,
+          katoPoint4_final:parseInt(this.state.KirinukiDes14["viewCount"],10) + parseInt(this.state.KirinukiDes14["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes14["subscriberCount"],10)*1000,
         }));
       }else{
         if(!this.state.Kirinuki15_lose){
@@ -1925,7 +2097,7 @@ export default class ChampionshipScreen extends Component {
             tableR4_final:this.state.KirinukiImage15,
             tableR4_name_final:this.state.KirinukiData15,
             tableR4_st_final:this.state.KirinukiDes15,
-            katoPoint4_final:this.state.KirinukiDes15["viewCount"] * this.state.KirinukiDes15["videoCount"]+this.state.KirinukiDes15["subscriberCount"]*100,
+            katoPoint4_final:parseInt(this.state.KirinukiDes15["viewCount"] ,10)+ parseInt(this.state.KirinukiDes15["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes15["subscriberCount"],10)*1000,
           }));
         }else{
           if(!this.state.Kirinuki16_lose){
@@ -1933,7 +2105,7 @@ export default class ChampionshipScreen extends Component {
               tableR4_final:this.state.KirinukiImage16,
               tableR4_name_final:this.state.KirinukiData16,
               tableR4_st_final:this.state.KirinukiDes16,
-              katoPoint4_final:this.state.KirinukiDes16["viewCount"] * this.state.KirinukiDes16["videoCount"]+this.state.KirinukiDes16["subscriberCount"]*100,
+              katoPoint4_final:parseInt(this.state.KirinukiDes16["viewCount"],10) + parseInt(this.state.KirinukiDes16["videoCount"],10)*1000*100+parseInt(this.state.KirinukiDes16["subscriberCount"],10)*1000,
             }));
           }
         }
@@ -1997,7 +2169,6 @@ export default class ChampionshipScreen extends Component {
     // destinationごとに音声を変えておく
       switch(destination){
         case "クレジット":
-          setTimeout(()=>playEffectSound(Sounds.arigatone,1),600*3);
           return this.props.navigation.navigate(destination);
       }
     } 
@@ -2007,17 +2178,6 @@ export default class ChampionshipScreen extends Component {
   };
 
   render(){
-    // if(this.state.final){
-    //   console.log(this.state.tableR1_final,":",this.state.tableR1_name_final);
-    //   console.log(this.state.tableR2_final,":",this.state.tableR2_name_final);
-    //   console.log(this.state.tableR3_final,":",this.state.tableR3_name_final);
-    //   console.log(this.state.tableR4_final,":",this.state.tableR4_name_final);
-    //   console.log(this.state.tableR1,":",this.state.tableR1_name);
-    //   console.log(this.state.tableR2,":",this.state.tableR2_name);
-    //   console.log(this.state.tableR3,":",this.state.tableR1_name);
-    //   console.log(this.state.tableR4,":",this.state.tableR2_name);
-    //   console.log("----------render----------")
-    // }
     if(this.state.battleFlag){
       // 対戦の終了判定
       if(Math.round(
@@ -2456,9 +2616,9 @@ export default class ChampionshipScreen extends Component {
               <Text style={styles.gameOverText}>
                 再読み込み ☜
               </Text>
-              <Text style={styles.gameOverText}>
-                (10回以上押しても変わらない場合は、少しだけお待ちください。)
-              </Text>
+                <Text style={styles.gameOverSubText}>
+                  何度か押しても変わらない場合は、APIの制限の可能性があります。カトフェスをプレイいただくか、しばらくお待ちください。
+                </Text>
             </View>
           </TouchableOpacity>
         )}
@@ -2741,9 +2901,13 @@ export default class ChampionshipScreen extends Component {
                   <Text style={
                     styles.description
                     }>切り抜き戦闘力：{Math.round(this.state.champ_katoPoint/1000)}
-                    </Text>
+                    </Text><Text style={
+                    styles.description
+                    }></Text>
+                    <Text style={
+                    styles.description
+                    }>---タップしてクレジットへ---</Text>
                 </View>
-                <Text style={styles.gameOverText}>タップしてクレジットへ！</Text>
               </View> 
             </View>
           </TouchableOpacity>

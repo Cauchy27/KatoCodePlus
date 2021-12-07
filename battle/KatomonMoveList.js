@@ -4,17 +4,17 @@ export default KatomonMoveList = {
   rightStraight:{
     name:"右ストレート",
     sound:Sounds.rightStraight,//音声ファイルのディレクトリ指定
-    power:150,
+    power:200,
     consumption_Guts:100,
     add_Guts:0,
-    range:150,
+    range:200,
     additional1:{
       param:"position2x",//変化するパラメータ(position/HP/ATK,,,)
       change:100,//変化量
     },
     additional2:{
-      param:"position1x",//変化するパラメータ(position/HP/ATK,,,)
-      change:50,//変化量
+      param:"p1ATK",//変化するパラメータ(position/HP/ATK,,,)
+      change:100,//変化量
     },
     additional3:{
       param:"p1HP",//変化するパラメータ(position/HP/ATK,,,)
@@ -158,11 +158,11 @@ export default KatomonMoveList = {
     range:1000,
     additional1:{
       param:"p1ATK",//変化するパラメータ(position/HP/ATK,,,)
-      change:20,//変化量
+      change:150,//変化量
     },
     additional2:{
       param:"p1DEF",//変化するパラメータ(position/HP/ATK,,,)
-      change:20,//変化量
+      change:150,//変化量
     },
     personality:1.4,//移動に影響する性格の設定
   },

@@ -184,31 +184,31 @@ export default class KatomonGenerateScreen extends Component {
     switch(player){
       case "p1":
         var selectRand = Math.random();
-        if(selectRand <0.1){
+        if(selectRand <0.11){
           return KatomonMoveList.rightStraight;
         }
-        if(selectRand <0.2 && selectRand >= 0.1){
+        if(selectRand <0.22 && selectRand >= 0.11){
           return KatomonMoveList.gaia;
         }
-        if(selectRand <0.3 && selectRand >= 0.2){
+        if(selectRand <0.33 && selectRand >= 0.22){
           return KatomonMoveList.escape;
         }
-        if(selectRand <0.4 && selectRand >= 0.3){
+        if(selectRand <0.44 && selectRand >= 0.33){
           return KatomonMoveList.drill;
         }
-        if(selectRand <0.5 && selectRand >= 0.4){
+        if(selectRand <0.55 && selectRand >= 0.44){
           return KatomonMoveList.mai;
         }
-        if(selectRand <0.6 && selectRand >= 0.5){
+        if(selectRand <0.66 && selectRand >= 0.55){
           return KatomonMoveList.kisei;
         }
-        if(selectRand <0.7 && selectRand >= 0.6){
+        if(selectRand <0.77 && selectRand >= 0.66){
           return KatomonMoveList.moko1;
         }
-        if(selectRand <0.8 && selectRand >= 0.7){
+        if(selectRand <0.88 && selectRand >= 0.77){
           return KatomonMoveList.fuji;
         }
-        if(selectRand <0.9 && selectRand >= 0.8){
+        if(selectRand <0.99 && selectRand >= 0.88){
           return KatomonMoveList.kussinn;
         }
         else{
