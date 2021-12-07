@@ -110,10 +110,10 @@ export default class ChampionshipScreen extends Component {
       expFlag:false,
 
       // final用
-      tableR1_final:null,
-      tableR2_final:null,
-      tableR3_final:null,
-      tableR4_final:null,
+      tableR1_final:Images.item1,
+      tableR2_final:Images.item2,
+      tableR3_final:Images.item3,
+      tableR4_final:Images.item4,
 
       tableR1_name_final:null,
       tableR2_name_final:null,
@@ -138,10 +138,10 @@ export default class ChampionshipScreen extends Component {
       champ_st:null,
       champ_katoPoint:null,
 
-      tableR1:null,
-      tableR2:null,
-      tableR3:null,
-      tableR4:null,
+      tableR1:Images.item1,
+      tableR2:Images.item2,
+      tableR3:Images.item3,
+      tableR4:Images.item4,
 
       tableR1_name:null,
       tableR2_name:null,
@@ -895,6 +895,7 @@ export default class ChampionshipScreen extends Component {
 
   skipGroup =() =>{
     if(!this.state.endA){
+      console.log("skipA");
       this.setState(state =>  ({
 
         groupA:true,
@@ -908,36 +909,40 @@ export default class ChampionshipScreen extends Component {
       // 戦闘力で決定)
       // 1の勝ち抜け
       if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-        try{this.loseSynser(false,true,true,true);}
+        try{return this.loseSynser(false,true,true,true);}
         catch(error){
           console.log("lose error");
         }
       }
       // 2の勝ち抜け
       if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-        try{this.loseSynser(true,false,true,true);}
+        try{return this.loseSynser(true,false,true,true);}
         catch(error){
           console.log("lose error");
         }
       }
       // 3の勝ち抜け
       if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-        try{this.loseSynser(true,true,false,true);}
+        try{return this.loseSynser(true,true,false,true);}
         catch(error){
           console.log("lose error");
         }
       }
       // 4の勝ち抜け
       if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-        try{this.loseSynser(true,true,true,false);}
+        try{return this.loseSynser(true,true,true,false);}
         catch(error){
           console.log("lose error");
         }
       }
+
+      console.log("tie");
       // 同着はスキップできないように。
     }
     else{
+      console.log("not skipA");
       if(!this.state.endB){
+        console.log("skipB");
         this.setState(state =>  ({
 
           groupB:true,
@@ -949,38 +954,42 @@ export default class ChampionshipScreen extends Component {
   
         }));
         // 戦闘力で決定)
-        // 1の勝ち抜け
-        if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-          try{this.loseSynser(false,true,true,true);}
-          catch(error){
-            console.log("lose error");
-          }
+      // 1の勝ち抜け
+      if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+        try{return this.loseSynser(false,true,true,true);}
+        catch(error){
+          console.log("lose error");
         }
-        // 2の勝ち抜け
-        if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-          try{this.loseSynser(true,false,true,true);}
-          catch(error){
-            console.log("lose error");
-          }
+      }
+      // 2の勝ち抜け
+      if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+        try{return this.loseSynser(true,false,true,true);}
+        catch(error){
+          console.log("lose error");
         }
-        // 3の勝ち抜け
-        if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-          try{this.loseSynser(true,true,false,true);}
-          catch(error){
-            console.log("lose error");
-          }
+      }
+      // 3の勝ち抜け
+      if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+        try{return this.loseSynser(true,true,false,true);}
+        catch(error){
+          console.log("lose error");
         }
-        // 4の勝ち抜け
-        if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-          try{this.loseSynser(true,true,true,false);}
-          catch(error){
-            console.log("lose error");
-          }
+      }
+      // 4の勝ち抜け
+      if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+        try{return this.loseSynser(true,true,true,false);}
+        catch(error){
+          console.log("lose error");
         }
-        // 同着はスキップできないように。
+      }
+
+      console.log("tie");
+      // 同着はスキップできないように。
       }
       else{
+        console.log("not skiB");
         if(!this.state.endC){
+          console.log("skipC");
           this.setState(state =>  ({
 
             groupC:true,
@@ -992,38 +1001,42 @@ export default class ChampionshipScreen extends Component {
     
           }));
           // 戦闘力で決定)
-          // 1の勝ち抜け
-          if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-            try{this.loseSynser(false,true,true,true);}
-            catch(error){
-              console.log("lose error");
-            }
-          }
-          // 2の勝ち抜け
-          if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-            try{this.loseSynser(true,false,true,true);}
-            catch(error){
-              console.log("lose error");
-            }
-          }
-          // 3の勝ち抜け
-          if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-            try{this.loseSynser(true,true,false,true);}
-            catch(error){
-              console.log("lose error");
-            }
-          }
-          // 4の勝ち抜け
-          if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-            try{this.loseSynser(true,true,true,false);}
-            catch(error){
-              console.log("lose error");
-            }
-          }
-          // 同着はスキップできないように。
+      // 1の勝ち抜け
+      if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+        try{return this.loseSynser(false,true,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 2の勝ち抜け
+      if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+        try{return this.loseSynser(true,false,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 3の勝ち抜け
+      if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+        try{return this.loseSynser(true,true,false,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 4の勝ち抜け
+      if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+        try{return this.loseSynser(true,true,true,false);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+
+      console.log("tie");
+      // 同着はスキップできないように。
         }
         else{
+          console.log("not skipC");
           if(!this.state.endD){
+            console.log("skipD");
             this.setState(state =>  ({
 
               groupD:true,
@@ -1035,40 +1048,45 @@ export default class ChampionshipScreen extends Component {
       
             }));
             // 戦闘力で決定)
-            // 1の勝ち抜け
-            if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
-              try{this.loseSynser(false,true,true,true);}
-              catch(error){
-                console.log("lose error");
-              }
-            }
-            // 2の勝ち抜け
-            if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
-              try{this.loseSynser(true,false,true,true);}
-              catch(error){
-                console.log("lose error");
-              }
-            }
-            // 3の勝ち抜け
-            if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
-              try{this.loseSynser(true,true,false,true);}
-              catch(error){
-                console.log("lose error");
-              }
-            }
-            // 4の勝ち抜け
-            if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
-              try{this.loseSynser(true,true,true,false);}
-              catch(error){
-                console.log("lose error");
-              }
-            }
-            // 同着はスキップできないように。
+      // 1の勝ち抜け
+      if(this.state.katoPoint1 > this.state.katoPoint2 &&　this.state.katoPoint1 > this.state.katoPoint3 && this.state.katoPoint1 > this.state.katoPoint4){
+        try{return this.loseSynser(false,true,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 2の勝ち抜け
+      if(this.state.katoPoint2 > this.state.katoPoint1 &&　this.state.katoPoint2 > this.state.katoPoint3 && this.state.katoPoint2 > this.state.katoPoint4){
+        try{return this.loseSynser(true,false,true,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 3の勝ち抜け
+      if(this.state.katoPoint3 > this.state.katoPoint1 &&　this.state.katoPoint3 > this.state.katoPoint2 && this.state.katoPoint3 > this.state.katoPoint4){
+        try{return this.loseSynser(true,true,false,true);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+      // 4の勝ち抜け
+      if(this.state.katoPoint4 > this.state.katoPoint1 &&　this.state.katoPoint4 > this.state.katoPoint2 && this.state.katoPoint4 > this.state.katoPoint3){
+        try{return this.loseSynser(true,true,true,false);}
+        catch(error){
+          console.log("lose error");
+        }
+      }
+
+      console.log("tie");
+      // 同着はスキップできないように。
+          }
+          else{
+            console.log("not skipD");
           }
         }
       }
     }
-    console.log("skip");
+    console.log("skip finish");
   };
 
   setBattle = async(col1,col2) =>{
@@ -1478,13 +1496,13 @@ export default class ChampionshipScreen extends Component {
 
       if(this.state.p1PoissonFlag){
         this.setState(state =>  ({
-          p1HP:this.state.p1HP - 50,
+          p1HP:this.state.p1HP - 40,
         })); 
       }
 
       if(this.state.p2PoissonFlag){
         this.setState(state =>  ({
-          p2HP:this.state.p2HP - 50,
+          p2HP:this.state.p2HP - 40,
         })); 
       }
 
@@ -1644,6 +1662,7 @@ export default class ChampionshipScreen extends Component {
 
   loseSynser = (r1,r2,r3,r4) =>{
     if(this.state.groupA){
+      console.log("A finished");
       this.setState(state =>  ({
         Kirinuki1_lose:r1,
         Kirinuki2_lose:r2,
@@ -1656,6 +1675,7 @@ export default class ChampionshipScreen extends Component {
       }));
     }
     if(this.state.groupB){
+      console.log("B finished");
       this.setState(state =>  ({
         Kirinuki5_lose:r1,
         Kirinuki6_lose:r2,
@@ -1669,6 +1689,7 @@ export default class ChampionshipScreen extends Component {
     
     }
     if(this.state.groupC){
+      console.log("C finished");
       this.setState(state =>  ({
         Kirinuki9_lose:r1,
         Kirinuki10_lose:r2,
@@ -1681,6 +1702,7 @@ export default class ChampionshipScreen extends Component {
       }));
     }
     if(this.state.groupD){
+      console.log("D finished");
       this.setState(state =>  ({
         Kirinuki13_lose:r1,
         Kirinuki14_lose:r2,
@@ -1730,6 +1752,7 @@ export default class ChampionshipScreen extends Component {
         resultFlag:true,
       }));
       playEffectSound( Sounds.next1,1);
+      console.log("next sound finished");
     }
     this.setState(state =>  ({
       tableData:{
@@ -1754,6 +1777,18 @@ export default class ChampionshipScreen extends Component {
           1:null,
         }
       },
+      p1Image:null,
+      p2Image:null,
+      p1Name:null,
+      p2Name:null,
+
+      p1HP:0,
+      p2HP:0,
+
+      p1KatoPoint:0,
+      p2KatoPoint:0,
+      
+      Timer:this.state.timeMax,
     }));
   };
 

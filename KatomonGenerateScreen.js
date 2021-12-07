@@ -257,40 +257,40 @@ export default class KatomonGenerateScreen extends Component {
     
     // 技はランダムで足すことにする。
     var katoRand = Math.random();
-    if(katoRand < 0.15){
+    if(katoRand < 0.1){
       this.state.katomon = KatomonList.kingdom;
     }
-    if(katoRand < 0.25 && katoRand >= 0.15){
+    if(katoRand < 0.2 && katoRand >= 0.1){
       this.state.katomon = KatomonList.kyomu;
     }
-    if(katoRand < 0.35 && katoRand >= 0.25){
+    if(katoRand < 0.3 && katoRand >= 0.2){
       this.state.katomon = KatomonList.smile;
     }
-    if(katoRand < 0.4 && katoRand >= 0.35){
+    if(katoRand < 0.4 && katoRand >= 0.3){
       this.state.katomon = KatomonList.piza;
     }
     if(katoRand < 0.5 && katoRand >= 0.4){
       this.state.katomon = KatomonList.dark;
     }
-    if(katoRand < 0.55 && katoRand >= 0.5){
-      this.state.katomon = KatomonList.naoko_gold;
+    if(katoRand < 0.6 && katoRand >= 0.5){
+      this.state.katomon = KatomonList.maruo;
     }
-    if(katoRand < 0.65 && katoRand >= 0.55){
+    if(katoRand < 0.65 && katoRand >= 0.6){
       this.state.katomon = KatomonList.naoko_normal;
     }
     if(katoRand < 0.7 && katoRand >= 0.65){
       this.state.katomon = KatomonList.hae;
     }
-    if(katoRand < 0.75 && katoRand >= 0.7){
+    if(katoRand < 0.8 && katoRand >= 0.7){
       this.state.katomon = KatomonList.okurei;
     }
-    if(katoRand < 0.8 && katoRand >= 0.75){
+    if(katoRand < 0.87 && katoRand >= 0.8){
       this.state.katomon = KatomonList.suwari;
     }
-    if(katoRand < 0.85 && katoRand >= 0.8){
+    if(katoRand < 0.9 && katoRand >= 0.87){
       this.state.katomon = KatomonList.unk;
     }
-    if(katoRand < 0.95 && katoRand >= 0.85){
+    if(katoRand < 0.95 && katoRand >= 0.9){
       this.state.katomon = KatomonList.hana1;
     }
     if(katoRand >= 0.95){

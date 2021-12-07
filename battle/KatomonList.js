@@ -15,7 +15,7 @@ export default KatomonList = {
   },
   kyomu:{
     name:"加藤純一",
-    param:0.5,
+    param:0.7,
     image:Images.katoKyomu,
     description:"",
     move:{
@@ -26,7 +26,7 @@ export default KatomonList = {
   },
   suwari:{
     name:"加藤純一",
-    param:0.7,
+    param:0.8,
     image:Images.katoUNKsuwari,
     description:"",
     move:{
@@ -47,7 +47,7 @@ export default KatomonList = {
     }
   },
   smile:{
-    name:"加藤純一",
+    name:"jun channel",
     param:1.3,
     image:Images.katoSmile,
     description:"",
@@ -70,7 +70,7 @@ export default KatomonList = {
   },
   hae:{
     name:"加藤純一",
-    param:0.4,
+    param:0.7,
     image:Images.katoHae,
     description:"",
     move:{
@@ -103,22 +103,22 @@ export default KatomonList = {
   },
   naoko_normal:{
     name:"な◯こ",
-    param:1.8,
+    param:3.8,
     image:Images.naoko_normal,
-    description:"",
+    description:"尚子が大好き",
     move:{
       move1:KatomonMoveList.rightStraight,
       move2:KatomonMoveList.gaia,
       move3:KatomonMoveList.escape,
     }
   },
-  naoko_gold:{
-    name:"金な◯こ",
-    param:3.5,
-    image:Images.naoko_gold,
-    description:"",
+  maruo:{
+    name:"まるお",
+    param:1.9,
+    image:Images.maruo,
+    description:"まるお",
     move:{
-      move1:KatomonMoveList.rightStraight,
+      move1:KatomonMoveList.mai,
       move2:KatomonMoveList.gaia,
       move3:KatomonMoveList.escape,
     }
@@ -127,7 +127,7 @@ export default KatomonList = {
     name:"ハナチャン",
     param:4.0,
     image:Images.hana1,
-    description:"",
+    description:"ハナチャン１",
     move:{
       move1:KatomonMoveList.rightStraight,
       move2:KatomonMoveList.gaia,
@@ -138,7 +138,7 @@ export default KatomonList = {
     name:"ハナチャン",
     param:5.0,
     image:Images.hana2,
-    description:"",
+    description:"ハナチャン２",
     move:{
       move1:KatomonMoveList.rightStraight,
       move2:KatomonMoveList.gaia,

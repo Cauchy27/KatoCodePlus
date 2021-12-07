@@ -87,7 +87,7 @@ export default class TitleScreen extends Component {
          res.sound.unloadAsync().catch(() => {console.log("error100")});
       });
    }).catch((error) => {console.log("error200")});
-   console.log(state);
+  //  console.log(state);
   };
 
   // BGM再生用（音量なども調整）
