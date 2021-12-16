@@ -148,6 +148,13 @@ export default class KatomonGenerateScreen extends Component {
     axios
       .get(url)
       .then(response => {
+          if(response.data.items[0].statistics.dislikeCount == undefined){
+            response.data.items[0].statistics.dislikeCount = 1
+          }
+          if(response.data.items[0].statistics.likeCount == undefined){
+            response.data.items[0].statistics.dislikeCount = 0
+          }
+          console.log(response.data.items[0].statistics.dislikeCount);
           this.setState({
             KatoMonData: response.data.items[0].snippet,
             KatoMonImage:response.data.items[0].snippet.thumbnails.medium.url,
@@ -157,17 +164,35 @@ export default class KatomonGenerateScreen extends Component {
             generateFlag: true,
             generateFalseFlag: false,
           });
-          var duration = this.state.KatoMonDataContent.duration.split("PT");
-          if(duration[1].match(/H/)){
-            duration = duration[1].split("H");
-          }else{
-            duration[0] = 0.0;
+          if(this.state.KatoMonDataContent.duration != undefined){
+            if(this.state.KatoMonDataContent.duration.match(/PT/)){
+              var duration = this.state.KatoMonDataContent.duration.split("PT");
+              if(duration[1].match(/H/)){
+                duration = duration[1].split("H");
+              }else{
+                duration[0] = 0.0;
+              }
+              duration[1] = duration[1].split("M");
+              duration[1][1] = duration[1][1].split("S");
+              this.setState({
+                duration_memo:duration,
+              });
+            }
+            else{
+              console.log("1");
+              var durationFalse = [0,[[0,0],0]];
+              this.setState(state =>  ({
+                duration_memo:durationFalse,
+              })); 
+            }
           }
-          duration[1] = duration[1].split("M");
-          duration[1][1] = duration[1][1].split("S");
-          this.setState({
-            duration_memo:duration,
-          });
+          else{
+            console.log("2");
+            var durationFalse = [0,[[0,0],0]];
+            this.setState(state =>  ({
+              duration_memo:durationFalse,
+            })); 
+          }
           playEffectSound(Sounds.generate1,0.05);
           this.state.sound.effect1 = new Audio.Sound;
       })
@@ -303,14 +328,15 @@ export default class KatomonGenerateScreen extends Component {
 
     // 基礎ステータス
 
-    this.setState({
-      // パワー
-      katoPower:Math.round((this.state.duration_memo[0] * 60 * 60 + this.state.duration_memo[1][0] * 60 + this.state.duration_memo[1][0][0]) * this.state.katomon.param/5000)+200,
-      // 勢い
-      katoIkioi:Math.round(this.state.KatoMonDataStatics.commentCount * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/5000000)+20,
-       // 守り
-       katoMamori:Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * this.state.KatoMonDataStatics.viewCount * this.state.katomon.param/50000)+20,
-    });
+      this.setState({
+        // パワー
+        katoPower:Math.round((parseInt(this.state.duration_memo[0]) * 60 * 60 + parseInt(this.state.duration_memo[1][0]) * 60 + parseInt(this.state.duration_memo[1][0][0])) * this.state.katomon.param/5000)+200,
+        // 勢い
+        katoIkioi:Math.round(parseInt(this.state.KatoMonDataStatics.commentCount) * parseInt(this.state.KatoMonDataStatics.viewCount) * this.state.katomon.param/5000000)+20,
+         // 守り
+         katoMamori:Math.round((parseInt(this.state.KatoMonDataStatics.likeCount))/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount)) * parseInt(this.state.KatoMonDataStatics.viewCount) * this.state.katomon.param/50000)+20,
+      });
+
     playEffectSound(Sounds.katomonGenerate,1);
   }
 
@@ -568,7 +594,7 @@ export default class KatomonGenerateScreen extends Component {
                   </View>
                   <View style={styles.katomon_detail_box}>
                     <Text style={styles.katomon_detail_text}>高評価率：</Text>
-                    <Text style={styles.katomon_detail_text}>{Math.round((this.state.KatoMonDataStatics.likeCount)/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount))*100)}%</Text>
+                    <Text style={styles.katomon_detail_text}>{Math.round((parseInt(this.state.KatoMonDataStatics.likeCount))/(parseInt(this.state.KatoMonDataStatics.likeCount) + parseInt(this.state.KatoMonDataStatics.dislikeCount))*100)}%</Text>
                   </View>
                   <View style={styles.katomon_detail_box}>
                     <Text style={styles.katomon_detail_text}>配信日時：</Text>
