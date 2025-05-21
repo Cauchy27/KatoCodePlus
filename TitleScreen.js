@@ -1,14 +1,10 @@
-import { StatusBar } from 'expo-status-bar';
-import React,{ Component } from 'react';
-import { 
+import React, { Component } from 'react';
+import {
   SafeAreaView,
-  StyleSheet, 
-  Text, 
+  StyleSheet,
+  Text,
   View,
-  Button,
-  Modal,
   Image,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import { Audio } from 'expo-av';
@@ -17,8 +13,6 @@ import Constants from './Constants';
 import BannerAd from './BannerAd';
 
 import Sounds from './assets/Sounds';
-
-import { AdMobBanner } from 'expo-ads-admob';
 
 // const soundObject = new Audio.Sound;
 
@@ -185,7 +179,7 @@ export default class TitleScreen extends Component {
   render(){
     
     return(
-      <View style = {styles.container}>
+      <SafeAreaView style = {styles.container}>
         <Image style={styles.backgroundImage} resizeMode="stretch" source={Images.backgroundTitle} />
         <View style = {styles.title}>
           <View style={{flex:1}}>
@@ -221,42 +215,7 @@ export default class TitleScreen extends Component {
                 カトモン生成/カトフェス
               </Text>
             </TouchableOpacity>
-            {/* <TouchableOpacity
-              onPress={() =>
-                this.soundStart(this.state.bgm.title,Sounds.bgm1, 0.03)
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
-            }}>
-                サウンド再生テスト
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.soundStart(this.state.bgm.title,Sounds.battle4, 0.03)
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
-            }}>
-                サウンド再生テスト2
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() =>
-                this.stopBgm(this.state.bgm.title)
-              }
-              style = {styles.bottun}
-            >
-              <Text style={{color : "#00ffff",textAlign:"center",
-              fontSize:Math.round(Constants.MAX_WIDTH/1.3/20)
-            }}>
-                サウンド停止テスト
-              </Text>
-            </TouchableOpacity> */}
+
             
           </View>
         </View>
@@ -276,7 +235,7 @@ export default class TitleScreen extends Component {
               </Text>
             </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -338,3 +297,4 @@ const styles = StyleSheet.create({
   },
   
 });
+
